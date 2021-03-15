@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "735714909603",
+    "project_id": "istisharaa",
+    "storage_bucket": "istisharaa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:735714909603:android:d46bdd1e431170abbf4e16",
+        "android_client_info": {
+          "package_name": "com.example.istishara_test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "735714909603-s8ndv60hr8cbj479arb9aq35vsiar572.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCItpDq0vPOViSA5VsOL8vWFZ-hQKnWIok"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "735714909603-s8ndv60hr8cbj479arb9aq35vsiar572.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
