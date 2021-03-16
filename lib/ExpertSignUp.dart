@@ -19,8 +19,18 @@ class ExpertSignUp extends StatefulWidget {
   _ESignUpState createState() => _ESignUpState();
 }
 
+final _PasswordController = TextEditingController();
+final _ConfirmPasswordController = TextEditingController();
+final _FirstNameController = TextEditingController();
+final _LastNameController = TextEditingController();
+final _PhoneController = TextEditingController();
+final _EmailController = TextEditingController();
+ enum VerifyMethod { Email, SMS }
+
 class _ESignUpState extends State<ExpertSignUp> {
   String _email, _password, _firstName, _lastName, _phoneNumber, exp;
+   VerifyMethod _character = VerifyMethod.Email;
+
 
   Future<void> signup() async {
     try {
@@ -32,6 +42,53 @@ class _ESignUpState extends State<ExpertSignUp> {
     } catch (e) {
       print(e);
     }
+  }
+
+  void _showDialog(String title, String content, BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog( 
+              //nsetPadding: EdgeInsets.all(10),
+              backgroundColor: Colors.deepPurple,
+              title: Text( title),
+              content: Container(padding: EdgeInsets.all(20),child: Column(children: [
+                Text("Verify Account via:"),
+               Row(children:[RadioListTile<VerifyMethod>(
+                title: const Text('Email'),
+                value: VerifyMethod.Email,
+                groupValue: _character,
+                onChanged: (VerifyMethod value) {
+            setState(() {
+              _character = value;
+            });
+          },),
+          RadioListTile<VerifyMethod>(
+                title: const Text('SMS'),
+                value: VerifyMethod.SMS,
+                groupValue: _character,
+                onChanged: (VerifyMethod value) {
+            setState(() {
+              _character = value;
+            });
+          },),]),
+                TextField(
+                  decoration: InputDecoration(  
+                   border: OutlineInputBorder( borderRadius:  BorderRadius.circular(5),
+                   ) ,
+                   hintText: "Verification Code",
+                  ),
+                  style:
+                          TextStyle(fontWeight: FontWeight.w500, fontSize: 18,color: Colors.white),
+                ),]),),
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () {
+                      signup();
+                    },
+                    child: Text("Close"))
+              ]);
+        });
   }
 
   bool validEmail(String email) {
@@ -54,19 +111,12 @@ class _ESignUpState extends State<ExpertSignUp> {
     return false;
   }
 
-  final _PasswordController = TextEditingController();
-  final _ConfirmPasswordController = TextEditingController();
   static final _formKeyFname = GlobalKey<FormState>();
   static final _formKeyLname = GlobalKey<FormState>();
   static final _formKeyEmail = GlobalKey<FormState>();
   static final _formKeyPhone = GlobalKey<FormState>();
   static final _formKeyPass = GlobalKey<FormState>();
   static final _formKeyConf = GlobalKey<FormState>();
-  @override
-  void dispose() {
-    super.dispose();
-    _PasswordController.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -111,6 +161,7 @@ class _ESignUpState extends State<ExpertSignUp> {
                       });
                     },
                     textAlignVertical: TextAlignVertical(y: 1),
+                    controller: _FirstNameController,
                     validator: (String value) {
                       if (value.isEmpty) {
                         return "This field cannot be Empty";
@@ -154,6 +205,7 @@ class _ESignUpState extends State<ExpertSignUp> {
                         });
                       },
                       textAlignVertical: TextAlignVertical(y: 1),
+                      controller: _LastNameController,
                       validator: (String value) {
                         if (value.isEmpty) {
                           return "This field cannot be Empty";
@@ -197,6 +249,7 @@ class _ESignUpState extends State<ExpertSignUp> {
                         });
                       },
                       textAlignVertical: TextAlignVertical(y: 1),
+                      controller: _EmailController,
                       validator: (String value) {
                         if (value.isEmpty) {
                           return "This field cannot be Empty";
@@ -240,6 +293,7 @@ class _ESignUpState extends State<ExpertSignUp> {
                         });
                       },
                       textAlignVertical: TextAlignVertical(y: 1),
+                      controller: _PhoneController,
                       validator: (String value) {
                         if (value.isEmpty) {
                           return "This field cannot be Empty";
@@ -287,8 +341,8 @@ class _ESignUpState extends State<ExpertSignUp> {
                       validator: (String value) {
                         if (value.isEmpty) {
                           return "This field cannot be Empty";
-                        } else if (value.length < 4) {
-                          return "Password has to be at least 4 characters long.";
+                        } else if (value.length < 6) {
+                          return "Password has to be at least 6 characters long.";
                         } else {
                           return null;
                         }
@@ -335,6 +389,7 @@ class _ESignUpState extends State<ExpertSignUp> {
                         });
                       },
                       textAlignVertical: TextAlignVertical(y: 1),
+                      controller: _ConfirmPasswordController,
                       validator: (String value) {
                         if (value.isEmpty) {
                           return "This field cannot be Empty";
@@ -370,7 +425,8 @@ class _ESignUpState extends State<ExpertSignUp> {
                             _formKeyPhone.currentState.validate() &&
                             _formKeyPass.currentState.validate() &&
                             _formKeyConf.currentState.validate()) {
-                          signup();
+                          _showDialog("Account Verification",
+                              "Please Verify your Account", context);
                         }
                       },
                       child: Text(

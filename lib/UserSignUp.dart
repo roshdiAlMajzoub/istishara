@@ -21,15 +21,23 @@ class UserSignUp extends StatefulWidget {
   _USignUpState createState() => _USignUpState();
 }
 
+
+ final _PasswordController = TextEditingController();
+final _ConfirmPasswordController = TextEditingController();
+final _FirstNameController = TextEditingController();
+final _LastNameController = TextEditingController();
+final _PhoneController = TextEditingController();
+final _EmailController = TextEditingController();
+
 class _USignUpState extends State<UserSignUp> {
-  String _email, _password, _firstName, _lastName, _phoneNumber;
+  String _email, _password, _firstName, _lastName, _phoneNumber, exp;
 
   Future<void> signup() async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: _email, password: _password);
-      await DataBaseServiceHelp(uid: userCredential.user.uid)
-          .updateuserData(_firstName, _lastName, _phoneNumber, _email);
+      await DataBaseServiceExperts(uid: userCredential.user.uid)
+          .updateuserData(_firstName, _lastName, _phoneNumber, _email, exp);
       Navigator.push(context, MaterialPageRoute(builder: (_) => Experts()));
     } catch (e) {
       print(e);
@@ -56,8 +64,6 @@ class _USignUpState extends State<UserSignUp> {
     return false;
   }
 
-  final _PasswordController = TextEditingController();
-  final _ConfirmPasswordController = TextEditingController();
   static final _formKeyFname = GlobalKey<FormState>();
   static final _formKeyLname = GlobalKey<FormState>();
   static final _formKeyEmail = GlobalKey<FormState>();
@@ -76,7 +82,7 @@ class _USignUpState extends State<UserSignUp> {
     final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
-            title: Text("Expert Set up Account",
+            title: Text("Help-Seeker Set up Account",
                 style: TextStyle(
                   fontSize: 20,
                 ))),
@@ -112,7 +118,9 @@ class _USignUpState extends State<UserSignUp> {
                         _formKeyFname.currentState.reset();
                       });
                     },
+            
                     textAlignVertical: TextAlignVertical(y: 1),
+                    controller: _FirstNameController,
                     validator: (String value) {
                       if (value.isEmpty) {
                         return "This field cannot be Empty";
@@ -156,6 +164,7 @@ class _USignUpState extends State<UserSignUp> {
                         });
                       },
                       textAlignVertical: TextAlignVertical(y: 1),
+                      controller: _LastNameController,
                       validator: (String value) {
                         if (value.isEmpty) {
                           return "This field cannot be Empty";
@@ -199,6 +208,7 @@ class _USignUpState extends State<UserSignUp> {
                         });
                       },
                       textAlignVertical: TextAlignVertical(y: 1),
+                      controller: _EmailController,
                       validator: (String value) {
                         if (value.isEmpty) {
                           return "This field cannot be Empty";
@@ -242,6 +252,7 @@ class _USignUpState extends State<UserSignUp> {
                         });
                       },
                       textAlignVertical: TextAlignVertical(y: 1),
+                      controller: _PhoneController,
                       validator: (String value) {
                         if (value.isEmpty) {
                           return "This field cannot be Empty";
@@ -281,6 +292,7 @@ class _USignUpState extends State<UserSignUp> {
                       },
                       onTap: () {
                         setState(() {
+                          
                           _formKeyPass.currentState.reset();
                         });
                       },
@@ -289,12 +301,13 @@ class _USignUpState extends State<UserSignUp> {
                       validator: (String value) {
                         if (value.isEmpty) {
                           return "This field cannot be Empty";
-                        } else if (value.length < 4) {
-                          return "Password has to be at least 4 characters long.";
+                        } else if (value.length < 6) {
+                          return "Password has to be at least 6 characters long.";
                         } else {
                           return null;
                         }
                       },
+                      
                       obscureText: true,
                       decoration: InputDecoration(
                           prefixIcon: Icon(
@@ -337,6 +350,7 @@ class _USignUpState extends State<UserSignUp> {
                         });
                       },
                       textAlignVertical: TextAlignVertical(y: 1),
+                      controller: _ConfirmPasswordController,
                       validator: (String value) {
                         if (value.isEmpty) {
                           return "This field cannot be Empty";
@@ -373,7 +387,6 @@ class _USignUpState extends State<UserSignUp> {
                             _formKeyPass.currentState.validate() &&
                             _formKeyConf.currentState.validate()) {
                           signup();
-                          
                         }
                       },
                       child: Text(
