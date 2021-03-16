@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:istishara_test/Reset.dart';
 import './DashBoard.dart';
 
 class MyApp extends StatelessWidget {
@@ -26,8 +27,45 @@ class _LoginDemoState extends State<LoginDemo> {
     } catch (e) {
       setState(() {
         _error = e.message;
+        print(_error);
       });
     }
+  }
+
+  Widget showAlert() {
+    if (_error != null) {
+      return Container(
+        color: Colors.yellow,
+        width: double.infinity,
+        padding: EdgeInsets.all(8.0),
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Icon(Icons.error_outline),
+            ),
+            Expanded(
+              child: Text(
+                _error,
+                maxLines: 3,
+              ),
+            ),
+            Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () {
+                      setState(() {
+                        _error = null;
+                      });
+                    }))
+          ],
+        ),
+      );
+    }
+    return SizedBox(
+      height: 0,
+    );
   }
 
   @override
@@ -42,11 +80,26 @@ class _LoginDemoState extends State<LoginDemo> {
         child: Column(
           children: <Widget>[
             Container(
-                height: size.height * 0.2,
+                height: size.height * 0.01,
                 child: Stack(
                   children: <Widget>[
                     Container(
-                        height: size.height * 0.2 - 2.7,
+                        height: size.height * 0.1 - 1.7,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF311B92),
+                          /*borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(36),
+                              bottomRight: Radius.circular(36)),*/
+                        ))
+                  ],
+                )),
+            showAlert(),
+            Container(
+                height: size.height * 0.15,
+                child: Stack(
+                  children: <Widget>[
+                    Container(
+                        height: size.height * 0.2 - 1.7,
                         decoration: BoxDecoration(
                           color: const Color(0xFF311B92),
                           borderRadius: BorderRadius.only(
@@ -101,7 +154,9 @@ class _LoginDemoState extends State<LoginDemo> {
               ),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> ResetDemo())),
+
+              
               child: Text(
                 'Forgot Password',
                 style: TextStyle(color: Colors.deepPurple[900], fontSize: 15),
