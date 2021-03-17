@@ -14,26 +14,127 @@ class UserSU extends StatelessWidget {
   }
 }
 
-
-
 class UserSignUp extends StatefulWidget {
   @override
   _USignUpState createState() => _USignUpState();
 }
 
+final _PasswordController = TextEditingController();
+final _ConfirmPasswordController = TextEditingController();
+final _FirstNameController = TextEditingController();
+final _LastNameController = TextEditingController();
+final _PhoneController = TextEditingController();
+final _EmailController = TextEditingController();
+int radioValue = 0;
+
 class _USignUpState extends State<UserSignUp> {
-  String _email, _password, _firstName, _lastName, _phoneNumber;
+  String _email, _password, _firstName, _lastName, _phoneNumber, exp;
 
   Future<void> signup() async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: _email, password: _password);
-      await DataBaseServiceHelp(uid: userCredential.user.uid)
-          .updateuserData(_firstName, _lastName, _phoneNumber, _email);
+      await DataBaseServiceExperts(uid: userCredential.user.uid)
+          .updateuserData(_firstName, _lastName, _phoneNumber, _email, exp);
       Navigator.push(context, MaterialPageRoute(builder: (_) => Experts()));
     } catch (e) {
       print(e);
     }
+  }
+
+  void _showDialog(String title, String content, BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              insetPadding: EdgeInsets.symmetric(
+                horizontal: 5.0,
+              ),
+              title: Center(
+                  child: Text(
+                title,
+                style: TextStyle(
+                    color: Colors.deepPurple, fontWeight: FontWeight.w900),
+              )),
+              content: StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState1) {
+                return SingleChildScrollView(
+                    child: Container(
+                  height: screenHeight / 3,
+                  child: Column(children: [
+                    Container(
+                        width: double.infinity,
+                        child: Text(
+                          content,
+                          style: TextStyle(
+                              color: Colors.deepPurple,
+                              fontWeight: FontWeight.w900),
+                        )),
+                    Container(
+                        width: double.infinity,
+                        child: Row(children: [
+                          Align(
+                              alignment: Alignment(-1, 0),
+                              child: Radio<int>(
+                                activeColor: Colors.deepPurple,
+                                value: 0,
+                                groupValue: radioValue,
+                                onChanged: (value) {
+                                  setState1(() {
+                                    radioValue = value;
+                                  });
+                                },
+                              )),
+                          Text(_email)
+                        ])),
+                    Container(
+                        width: double.infinity,
+                        child: Row(children: [
+                          Align(
+                              alignment: Alignment(-1, 0),
+                              child: Radio<int>(
+                                activeColor: Colors.deepPurple,
+                                value: 1,
+                                groupValue: radioValue,
+                                onChanged: (value) {
+                                  setState1(() {
+                                    radioValue = value;
+                                  });
+                                },
+                              )),
+                          Text(_phoneNumber)
+                        ])),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: screenHeight / 50, bottom: screenHeight / 50),
+                      child: Text(
+                        "Please insert the code sent to you here:",
+                        style: TextStyle(
+                            color: Colors.deepPurple,
+                            fontWeight: FontWeight.w900),
+                      ),
+                    ),
+                    Container(
+                        height: screenHeight / 15,
+                        child: TextField(
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0)),
+                            hintText: "Verification Code",
+                          ),
+                          textAlignVertical: TextAlignVertical(y: 1),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 15),
+                        )),
+                  ]),
+                ));
+              }),
+              actions: <Widget>[
+                TextButton(onPressed: signup, child: Text("Verify"))
+              ]);
+        });
   }
 
   bool validEmail(String email) {
@@ -56,19 +157,12 @@ class _USignUpState extends State<UserSignUp> {
     return false;
   }
 
-  final _PasswordController = TextEditingController();
-  final _ConfirmPasswordController = TextEditingController();
   static final _formKeyFname = GlobalKey<FormState>();
   static final _formKeyLname = GlobalKey<FormState>();
   static final _formKeyEmail = GlobalKey<FormState>();
   static final _formKeyPhone = GlobalKey<FormState>();
   static final _formKeyPass = GlobalKey<FormState>();
   static final _formKeyConf = GlobalKey<FormState>();
-  @override
-  void dispose() {
-    super.dispose();
-    _PasswordController.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +170,7 @@ class _USignUpState extends State<UserSignUp> {
     final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
-            title: Text("Expert Set up Account",
+            title: Text("Help-Seeker Set up Account",
                 style: TextStyle(
                   fontSize: 20,
                 ))),
@@ -84,14 +178,7 @@ class _USignUpState extends State<UserSignUp> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
-                height: screenHeight / 10,
-                padding: EdgeInsets.only(top: screenHeight / 25, bottom: 0),
-                child: Text(
-                  "Get Started with Istishara!",
-                  style: TextStyle(fontSize: 25, color: Colors.deepPurple),
-                ),
-              ),
+             Container(height: screenHeight/20,),
               Container(
                 height: screenHeight / 10,
                 padding: EdgeInsets.only(
@@ -113,6 +200,7 @@ class _USignUpState extends State<UserSignUp> {
                       });
                     },
                     textAlignVertical: TextAlignVertical(y: 1),
+                    controller: _FirstNameController,
                     validator: (String value) {
                       if (value.isEmpty) {
                         return "This field cannot be Empty";
@@ -156,6 +244,7 @@ class _USignUpState extends State<UserSignUp> {
                         });
                       },
                       textAlignVertical: TextAlignVertical(y: 1),
+                      controller: _LastNameController,
                       validator: (String value) {
                         if (value.isEmpty) {
                           return "This field cannot be Empty";
@@ -199,6 +288,7 @@ class _USignUpState extends State<UserSignUp> {
                         });
                       },
                       textAlignVertical: TextAlignVertical(y: 1),
+                      controller: _EmailController,
                       validator: (String value) {
                         if (value.isEmpty) {
                           return "This field cannot be Empty";
@@ -242,6 +332,7 @@ class _USignUpState extends State<UserSignUp> {
                         });
                       },
                       textAlignVertical: TextAlignVertical(y: 1),
+                      controller: _PhoneController,
                       validator: (String value) {
                         if (value.isEmpty) {
                           return "This field cannot be Empty";
@@ -289,8 +380,8 @@ class _USignUpState extends State<UserSignUp> {
                       validator: (String value) {
                         if (value.isEmpty) {
                           return "This field cannot be Empty";
-                        } else if (value.length < 4) {
-                          return "Password has to be at least 4 characters long.";
+                        } else if (value.length < 6) {
+                          return "Password has to be at least 6 characters long.";
                         } else {
                           return null;
                         }
@@ -337,6 +428,7 @@ class _USignUpState extends State<UserSignUp> {
                         });
                       },
                       textAlignVertical: TextAlignVertical(y: 1),
+                      controller: _ConfirmPasswordController,
                       validator: (String value) {
                         if (value.isEmpty) {
                           return "This field cannot be Empty";
@@ -360,11 +452,15 @@ class _USignUpState extends State<UserSignUp> {
                           TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
                     )),
               ),
+                Container(height: screenHeight / 20),
               Container(
                   height: screenHeight / 10,
-                  child: Align(
-                    alignment: Alignment(1, 0),
-                    child: FlatButton(
+                  padding: EdgeInsets.only(
+                    bottom: screenHeight / 30,
+                  ),
+                    child: RaisedButton(
+                      color: Colors.deepPurple,
+                      child: Text("Create Account",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w900),),
                       onPressed: () {
                         if (_formKeyFname.currentState.validate() &&
                             _formKeyLname.currentState.validate() &&
@@ -372,17 +468,12 @@ class _USignUpState extends State<UserSignUp> {
                             _formKeyPhone.currentState.validate() &&
                             _formKeyPass.currentState.validate() &&
                             _formKeyConf.currentState.validate()) {
-                          signup();
-                          
+                          _showDialog("Account Verification",
+                              "Verify your Account via:", context);
                         }
-                      },
-                      child: Text(
-                        'Next',
-                        style:
-                            TextStyle(color: Colors.deepPurple, fontSize: 18),
-                      ),
+                      }
                     ),
-                  ))
+                  )
             ],
           ),
         ));

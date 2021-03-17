@@ -68,78 +68,10 @@ class ExpertsState extends State<Experts> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return new MaterialApp(
-        home: new Scaffold(
-      body: SingleChildScrollView(
-          child: Column(children: <Widget>[
-        Container(
-            height: size.height * 0.2,
-            child: Stack(
-              children: <Widget>[
-                Container(
-                    height: size.height * 0.2 - 2.7,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFB388FF),
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(36),
-                          bottomRight: Radius.circular(36)),
-                    ))
-              ],
-            )),
-        Padding(
-            padding: EdgeInsets.all(50),
-            child: Center(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                  Text("Select what best describes your expertise:",
-                      style: TextStyle(color: Colors.black38, fontSize: 20)),
-                  SizedBox(
-                    height: 30.0,
-                  ),
-                  DropdownButton(
-                    value: _selectedType,
-                    items: _dropdownMenuItems,
-                    onChanged: onChangeDropdownItem,
-                  ),
-                  SizedBox(
-                    height: size.height * 0.1,
-                  ),
-                  Container(
-                    alignment: Alignment(1, 0),
-                    child: OutlinedButton(
-                      onPressed: null,
-                      child: Text("Upload CV",
-                          style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w900,
-                              color: Color(0xff5848CF))),
-                      style: ElevatedButton.styleFrom(
-                          side:
-                              BorderSide(width: 3.0, color: Colors.deepPurple),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(32.0),
-                          ),
-                          minimumSize: Size(100, 50)),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      RaisedButton(
-                          color: Theme.of(context).accentColor,
-                          child: Text('Signup'),
-                          onPressed: () {
-                            Navigator.push(context,
-                              MaterialPageRoute(builder: (_) => DashboardScreen()));
-                            
-                          })
-                    ],
-                  )
-                ])))
-      ])),
-    ));
+    return  DropdownButton(
+                  value: _selectedType,
+                  items: _dropdownMenuItems,
+                  onChanged: onChangeDropdownItem,
+                );
   }
 }
