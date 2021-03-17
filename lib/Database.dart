@@ -16,7 +16,6 @@ class DataBaseServiceHelp {
   }
 }
 
-
 class DataBaseServiceExperts {
   CollectionReference collectionReference =
       FirebaseFirestore.instance.collection('Experts');
@@ -31,5 +30,24 @@ class DataBaseServiceExperts {
       'phone number': pnumber,
       'expertise': exp,
     });
+  }
+}
+
+class DataBaseList {
+  CollectionReference collectionReference =
+      FirebaseFirestore.instance.collection('Experts');
+
+  Future getUsersList() async {
+    List expertList = [];
+    try {
+      await collectionReference.get().then((QuerySnapshot) {
+        QuerySnapshot.docs.forEach((element) {
+          expertList.add(element.data());
+        });
+      });
+      return expertList;
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }
