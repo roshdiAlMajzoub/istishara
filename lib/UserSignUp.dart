@@ -1,6 +1,11 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_password_strength/flutter_password_strength.dart';
+import 'package:istishara_test/DashBoard.dart';
 import 'package:istishara_test/Database.dart';
+import 'package:istishara_test/Login.dart';
 import 'ExpertType.dart';
 import 'dart:ui';
 
@@ -37,7 +42,10 @@ void clearInfo() {
 int radioValue = 0;
 
 class _USignUpState extends State<UserSignUp> {
-  String _email, _password, _firstName, _lastName, _phoneNumber, exp;
+  String _email, _password, _firstName, _lastName, _phoneNumber, exp, _error;
+  final auth = FirebaseAuth.instance;
+  User user;
+  Timer timer;
 
   Future<void> signup() async {
     try {
@@ -45,13 +53,126 @@ class _USignUpState extends State<UserSignUp> {
           .createUserWithEmailAndPassword(email: _email, password: _password);
       await DataBaseServiceExperts(uid: userCredential.user.uid)
           .updateuserData(_firstName, _lastName, _phoneNumber, _email, exp);
-      Navigator.push(context, MaterialPageRoute(builder: (_) => Experts()));
+      //Navigator.push(context, MaterialPageRoute(builder: (_) => DashboardScreen()));
     } catch (e) {
+      setState(() {
+        _error = e.message;
+        print(_error);
+      });
       print(e);
+    }
+    if (_error == null) {
+      timer = Timer.periodic(Duration(seconds: 3), (timer) {
+        checkEmailVerified();
+      });
+    }
+  }
+
+  Widget showAlert() {
+    if (_error != null) {
+      return Container(
+        color: Colors.yellow,
+        width: double.infinity,
+        padding: EdgeInsets.all(8.0),
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Icon(Icons.error_outline),
+            ),
+            Expanded(
+              child: Text(
+                _error,
+                maxLines: 3,
+              ),
+            ),
+            Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () {
+                      setState(() {
+                        _error = null;
+                      });
+                    }))
+          ],
+        ),
+      );
+    }
+    return SizedBox(
+      height: 0,
+    );
+  }
+
+  Future<void> checkEmailVerified() async {
+    _showDialog("Account Verification",
+        "An Email verification has been sent to: ", context);
+    user = auth.currentUser;
+    user.sendEmailVerification();
+    await user.reload();
+    if (user.emailVerified) {
+      timer.cancel();
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => LoginDemo()));
     }
   }
 
   void _showDialog(String title, String content, BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            insetPadding: EdgeInsets.symmetric(
+              horizontal: 5.0,
+            ),
+            title: Center(
+                child: Text(
+              title,
+              style: TextStyle(
+                  color: Colors.deepPurple, fontWeight: FontWeight.w900),
+            )),
+            content: StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState1) {
+              return SingleChildScrollView(
+                  child: Container(
+                alignment: Alignment.center,
+                width: screenWidth / 1.8,
+                height: screenHeight / 7,
+                child: Column(children: [
+                  Container(
+                      //width: double.infinity,
+                      child: Text(
+                    content,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.deepPurple, fontWeight: FontWeight.w900),
+                  )),
+                  Container(
+                      child: Text(
+                    _email,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                        color: Colors.deepPurple, fontWeight: FontWeight.w900),
+                  )),
+                  Container(
+                    child: Text(
+                      'Please verify!',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          color: Colors.deepPurple,
+                          fontWeight: FontWeight.w900),
+                    ),
+                  )
+                ]),
+              ));
+            }),
+          );
+        });
+  }
+
+  /*void _showDialog(String title, String content, BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     showDialog(
@@ -144,7 +265,7 @@ class _USignUpState extends State<UserSignUp> {
                 TextButton(onPressed: signup, child: Text("Verify"))
               ]);
         });
-  }
+  }*/
 
   bool validEmail(String email) {
     return RegExp(
@@ -208,6 +329,7 @@ class _USignUpState extends State<UserSignUp> {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
+<<<<<<< HEAD
     return WillPopScope(
         onWillPop: () async {
           _showDialog2(context);
@@ -225,6 +347,63 @@ class _USignUpState extends State<UserSignUp> {
                 children: [
                   Container(
                     height: screenHeight / 20,
+=======
+    return Scaffold(
+        appBar: AppBar(
+            title: Text("Help-Seeker Set up Account",
+                style: TextStyle(
+                  fontSize: 20,
+                ))),
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              showAlert(),
+              Container(
+                height: screenHeight / 20,
+              ),
+              Container(
+                height: screenHeight / 10,
+                padding: EdgeInsets.only(
+                  left: screenWidth / 25,
+                  right: screenWidth / 25,
+                  bottom: screenHeight / 40,
+                ),
+                child: Form(
+                  key: _formKeyFname,
+                  child: TextFormField(
+                    onChanged: (value) {
+                      setState(() {
+                        _firstName = value.trim();
+                      });
+                    },
+                    onTap: () {
+                      setState(() {
+                        _formKeyFname.currentState.reset();
+                      });
+                    },
+                    textAlignVertical: TextAlignVertical(y: 1),
+                    controller: _FirstNameController,
+                    validator: (String value) {
+                      if (value.isEmpty) {
+                        return "This field cannot be Empty";
+                      } else if (value.length < 3) {
+                        return "First name has to be at least 3 characters long";
+                      } else {
+                        return null;
+                      }
+                    },
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15.0)),
+                        prefixIcon: Icon(
+                          Icons.person,
+                          color: Colors.deepPurple,
+                        ),
+                        hintText: "Do not use nick names",
+                        labelText: "First Name"),
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+>>>>>>> 6f041002cb80c6bd7de30fb23e19f4588672b250
                   ),
                   Container(
                     height: screenHeight / 10,
@@ -271,6 +450,7 @@ class _USignUpState extends State<UserSignUp> {
                       ),
                     ),
                   ),
+<<<<<<< HEAD
                   Container(
                     height: screenHeight / 10,
                     padding: EdgeInsets.only(
@@ -529,5 +709,79 @@ class _USignUpState extends State<UserSignUp> {
                 ],
               ),
             )));
+=======
+                  child: FlutterPasswordStrength(
+                      password: _PasswordController.value.text,
+                      strengthCallback: (strength) {
+                        debugPrint(strength.toString());
+                      })),
+              Container(
+                height: screenHeight / 10,
+                padding: EdgeInsets.only(
+                  left: screenWidth / 25,
+                  right: screenWidth / 25,
+                  bottom: screenHeight / 40,
+                ),
+                child: Form(
+                    key: _formKeyConf,
+                    child: TextFormField(
+                      onTap: () {
+                        setState(() {
+                          _formKeyConf.currentState.reset();
+                        });
+                      },
+                      textAlignVertical: TextAlignVertical(y: 1),
+                      controller: _ConfirmPasswordController,
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return "This field cannot be Empty";
+                        } else if (value != _PasswordController.value.text) {
+                          return "Password Mismatch";
+                        } else {
+                          return null;
+                        }
+                      },
+                      obscureText: true,
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.lock,
+                            color: Colors.deepPurple,
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15.0)),
+                          labelText: "Confirm Password",
+                          hintText: "Re-enter your password"),
+                      style:
+                          TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+                    )),
+              ),
+              Container(height: screenHeight / 20),
+              Container(
+                height: screenHeight / 10,
+                padding: EdgeInsets.only(
+                  bottom: screenHeight / 30,
+                ),
+                child: RaisedButton(
+                    color: Colors.deepPurple,
+                    child: Text(
+                      "Create Account",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w900),
+                    ),
+                    onPressed: () {
+                      if (_formKeyFname.currentState.validate() &&
+                          _formKeyLname.currentState.validate() &&
+                          _formKeyEmail.currentState.validate() &&
+                          _formKeyPhone.currentState.validate() &&
+                          _formKeyPass.currentState.validate() &&
+                          _formKeyConf.currentState.validate()) {
+                        signup();
+                      }
+                    }),
+              )
+            ],
+          ),
+        ));
+>>>>>>> 6f041002cb80c6bd7de30fb23e19f4588672b250
   }
 }

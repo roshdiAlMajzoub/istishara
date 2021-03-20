@@ -37,6 +37,11 @@ class ExpertsState extends State<Experts> {
   List<ExpertType> _types = ExpertType.getType();
   List<DropdownMenuItem<ExpertType>> _dropdownMenuItems;
   ExpertType _selectedType;
+  static String selected;
+
+  static String getExpertType() {
+    return selected;
+  }
 
   @override
   void initState() {
@@ -55,21 +60,24 @@ class ExpertsState extends State<Experts> {
         ),
       );
     }
+
     return items;
   }
 
   onChangeDropdownItem(ExpertType selectedType) {
     setState(() {
       _selectedType = selectedType;
+      selected = _selectedType.type;
     });
+    //print(selected);
   }
 
   @override
   Widget build(BuildContext context) {
-    return  DropdownButton(
-                  value: _selectedType,
-                  items: _dropdownMenuItems,
-                  onChanged: onChangeDropdownItem,
-                );
+    return DropdownButton(
+      value: _selectedType,
+      items: _dropdownMenuItems,
+      onChanged: onChangeDropdownItem,
+    );
   }
 }

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DataBaseServiceHelp {
   CollectionReference collectionReference =
-      FirebaseFirestore.instance.collection('help_seekers');
+      FirebaseFirestore.instance.collection('help seekers');
 
   final String uid;
   DataBaseServiceHelp({this.uid});
@@ -16,20 +16,39 @@ class DataBaseServiceHelp {
   }
 }
 
-
 class DataBaseServiceExperts {
-  CollectionReference collectionReference =
-      FirebaseFirestore.instance.collection('Experts');
-
   final String uid;
   DataBaseServiceExperts({this.uid});
   Future updateuserData(fname, lname, pnumber, email, exp) async {
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection(exp);
+
     return await collectionReference.doc(uid).set({
       'first name': fname,
       'last name': lname,
       'email': email,
       'phone number': pnumber,
-      'expertise': exp,
+      'reputation' : 0,
     });
+  }
+}
+
+class DataBaseList {
+  
+
+  Future getUsersList(coll) async {
+    CollectionReference collectionReference =
+      FirebaseFirestore.instance.collection(coll);
+    List expertList = [];
+    try {
+      await collectionReference.get().then((QuerySnapshot) {
+        QuerySnapshot.docs.forEach((element) {
+          expertList.add(element.data());
+        });
+      });
+      return expertList;
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }

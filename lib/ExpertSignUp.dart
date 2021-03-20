@@ -1,5 +1,18 @@
+import 'dart:async';
+
+import 'dart:io';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+import 'dart:math';
+import 'package:flutter/services.dart';
+import 'package:http/http.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:istishara_test/Database.dart';
+import 'package:istishara_test/Login.dart';
+import 'package:path_provider/path_provider.dart';
 import './ExpertType.dart';
 import 'ExpertType.dart';
 import 'dart:ui';
@@ -39,7 +52,94 @@ void clearInfo() {
 int radioValue = 0;
 
 class _ESignUpState extends State<ExpertSignUp> {
-  String _email, _password, _firstName, _lastName, _phoneNumber, exp;
+  String _email,
+      _path,
+      _password,
+      _firstName,
+      _lastName,
+      _phoneNumber,
+      exp,
+      _error;
+
+ 
+  final auth = FirebaseAuth.instance;
+  User user;
+  Timer timer;
+  File CV;
+  String cvN;
+  FilePickerResult res;
+
+  Widget cvName(name) {
+    if (name != null) {
+      return Container(
+        child: Text(name),
+      );
+    } else {
+      return Container(
+        child: Text(""),
+      );
+    }
+  }
+
+  bool expertt() {
+    exp = ExpertsState.getExpertType();
+    if (exp != null) {
+      return true;
+    }
+    return false;
+  }
+
+  upload() async {
+    //upload from file explorer
+    FilePickerResult result = await FilePicker.platform.pickFiles();
+    res = result;
+
+    if (result != null) {
+      File file = File(result.files.single.path);
+      CV = file;
+      cvN = CV.path.split('/').last;
+      return CV;
+    } else {
+      print('not done');
+      // User canceled the picker
+    }
+  }
+
+  uploadFile(File file) async {
+
+    // upload to firebase
+    if (file == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('No file was selected'),
+      ));
+      return null;
+    }
+    firebase_storage.UploadTask uploadTask;
+
+    firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child('playground')
+        .child('${file.path.split('/').last}');
+
+    final metadata = firebase_storage.SettableMetadata(
+        contentType: 'pdf/doc',
+        customMetadata: {'picked-file-path': file.path});
+
+    if (kIsWeb) {
+      uploadTask = ref.putData(await file.readAsBytes(), metadata);
+    } else {
+      uploadTask = ref.putFile(File(file.path), metadata);
+    }
+//////
+    return Future.value(uploadTask);
+  }
+
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      exp = ExpertsState.getExpertType();
+    });
+  }
 
   Future<void> signup() async {
     try {
@@ -47,13 +147,57 @@ class _ESignUpState extends State<ExpertSignUp> {
           .createUserWithEmailAndPassword(email: _email, password: _password);
       await DataBaseServiceExperts(uid: userCredential.user.uid)
           .updateuserData(_firstName, _lastName, _phoneNumber, _email, exp);
-      Navigator.push(context, MaterialPageRoute(builder: (_) => Experts()));
+      uploadFile(CV);
     } catch (e) {
-      print(e);
+      setState(() {
+        _error = e.message;
+        print(_error);
+      });
+    }
+    if (_error == null) {
+      timer = Timer.periodic(Duration(seconds: 3), (timer) {
+        checkEmailVerified();
+      });
     }
   }
 
-  void _showDialog(String title, String content, BuildContext context) {
+  Widget showAlert() {
+    if (_error != null) {
+      return Container(
+        color: Colors.yellow,
+        width: double.infinity,
+        padding: EdgeInsets.all(8.0),
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Icon(Icons.error_outline),
+            ),
+            Expanded(
+              child: Text(
+                _error,
+                maxLines: 3,
+              ),
+            ),
+            Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () {
+                      setState(() {
+                        _error = null;
+                      });
+                    }))
+          ],
+        ),
+      );
+    }
+    return SizedBox(
+      height: 0,
+    );
+  }
+
+  /*void _showDialog(String title, String content, BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     showDialog(
@@ -143,8 +287,76 @@ class _ESignUpState extends State<ExpertSignUp> {
                 ));
               }),
               actions: <Widget>[
-                TextButton(onPressed: signup, child: Text("Verify"))
+                TextButton( onPressed:(){Navigator.push( context, MaterialPageRoute(builder: (_) => DashboardScreen()));} , child: Text("Verify"))
               ]);
+        });
+  }*/
+
+  Future<void> checkEmailVerified() async {
+    _showDialog("Account Verification",
+        "An Email verification has been sent to: ", context);
+    user = auth.currentUser;
+    user.sendEmailVerification();
+    await user.reload();
+    if (user.emailVerified) {
+      timer.cancel();
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => LoginDemo()));
+    }
+  }
+
+  void _showDialog(String title, String content, BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            insetPadding: EdgeInsets.symmetric(
+              horizontal: 5.0,
+            ),
+            title: Center(
+                child: Text(
+              title,
+              style: TextStyle(
+                  color: Colors.deepPurple, fontWeight: FontWeight.w900),
+            )),
+            content: StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState1) {
+              return SingleChildScrollView(
+                  child: Container(
+                alignment: Alignment.center,
+                width: screenWidth / 1.8,
+                height: screenHeight / 7,
+                child: Column(children: [
+                  Container(
+                      //width: double.infinity,
+                      child: Text(
+                    content,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.deepPurple, fontWeight: FontWeight.w900),
+                  )),
+                  Container(
+                      child: Text(
+                    _email,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                        color: Colors.deepPurple, fontWeight: FontWeight.w900),
+                  )),
+                  Container(
+                    child: Text(
+                      'Please verify!',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          color: Colors.deepPurple,
+                          fontWeight: FontWeight.w900),
+                    ),
+                  )
+                ]),
+              ));
+            }),
+          );
         });
   }
 
@@ -226,6 +438,7 @@ class _ESignUpState extends State<ExpertSignUp> {
         body: SingleChildScrollView(
           child: Column(
             children: [
+              showAlert(),
               Container(height: screenHeight / 20),
               Container(
                 height: screenHeight / 10,
@@ -540,7 +753,9 @@ class _ESignUpState extends State<ExpertSignUp> {
                     bottom: screenHeight / 30,
                   ),
                   child: OutlinedButton(
-                      onPressed: null,
+                      onPressed: () {
+                        upload();
+                      },
                       child: Text("Upload CV",
                           style: TextStyle(
                               fontSize: 17,
@@ -552,6 +767,10 @@ class _ESignUpState extends State<ExpertSignUp> {
                           borderRadius: BorderRadius.circular(32.0),
                         ),
                       ))),
+<<<<<<< HEAD
+=======
+              cvName(cvN),
+>>>>>>> 6f041002cb80c6bd7de30fb23e19f4588672b250
               Container(height: screenHeight / 20),
               Container(
                 height: screenHeight / 10,
@@ -571,9 +790,18 @@ class _ESignUpState extends State<ExpertSignUp> {
                           _formKeyEmail.currentState.validate() &&
                           _formKeyPhone.currentState.validate() &&
                           _formKeyPass.currentState.validate() &&
+<<<<<<< HEAD
                           _formKeyConf.currentState.validate()) {
                         _showDialog("Account Verification",
                             "Verify your Account via:", context);
+=======
+                          _formKeyConf.currentState.validate() &&
+                          expertt()) {
+                        signup();
+
+                        //_showDialog("Account Verification",
+                        //  "Verify your Account via:", context);
+>>>>>>> 6f041002cb80c6bd7de30fb23e19f4588672b250
                       }
                     }),
               )

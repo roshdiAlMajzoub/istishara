@@ -46,7 +46,10 @@ class DashboardScreen extends StatelessWidget {
                     child: DashboardButton(
                       icon: Icons.book,
                       text: 'Nutritionist',
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => ListName()));
+                      },
                     ),
                   ),
                 ],
@@ -59,21 +62,30 @@ class DashboardScreen extends StatelessWidget {
                     child: DashboardButton(
                       icon: Icons.book,
                       text: 'Family Doctor',
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => ListName()));
+                      },
                     ),
                   ),
                   Expanded(
                     child: DashboardButton(
                       icon: Icons.book,
                       text: 'Civil Engineer',
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => ListName()));
+                      },
                     ),
                   ),
                   Expanded(
                     child: DashboardButton(
                       icon: Icons.book,
                       text: 'Plumber',
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => ListName()));
+                      },
                     ),
                   ),
                 ],
@@ -86,21 +98,30 @@ class DashboardScreen extends StatelessWidget {
                     child: DashboardButton(
                       icon: Icons.book,
                       text: 'Electrician',
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => ListName()));
+                      },
                     ),
                   ),
                   Expanded(
                     child: DashboardButton(
                       icon: Icons.book,
                       text: 'Personal Trainer',
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => ListName()));
+                      },
                     ),
                   ),
                   Expanded(
                     child: DashboardButton(
                       icon: Icons.book,
                       text: 'Architect',
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => ListName()));
+                      },
                     ),
                   ),
                 ],
