@@ -31,7 +31,7 @@ class Display extends StatelessWidget {
         '/Start': (BuildContext context) => StartApp(),
         '/ExpertSU': (BuildContext context) => ExpertSU(),
         '/UserSU': (BuildContext context) => UserSU(),
-        '/UserMain': (BuildContext context) => DashboardScreen(),
+        '/UserMain': (BuildContext context) => Dashboard(),
         '/Login': (BuildContext context) => MyApp(),
       },
     );

@@ -4,22 +4,25 @@ import 'nav-drawer.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'dart:io';
 
-class DashboardScreen extends StatelessWidget {
-  const DashboardScreen({
-    Key key,
-  }) : super(key: key);
+class Dashboard extends StatefulWidget {
+  @override
+  DashboardState createState() => DashboardState();
+}
 
+class DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       drawer: NavDrawer(),
+      drawer: NavDrawer(),
       appBar: AppBar(
-      title: Text('Types Of Experts')),
-      body: DoubleBackToCloseApp(
+          title: Text("Dashboard"),
+          elevation: .1,
+          backgroundColor: Color(0xff5848CF)),
+      body:DoubleBackToCloseApp(
                 snackBar: SnackBar(
                   content: Text('Tap back again to Exit'),
                 ),
-                child: WillPopScope(
+                child:WillPopScope(
                     onWillPop: () async {
                       if (Platform.isAndroid) {
                         exit(0);
@@ -28,168 +31,67 @@ class DashboardScreen extends StatelessWidget {
                       }
                       return false;
                     },
-      child: IconTheme.merge(
-        data: IconThemeData(
-          color: Theme.of(context).primaryColor,
-        ),
-        child: Column(
+                    child: Container(
+        padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 2.0),
+        child: GridView.count(
+          crossAxisCount: 2,
+          padding: EdgeInsets.all(3.0),
           children: <Widget>[
-            Expanded(
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: DashboardButton(
-                      icon: Icons.book,
-                      text: 'Software Engineer',
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => ListName()));
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: DashboardButton(
-                        icon: Icons.book,
-                        text: 'Mechanical Engineer',
-                        onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (_) => ListName()));
-                        }),
-                  ),
-                  Expanded(
-                    child: DashboardButton(
-                      icon: Icons.book,
-                      text: 'Nutritionist',
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => ListName()));
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: DashboardButton(
-                      icon: Icons.book,
-                      text: 'Family Doctor',
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => ListName()));
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: DashboardButton(
-                      icon: Icons.book,
-                      text: 'Civil Engineer',
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => ListName()));
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: DashboardButton(
-                      icon: Icons.book,
-                      text: 'Plumber',
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => ListName()));
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: DashboardButton(
-                      icon: Icons.book,
-                      text: 'Electrician',
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => ListName()));
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: DashboardButton(
-                      icon: Icons.book,
-                      text: 'Personal Trainer',
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => ListName()));
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: DashboardButton(
-                      icon: Icons.book,
-                      text: 'Architect',
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => ListName()));
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            makeDashboardItem("Software Engineer", Icons.computer),
+            makeDashboardItem("Civil Engineering", Icons.build),
+            makeDashboardItem("Nutritionist", Icons.flaky_rounded),
+            makeDashboardItem("Plumber", Icons.plumbing),
+            makeDashboardItem("PE", Icons.sports_handball),
+            makeDashboardItem("Handyman", Icons.handyman_outlined),
+            makeDashboardItem("Architect", Icons.apartment_rounded),
+            makeDashboardItem("Electrician", Icons.electrical_services_outlined),
+            makeDashboardItem("Carpenter", Icons.carpenter_outlined),
+            makeDashboardItem("Interior Designer", Icons.home_outlined),
+            makeDashboardItem("BlackSmith", Icons.construction),
+            makeDashboardItem("Industrial Engineer", Icons.work),
           ],
         ),
       ),
     )));
   }
-}
 
-class DashboardButton extends StatelessWidget {
-  const DashboardButton({
-    Key key,
-    @required this.icon,
-    @required this.text,
-    this.onTap,
-  }) : super(key: key);
-
-  final IconData icon;
-  final String text;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      child: InkWell(
-        onTap: onTap,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            FractionallySizedBox(
-              widthFactor: 0.6,
-              child: FittedBox(
-                child: Icon(icon),
-              ),
+  Card makeDashboardItem(
+    String title,
+    IconData icon,
+  ) {
+    return Card(
+        elevation: 1.0,
+        margin: new EdgeInsets.all(8.0),
+        child: Container(
+          decoration: BoxDecoration(color: Color.fromRGBO(220, 220, 220, 1.0)),
+          child: new InkWell(
+            onTap: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => ListPage()));
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              verticalDirection: VerticalDirection.down,
+              children: <Widget>[
+                SizedBox(
+                  height: 50.0,
+                ),
+                Center(
+                    child: Icon(
+                  icon,
+                  size: 40.0,
+                  color: Colors.black,
+                )),
+                SizedBox(height: 20.0),
+                new Center(
+                  child: new Text(title,
+                      style:
+                          new TextStyle(fontSize: 18.0, color: Colors.black)),
+                )
+              ],
             ),
-            SizedBox(height: 16.0),
-            Text(
-              text,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-              textScaleFactor: 0.8,
-            ),
-            SizedBox(height: 4.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Divider(height: 1.0),
-            ),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }

@@ -42,6 +42,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
       ),
     );
   }
+
   void _showDialog(String title, String content, BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
@@ -76,7 +77,12 @@ class _VerifyScreenState extends State<VerifyScreen> {
                 ));
               }),
               actions: <Widget>[
-                TextButton( onPressed:(){Navigator.push( context, MaterialPageRoute(builder: (_) => DashboardScreen()));} , child: Text("Verify"))
+                TextButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => Dashboard()));
+                    },
+                    child: Text("Verify"))
               ]);
         });
   }
@@ -87,7 +93,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
     if (user.emailVerified) {
       timer.cancel();
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => DashboardScreen()));
+          MaterialPageRoute(builder: (context) => Dashboard()));
     }
   }
 }

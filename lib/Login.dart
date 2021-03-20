@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:istishara_test/Reset.dart';
-import './DashBoard.dart';
+import 'package:istishara_test/Reset.dart';;
 
 class MyApp extends StatelessWidget {
   @override
