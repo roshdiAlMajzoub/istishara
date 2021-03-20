@@ -1,51 +1,95 @@
 import 'package:flutter/material.dart';
+import 'package:istishara_test/nav-drawer.dart';
 
-
-class ListName extends StatefulWidget{
+class MainListPage extends StatelessWidget {
+  // This widget is the root of your application.
   @override
-  State<ListName> createState() {
-    return new Name();
+  Widget build(BuildContext context) {
+    return new ListPage();
   }
 }
 
-class Name extends State<ListName>{
-  List<String> names = [
-    'Expert1','Expert2','Expert3','Expert4','Expert5','Expert6','Exper7','Expert8',
-    'Expert9','Expert10','Expert11','Expert12','Expert13','Expert14','Expert15','Expert16','Expert17',
-    'Expert18','Expert18','Expert19','Expert20'
-  ];
+class ListPage extends StatefulWidget {
+  @override
+  _ListPageState createState() => _ListPageState();
+}
+
+class _ListPageState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: AppBar(
-        title: new Text("My List App"),
-      ),
-      body: new Container(
-        child: new ListView.builder(
-            reverse: false,
-            itemBuilder: (_,int index)=>EachList(this.names[index]),
-            itemCount: this.names.length,
-        ),
-      ),
+    return Scaffold(
+      drawer: new NavDrawer(),
+      backgroundColor: Colors.blue[800],
+      appBar: topAppBar,
+      body: makeBody,
     );
   }
 }
-class EachList extends StatelessWidget{
-  final String name;
-  EachList(this.name);
-  @override
-  Widget build(BuildContext context) {
-    return new Card(
-      child: new Container(
-        padding: EdgeInsets.all(8.0),
-        child: new Row(
-          children: <Widget>[
-            new CircleAvatar(child: new Text(name[0]),),
-            new Padding(padding: EdgeInsets.only(right: 10.0)),
-            new Text(name,style: TextStyle(fontSize: 20.0),)
-          ],
-        ),
-      ),
-    );
-  }
-}
+
+final topAppBar = AppBar(
+  elevation: 0.1,
+  backgroundColor: Colors.blue[900],
+  title: Text("List of Experts"),
+);
+
+final makeBody = Container(
+  child: ListView.builder(
+    scrollDirection: Axis.vertical,
+    shrinkWrap: true,
+    itemCount: 10, //depends on firebase count;;
+    itemBuilder: (BuildContext context, int index) {
+      return makeCard;
+    },
+  ),
+);
+
+final makeCard = Card(
+  elevation: 8.0,
+  margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+  child: Container(
+    decoration: BoxDecoration(color: Colors.blue[900]),
+    child: makeListTile,
+  ),
+);
+
+final makeListTile = ListTile(
+  contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+  leading: Container(
+    padding: EdgeInsets.only(right: 12.0),
+    decoration: new BoxDecoration(
+        border: new Border(
+            right: new BorderSide(width: 1.0, color: Colors.white24))),
+    child: Icon(Icons.person, color: Colors.white),
+  ),
+  title: Text(
+    "John Marlin",
+
+    ///this should be expert.name where name is the expert's name@roshdiAlMajzoub
+    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+  ),
+  // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
+
+  subtitle: Row(
+    children: <Widget>[
+      Expanded(
+          flex: 1,
+          child: Container(
+            child: LinearProgressIndicator(
+                backgroundColor: Color.fromRGBO(209, 224, 224, 0.2),
+                value:
+                    0.5, //this should be expert.reputation where it will be brought from the expert's database@roshdiAlMajzoub
+                valueColor: AlwaysStoppedAnimation(Colors.green)),
+          )),
+      Expanded(
+        flex: 4,
+        child: Padding(
+            padding: EdgeInsets.only(left: 10.0),
+            child: Text(
+                "Reputable", //this should be expert.text where it will be brought from the expert's database@roshdiAlMajzoub
+                style: TextStyle(color: Colors.white))),
+      )
+    ],
+  ),
+  trailing: Icon(Icons.keyboard_arrow_right, color: Colors.white, size: 30.0),
+  onTap: () {},
+);

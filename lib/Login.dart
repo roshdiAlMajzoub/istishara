@@ -23,7 +23,7 @@ class _LoginDemoState extends State<LoginDemo> {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: _email, password: _password);
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => DashboardScreen()));
+          MaterialPageRoute(builder: (context) => Dashboard()));
     } catch (e) {
       setState(() {
         _error = e.message;
