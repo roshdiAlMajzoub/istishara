@@ -9,6 +9,8 @@ class ListName extends StatefulWidget {
 }
 
 class Name extends State<ListName> {
+  String c;
+
   @override
   void initState() {
     super.initState();
@@ -18,7 +20,7 @@ class Name extends State<ListName> {
   List expertProfileList = [];
 
   fetchDataBaseList() async {
-    dynamic resultant = await DataBaseList().getUsersList();
+    dynamic resultant = await DataBaseList().getUsersList('Data Scientist');
 
     if (resultant == null) {
       print("unable to retrieve");
@@ -26,7 +28,6 @@ class Name extends State<ListName> {
       setState(() {
         expertProfileList = resultant;
       });
-      
     }
   }
 
@@ -62,10 +63,22 @@ class Name extends State<ListName> {
       ),
       body: new Container(
         child: new ListView.builder(
-          reverse: false,
-          itemBuilder: (_, int index) => EachList(expertProfileList[index]['email']),
-          //itemBuilder: (_, int index) => EachList(this.names[index]),
           itemCount: expertProfileList.length,
+          reverse: false,
+          itemBuilder: (context, index) {
+            return Card(
+              child: ListTile(
+                title: Text(expertProfileList[index]['first name']),
+                subtitle: Text(expertProfileList[index]['email']),
+                trailing: Text(expertProfileList[index]['reputation'].toString()),
+              ),
+            );
+          },
+          //itemBuilder: (_, int index) =>
+          // =EachList(expertProfileList[index]['first name']),
+
+          //itemBuilder: (_, int index) => EachList(this.names[index]),
+          
           //itemCount: this.names.length,
         ),
       ),
