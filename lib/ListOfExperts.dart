@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:istishara_test/nav-drawer.dart';
 
 class MainListPage extends StatelessWidget {
-  // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return new ListPage();
   }
 }
+
+
 
 class ListPage extends StatefulWidget {
   @override

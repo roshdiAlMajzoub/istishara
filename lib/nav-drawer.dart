@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'Login.dart';
 
 class NavDrawer extends StatelessWidget {
+  final auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -13,7 +16,8 @@ class NavDrawer extends StatelessWidget {
                 color: Colors.green,
                 image: DecorationImage(
                     fit: BoxFit.fill,
-                    image: AssetImage('asset/images/menu.png'))), child: null,
+                    image: AssetImage('asset/images/menu.png'))),
+            child: null,
           ),
           ListTile(
             leading: Icon(Icons.verified_user),
@@ -38,12 +42,12 @@ class NavDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('Logout'),
-            onTap: (){
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => LoginDemo()));
-                },
+            onTap: () {
+              auth.signOut();
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => LoginDemo()));
+            },
           ),
-          
         ],
       ),
     );

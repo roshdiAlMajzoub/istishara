@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_password_strength/flutter_password_strength.dart';
+import 'package:istishara_test/DashBoard.dart';
 import 'package:istishara_test/Database.dart';
+import 'package:istishara_test/Login.dart';
 import 'ExpertType.dart';
 import 'dart:ui';
 
@@ -28,7 +32,10 @@ final _EmailController = TextEditingController();
 int radioValue = 0;
 
 class _USignUpState extends State<UserSignUp> {
-  String _email, _password, _firstName, _lastName, _phoneNumber, exp;
+  String _email, _password, _firstName, _lastName, _phoneNumber, exp, _error;
+  final auth = FirebaseAuth.instance;
+  User user;
+  Timer timer;
 
   Future<void> signup() async {
     try {
@@ -36,13 +43,126 @@ class _USignUpState extends State<UserSignUp> {
           .createUserWithEmailAndPassword(email: _email, password: _password);
       await DataBaseServiceExperts(uid: userCredential.user.uid)
           .updateuserData(_firstName, _lastName, _phoneNumber, _email, exp);
-      Navigator.push(context, MaterialPageRoute(builder: (_) => Experts()));
+      //Navigator.push(context, MaterialPageRoute(builder: (_) => DashboardScreen()));
     } catch (e) {
+      setState(() {
+        _error = e.message;
+        print(_error);
+      });
       print(e);
+    }
+    if (_error == null) {
+      timer = Timer.periodic(Duration(seconds: 3), (timer) {
+        checkEmailVerified();
+      });
+    }
+  }
+
+  Widget showAlert() {
+    if (_error != null) {
+      return Container(
+        color: Colors.yellow,
+        width: double.infinity,
+        padding: EdgeInsets.all(8.0),
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Icon(Icons.error_outline),
+            ),
+            Expanded(
+              child: Text(
+                _error,
+                maxLines: 3,
+              ),
+            ),
+            Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () {
+                      setState(() {
+                        _error = null;
+                      });
+                    }))
+          ],
+        ),
+      );
+    }
+    return SizedBox(
+      height: 0,
+    );
+  }
+
+  Future<void> checkEmailVerified() async {
+    _showDialog("Account Verification",
+        "An Email verification has been sent to: ", context);
+    user = auth.currentUser;
+    user.sendEmailVerification();
+    await user.reload();
+    if (user.emailVerified) {
+      timer.cancel();
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => LoginDemo()));
     }
   }
 
   void _showDialog(String title, String content, BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            insetPadding: EdgeInsets.symmetric(
+              horizontal: 5.0,
+            ),
+            title: Center(
+                child: Text(
+              title,
+              style: TextStyle(
+                  color: Colors.deepPurple, fontWeight: FontWeight.w900),
+            )),
+            content: StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState1) {
+              return SingleChildScrollView(
+                  child: Container(
+                alignment: Alignment.center,
+                width: screenWidth / 1.8,
+                height: screenHeight / 7,
+                child: Column(children: [
+                  Container(
+                      //width: double.infinity,
+                      child: Text(
+                    content,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.deepPurple, fontWeight: FontWeight.w900),
+                  )),
+                  Container(
+                      child: Text(
+                    _email,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                        color: Colors.deepPurple, fontWeight: FontWeight.w900),
+                  )),
+                  Container(
+                    child: Text(
+                      'Please verify!',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          color: Colors.deepPurple,
+                          fontWeight: FontWeight.w900),
+                    ),
+                  )
+                ]),
+              ));
+            }),
+          );
+        });
+  }
+
+  /*void _showDialog(String title, String content, BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     showDialog(
@@ -135,7 +255,7 @@ class _USignUpState extends State<UserSignUp> {
                 TextButton(onPressed: signup, child: Text("Verify"))
               ]);
         });
-  }
+  }*/
 
   bool validEmail(String email) {
     return RegExp(
@@ -178,7 +298,10 @@ class _USignUpState extends State<UserSignUp> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-             Container(height: screenHeight/20,),
+              showAlert(),
+              Container(
+                height: screenHeight / 20,
+              ),
               Container(
                 height: screenHeight / 10,
                 padding: EdgeInsets.only(
@@ -452,28 +575,30 @@ class _USignUpState extends State<UserSignUp> {
                           TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
                     )),
               ),
-                Container(height: screenHeight / 20),
+              Container(height: screenHeight / 20),
               Container(
-                  height: screenHeight / 10,
-                  padding: EdgeInsets.only(
-                    bottom: screenHeight / 30,
-                  ),
-                    child: RaisedButton(
-                      color: Colors.deepPurple,
-                      child: Text("Create Account",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w900),),
-                      onPressed: () {
-                        if (_formKeyFname.currentState.validate() &&
-                            _formKeyLname.currentState.validate() &&
-                            _formKeyEmail.currentState.validate() &&
-                            _formKeyPhone.currentState.validate() &&
-                            _formKeyPass.currentState.validate() &&
-                            _formKeyConf.currentState.validate()) {
-                          _showDialog("Account Verification",
-                              "Verify your Account via:", context);
-                        }
-                      }
+                height: screenHeight / 10,
+                padding: EdgeInsets.only(
+                  bottom: screenHeight / 30,
+                ),
+                child: RaisedButton(
+                    color: Colors.deepPurple,
+                    child: Text(
+                      "Create Account",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w900),
                     ),
-                  )
+                    onPressed: () {
+                      if (_formKeyFname.currentState.validate() &&
+                          _formKeyLname.currentState.validate() &&
+                          _formKeyEmail.currentState.validate() &&
+                          _formKeyPhone.currentState.validate() &&
+                          _formKeyPass.currentState.validate() &&
+                          _formKeyConf.currentState.validate()) {
+                        signup();
+                      }
+                    }),
+              )
             ],
           ),
         ));
