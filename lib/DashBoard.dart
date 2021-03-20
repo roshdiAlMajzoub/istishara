@@ -1,6 +1,8 @@
 import 'ListOfExperts.dart';
 import 'package:flutter/material.dart';
 import 'nav-drawer.dart';
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
+import 'dart:io';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({
@@ -12,9 +14,21 @@ class DashboardScreen extends StatelessWidget {
     return Scaffold(
        drawer: NavDrawer(),
       appBar: AppBar(
-        title: Text('Types Of Experts'),
-      ),
-      body: IconTheme.merge(
+      title: Text('Types Of Experts')),
+      body: DoubleBackToCloseApp(
+                snackBar: SnackBar(
+                  content: Text('Tap back again to Exit'),
+                ),
+                child: WillPopScope(
+                    onWillPop: () async {
+                      if (Platform.isAndroid) {
+                        exit(0);
+                      } else if (Platform.isIOS) {
+                        exit(0);
+                      }
+                      return false;
+                    },
+      child: IconTheme.merge(
         data: IconThemeData(
           color: Theme.of(context).primaryColor,
         ),
@@ -130,7 +144,7 @@ class DashboardScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
+    )));
   }
 }
 

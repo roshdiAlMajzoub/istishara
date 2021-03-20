@@ -44,8 +44,7 @@ class NavDrawer extends StatelessWidget {
             title: Text('Logout'),
             onTap: () {
               auth.signOut();
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => LoginDemo()));
+              Navigator.of(context).pushReplacementNamed('/Login');
             },
           ),
         ],
