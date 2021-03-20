@@ -1,10 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_password_strength/flutter_password_strength.dart';
 import 'package:istishara_test/Database.dart';
 import 'ExpertType.dart';
 import 'dart:ui';
-import 'package:fluttertoast/fluttertoast.dart';
+
 
 import 'package:flutter/material.dart';
 
