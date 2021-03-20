@@ -767,10 +767,7 @@ class _ESignUpState extends State<ExpertSignUp> {
                           borderRadius: BorderRadius.circular(32.0),
                         ),
                       ))),
-<<<<<<< HEAD
-=======
               cvName(cvN),
->>>>>>> 6f041002cb80c6bd7de30fb23e19f4588672b250
               Container(height: screenHeight / 20),
               Container(
                 height: screenHeight / 10,
@@ -790,18 +787,12 @@ class _ESignUpState extends State<ExpertSignUp> {
                           _formKeyEmail.currentState.validate() &&
                           _formKeyPhone.currentState.validate() &&
                           _formKeyPass.currentState.validate() &&
-<<<<<<< HEAD
-                          _formKeyConf.currentState.validate()) {
-                        _showDialog("Account Verification",
-                            "Verify your Account via:", context);
-=======
                           _formKeyConf.currentState.validate() &&
                           expertt()) {
                         signup();
 
                         //_showDialog("Account Verification",
                         //  "Verify your Account via:", context);
->>>>>>> 6f041002cb80c6bd7de30fb23e19f4588672b250
                       }
                     }),
               )
