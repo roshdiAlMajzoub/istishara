@@ -1,12 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:istishara_test/ExpertSignUp.dart';
+import 'package:istishara_test/UserSignUp.dart';
 import 'dart:async';
 import 'package:loading_animations/loading_animations.dart';
 import 'dart:math';
 import './Start.dart';
 import 'package:connectivity/connectivity.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(Display());
@@ -20,6 +22,12 @@ class Display extends StatelessWidget {
         primarySwatch: Colors.deepPurple,
       ),
       home: DisplayDemo(),
+      routes: <String, WidgetBuilder>{
+        '/Display': (BuildContext context) => DisplayDemo(),
+        '/Start': (BuildContext context) => StartApp(),
+        '/ExpertSU': (BuildContext context) => ExpertSU(),
+        '/UserSU': (BuildContext context) => UserSU()
+      },
     );
   }
 }
@@ -61,8 +69,7 @@ class _DisplayState extends State<DisplayDemo> {
         if (response == ConnectivityResult.mobile ||
             response == ConnectivityResult.wifi) {
           connection = "Connected";
-          Navigator.of(context)
-              .pushReplacement(MaterialPageRoute(builder: (_) => StartApp()));
+          Navigator.of(context).pushNamed('/Start');
         }
         a++;
         if (a == 2) {

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:istishara_test/ExpertSignUp.dart';
 import 'package:istishara_test/Login.dart';
@@ -81,10 +80,7 @@ class _StartState extends State<_Start> {
                                     fontWeight: FontWeight.w900,
                                     color: Color(0xff5848CF))),
                             onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) =>ExpertSU()));
+                              Navigator.of(context).pushNamed('/ExpertSU');
                             },
                             style: ElevatedButton.styleFrom(
                               side: BorderSide(width: 3.0, color: Colors.black),

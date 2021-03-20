@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:istishara_test/Database.dart';
+import 'package:istishara_test/Start.dart';
 import './ExpertType.dart';
 import 'ExpertType.dart';
 import 'dart:ui';
 import './DashBoard.dart';
 import 'package:flutter_password_strength/flutter_password_strength.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:flutter/material.dart';
 
@@ -26,6 +30,16 @@ final _FirstNameController = TextEditingController();
 final _LastNameController = TextEditingController();
 final _PhoneController = TextEditingController();
 final _EmailController = TextEditingController();
+
+void clearInfo() {
+  _PasswordController.clear();
+  _ConfirmPasswordController.clear();
+  _FirstNameController.clear();
+  _LastNameController.clear();
+  _PhoneController.clear();
+  _EmailController.clear();
+}
+
 int radioValue = 0;
 
 class _ESignUpState extends State<ExpertSignUp> {
@@ -150,7 +164,7 @@ class _ESignUpState extends State<ExpertSignUp> {
     } on Exception {
       return false;
     }
-    var validPrefixes = ["79", "78", "03", "81", "70"];
+    var validPrefixes = ["79", "78", "03", "81", "70", "71"];
     String prefix = number.substring(0, 2);
     if (number.length == 8 && validPrefixes.contains(prefix)) {
       return true;
@@ -164,16 +178,53 @@ class _ESignUpState extends State<ExpertSignUp> {
   static final _formKeyPhone = GlobalKey<FormState>();
   static final _formKeyPass = GlobalKey<FormState>();
   static final _formKeyConf = GlobalKey<FormState>();
+  String giveUp = "No";
+  void _showDialog2(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              insetPadding: EdgeInsets.symmetric(
+                horizontal: 5.0,
+              ),
+              title: Text(
+                "Give up?!",
+                style: TextStyle(
+                    color: Colors.deepPurple, fontWeight: FontWeight.w900),
+              ),
+              content: Text(
+                  "Are you sure you want to give up on setting up your account?\n\nInformation entered will be disregarded."),
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                      clearInfo();
+                    },
+                    child: Text("Yes")),
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("No"))
+              ]);
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
+    return  WillPopScope(
+        onWillPop: () async {
+          _showDialog2(context);
+          return false;
+        },
+        child:Scaffold(
         appBar: AppBar(
             title: Text("Expert Set up Account",
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 18,
                 ))),
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
@@ -505,32 +556,33 @@ class _ESignUpState extends State<ExpertSignUp> {
                           borderRadius: BorderRadius.circular(32.0),
                         ),
                       ))),
-
-
               Container(height: screenHeight / 20),
               Container(
-                  height: screenHeight / 10,
-                  padding: EdgeInsets.only(
-                    bottom: screenHeight / 30,
-                  ),
-                    child: RaisedButton(
-                      color: Colors.deepPurple,
-                      child: Text("Create Account",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w900),),
-                      onPressed: () {
-                        if (_formKeyFname.currentState.validate() &&
-                            _formKeyLname.currentState.validate() &&
-                            _formKeyEmail.currentState.validate() &&
-                            _formKeyPhone.currentState.validate() &&
-                            _formKeyPass.currentState.validate() &&
-                            _formKeyConf.currentState.validate()) {
-                          _showDialog("Account Verification",
-                              "Verify your Account via:", context);
-                        }
-                      }
+                height: screenHeight / 10,
+                padding: EdgeInsets.only(
+                  bottom: screenHeight / 30,
+                ),
+                child: RaisedButton(
+                    color: Colors.deepPurple,
+                    child: Text(
+                      "Create Account",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w900),
                     ),
-                  )
+                    onPressed: () {
+                      if (_formKeyFname.currentState.validate() &&
+                          _formKeyLname.currentState.validate() &&
+                          _formKeyEmail.currentState.validate() &&
+                          _formKeyPhone.currentState.validate() &&
+                          _formKeyPass.currentState.validate() &&
+                          _formKeyConf.currentState.validate()) {
+                        _showDialog("Account Verification",
+                            "Verify your Account via:", context);
+                      }
+                    }),
+              )
             ],
           ),
-        ));
+        )));
   }
 }

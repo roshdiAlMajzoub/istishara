@@ -4,6 +4,7 @@ import 'package:flutter_password_strength/flutter_password_strength.dart';
 import 'package:istishara_test/Database.dart';
 import 'ExpertType.dart';
 import 'dart:ui';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:flutter/material.dart';
 
@@ -25,6 +26,15 @@ final _FirstNameController = TextEditingController();
 final _LastNameController = TextEditingController();
 final _PhoneController = TextEditingController();
 final _EmailController = TextEditingController();
+void clearInfo() {
+  _PasswordController.clear();
+  _ConfirmPasswordController.clear();
+  _FirstNameController.clear();
+  _LastNameController.clear();
+  _PhoneController.clear();
+  _EmailController.clear();
+}
+
 int radioValue = 0;
 
 class _USignUpState extends State<UserSignUp> {
@@ -163,319 +173,362 @@ class _USignUpState extends State<UserSignUp> {
   static final _formKeyPhone = GlobalKey<FormState>();
   static final _formKeyPass = GlobalKey<FormState>();
   static final _formKeyConf = GlobalKey<FormState>();
+  void _showDialog2(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              insetPadding: EdgeInsets.symmetric(
+                horizontal: 5.0,
+              ),
+              title: Text(
+                "Give up?!",
+                style: TextStyle(
+                    color: Colors.deepPurple, fontWeight: FontWeight.w900),
+              ),
+              content: Text(
+                  "Are you sure you want to give up on setting up your account?\n\nInformation entered will be disregarded."),
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                      clearInfo();
+                    },
+                    child: Text("Yes")),
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("No"))
+              ]);
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
-        appBar: AppBar(
-            title: Text("Help-Seeker Set up Account",
-                style: TextStyle(
-                  fontSize: 20,
-                ))),
-        backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-             Container(height: screenHeight/20,),
-              Container(
-                height: screenHeight / 10,
-                padding: EdgeInsets.only(
-                  left: screenWidth / 25,
-                  right: screenWidth / 25,
-                  bottom: screenHeight / 40,
-                ),
-                child: Form(
-                  key: _formKeyFname,
-                  child: TextFormField(
-                    onChanged: (value) {
-                      setState(() {
-                        _firstName = value.trim();
-                      });
-                    },
-                    onTap: () {
-                      setState(() {
-                        _formKeyFname.currentState.reset();
-                      });
-                    },
-                    textAlignVertical: TextAlignVertical(y: 1),
-                    controller: _FirstNameController,
-                    validator: (String value) {
-                      if (value.isEmpty) {
-                        return "This field cannot be Empty";
-                      } else if (value.length < 3) {
-                        return "First name has to be at least 3 characters long";
-                      } else {
-                        return null;
-                      }
-                    },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15.0)),
-                        prefixIcon: Icon(
-                          Icons.person,
-                          color: Colors.deepPurple,
-                        ),
-                        hintText: "Do not use nick names",
-                        labelText: "First Name"),
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+    return WillPopScope(
+        onWillPop: () async {
+          _showDialog2(context);
+          return false;
+        },
+        child: Scaffold(
+            appBar: AppBar(
+                title: Text("Help-Seeker Set up Account",
+                    style: TextStyle(
+                      fontSize: 18,
+                    ))),
+            backgroundColor: Colors.white,
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    height: screenHeight / 20,
                   ),
-                ),
-              ),
-              Container(
-                height: screenHeight / 10,
-                padding: EdgeInsets.only(
-                  left: screenWidth / 25,
-                  right: screenWidth / 25,
-                  bottom: screenHeight / 40,
-                ),
-                child: Form(
-                    key: _formKeyLname,
-                    child: TextFormField(
-                      onChanged: (value) {
-                        setState(() {
-                          _lastName = value;
-                        });
-                      },
-                      onTap: () {
-                        setState(() {
-                          _formKeyLname.currentState.reset();
-                        });
-                      },
-                      textAlignVertical: TextAlignVertical(y: 1),
-                      controller: _LastNameController,
-                      validator: (String value) {
-                        if (value.isEmpty) {
-                          return "This field cannot be Empty";
-                        } else if (value.length < 3) {
-                          return "Last name has to be at least 3 characters long";
-                        } else {
-                          return null;
-                        }
-                      },
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15.0)),
-                          prefixIcon: Icon(
-                            Icons.person,
-                            color: Colors.deepPurple,
-                          ),
-                          labelText: "Last Name",
-                          hintText: "Your Family Name"),
-                      style:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
-                    )),
-              ),
-              Container(
-                height: screenHeight / 10,
-                padding: EdgeInsets.only(
-                  left: screenWidth / 25,
-                  right: screenWidth / 25,
-                  bottom: screenHeight / 40,
-                ),
-                child: Form(
-                    key: _formKeyEmail,
-                    child: TextFormField(
-                      onChanged: (value) {
-                        setState(() {
-                          _email = value.trim();
-                        });
-                      },
-                      onTap: () {
-                        setState(() {
-                          _formKeyEmail.currentState.reset();
-                        });
-                      },
-                      textAlignVertical: TextAlignVertical(y: 1),
-                      controller: _EmailController,
-                      validator: (String value) {
-                        if (value.isEmpty) {
-                          return "This field cannot be Empty";
-                        } else if (!validEmail(value)) {
-                          return "Incorrect Format";
-                        } else {
-                          return null;
-                        }
-                      },
-                      decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.email,
-                            color: Colors.deepPurple,
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15.0)),
-                          labelText: "E-mail",
-                          hintText: "Enter valid email as abc@example.com"),
-                      style:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
-                    )),
-              ),
-              Container(
-                height: screenHeight / 10,
-                padding: EdgeInsets.only(
-                  left: screenWidth / 25,
-                  right: screenWidth / 25,
-                  bottom: screenHeight / 40,
-                ),
-                child: Form(
-                    key: _formKeyPhone,
-                    child: TextFormField(
-                      onChanged: (value) {
-                        setState(() {
-                          _phoneNumber = value.trim();
-                        });
-                      },
-                      onTap: () {
-                        setState(() {
-                          _formKeyPhone.currentState.reset();
-                        });
-                      },
-                      textAlignVertical: TextAlignVertical(y: 1),
-                      controller: _PhoneController,
-                      validator: (String value) {
-                        if (value.isEmpty) {
-                          return "This field cannot be Empty";
-                        } else if (!validPhoneNumber(value)) {
-                          return "Incorrect Format";
-                        } else {
-                          return null;
-                        }
-                      },
-                      decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.phone,
-                            color: Colors.deepPurple,
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15.0)),
-                          labelText: "Phone Number",
-                          hintText: "8-digits Number"),
-                      style:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
-                    )),
-              ),
-              Container(
-                height: screenHeight / 10,
-                padding: EdgeInsets.only(
-                  left: screenWidth / 25,
-                  right: screenWidth / 25,
-                  bottom: screenHeight / 40,
-                ),
-                child: Form(
-                    key: _formKeyPass,
-                    child: TextFormField(
-                      onChanged: (value) {
-                        setState(() {
-                          _password = value.trim();
-                        });
-                      },
-                      onTap: () {
-                        setState(() {
-                          _formKeyPass.currentState.reset();
-                        });
-                      },
-                      textAlignVertical: TextAlignVertical(y: 1),
-                      controller: _PasswordController,
-                      validator: (String value) {
-                        if (value.isEmpty) {
-                          return "This field cannot be Empty";
-                        } else if (value.length < 6) {
-                          return "Password has to be at least 6 characters long.";
-                        } else {
-                          return null;
-                        }
-                      },
-                      obscureText: true,
-                      decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.lock,
-                            color: Colors.deepPurple,
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15.0)),
-                          labelText: "Password",
-                          hintText:
-                              "Strong Password is at least 8 character long."),
-                      style:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
-                    )),
-              ),
-              Padding(
-                  padding: EdgeInsets.only(
-                    left: screenWidth / 15,
-                    right: screenWidth / 15,
-                    bottom: screenHeight / 40,
-                  ),
-                  child: FlutterPasswordStrength(
-                      password: _PasswordController.value.text,
-                      strengthCallback: (strength) {
-                        debugPrint(strength.toString());
-                      })),
-              Container(
-                height: screenHeight / 10,
-                padding: EdgeInsets.only(
-                  left: screenWidth / 25,
-                  right: screenWidth / 25,
-                  bottom: screenHeight / 40,
-                ),
-                child: Form(
-                    key: _formKeyConf,
-                    child: TextFormField(
-                      onTap: () {
-                        setState(() {
-                          _formKeyConf.currentState.reset();
-                        });
-                      },
-                      textAlignVertical: TextAlignVertical(y: 1),
-                      controller: _ConfirmPasswordController,
-                      validator: (String value) {
-                        if (value.isEmpty) {
-                          return "This field cannot be Empty";
-                        } else if (value != _PasswordController.value.text) {
-                          return "Password Mismatch";
-                        } else {
-                          return null;
-                        }
-                      },
-                      obscureText: true,
-                      decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.lock,
-                            color: Colors.deepPurple,
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15.0)),
-                          labelText: "Confirm Password",
-                          hintText: "Re-enter your password"),
-                      style:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
-                    )),
-              ),
-                Container(height: screenHeight / 20),
-              Container(
-                  height: screenHeight / 10,
-                  padding: EdgeInsets.only(
-                    bottom: screenHeight / 30,
-                  ),
-                    child: RaisedButton(
-                      color: Colors.deepPurple,
-                      child: Text("Create Account",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w900),),
-                      onPressed: () {
-                        if (_formKeyFname.currentState.validate() &&
-                            _formKeyLname.currentState.validate() &&
-                            _formKeyEmail.currentState.validate() &&
-                            _formKeyPhone.currentState.validate() &&
-                            _formKeyPass.currentState.validate() &&
-                            _formKeyConf.currentState.validate()) {
-                          _showDialog("Account Verification",
-                              "Verify your Account via:", context);
-                        }
-                      }
+                  Container(
+                    height: screenHeight / 10,
+                    padding: EdgeInsets.only(
+                      left: screenWidth / 25,
+                      right: screenWidth / 25,
+                      bottom: screenHeight / 40,
                     ),
+                    child: Form(
+                      key: _formKeyFname,
+                      child: TextFormField(
+                        onChanged: (value) {
+                          setState(() {
+                            _firstName = value.trim();
+                          });
+                        },
+                        onTap: () {
+                          setState(() {
+                            _formKeyFname.currentState.reset();
+                          });
+                        },
+                        textAlignVertical: TextAlignVertical(y: 1),
+                        controller: _FirstNameController,
+                        validator: (String value) {
+                          if (value.isEmpty) {
+                            return "This field cannot be Empty";
+                          } else if (value.length < 3) {
+                            return "First name has to be at least 3 characters long";
+                          } else {
+                            return null;
+                          }
+                        },
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15.0)),
+                            prefixIcon: Icon(
+                              Icons.person,
+                              color: Colors.deepPurple,
+                            ),
+                            hintText: "Do not use nick names",
+                            labelText: "First Name"),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 18),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: screenHeight / 10,
+                    padding: EdgeInsets.only(
+                      left: screenWidth / 25,
+                      right: screenWidth / 25,
+                      bottom: screenHeight / 40,
+                    ),
+                    child: Form(
+                        key: _formKeyLname,
+                        child: TextFormField(
+                          onChanged: (value) {
+                            setState(() {
+                              _lastName = value;
+                            });
+                          },
+                          onTap: () {
+                            setState(() {
+                              _formKeyLname.currentState.reset();
+                            });
+                          },
+                          textAlignVertical: TextAlignVertical(y: 1),
+                          controller: _LastNameController,
+                          validator: (String value) {
+                            if (value.isEmpty) {
+                              return "This field cannot be Empty";
+                            } else if (value.length < 3) {
+                              return "Last name has to be at least 3 characters long";
+                            } else {
+                              return null;
+                            }
+                          },
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15.0)),
+                              prefixIcon: Icon(
+                                Icons.person,
+                                color: Colors.deepPurple,
+                              ),
+                              labelText: "Last Name",
+                              hintText: "Your Family Name"),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 18),
+                        )),
+                  ),
+                  Container(
+                    height: screenHeight / 10,
+                    padding: EdgeInsets.only(
+                      left: screenWidth / 25,
+                      right: screenWidth / 25,
+                      bottom: screenHeight / 40,
+                    ),
+                    child: Form(
+                        key: _formKeyEmail,
+                        child: TextFormField(
+                          onChanged: (value) {
+                            setState(() {
+                              _email = value.trim();
+                            });
+                          },
+                          onTap: () {
+                            setState(() {
+                              _formKeyEmail.currentState.reset();
+                            });
+                          },
+                          textAlignVertical: TextAlignVertical(y: 1),
+                          controller: _EmailController,
+                          validator: (String value) {
+                            if (value.isEmpty) {
+                              return "This field cannot be Empty";
+                            } else if (!validEmail(value)) {
+                              return "Incorrect Format";
+                            } else {
+                              return null;
+                            }
+                          },
+                          decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.email,
+                                color: Colors.deepPurple,
+                              ),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15.0)),
+                              labelText: "E-mail",
+                              hintText: "Enter valid email as abc@example.com"),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 18),
+                        )),
+                  ),
+                  Container(
+                    height: screenHeight / 10,
+                    padding: EdgeInsets.only(
+                      left: screenWidth / 25,
+                      right: screenWidth / 25,
+                      bottom: screenHeight / 40,
+                    ),
+                    child: Form(
+                        key: _formKeyPhone,
+                        child: TextFormField(
+                          onChanged: (value) {
+                            setState(() {
+                              _phoneNumber = value.trim();
+                            });
+                          },
+                          onTap: () {
+                            setState(() {
+                              _formKeyPhone.currentState.reset();
+                            });
+                          },
+                          textAlignVertical: TextAlignVertical(y: 1),
+                          controller: _PhoneController,
+                          validator: (String value) {
+                            if (value.isEmpty) {
+                              return "This field cannot be Empty";
+                            } else if (!validPhoneNumber(value)) {
+                              return "Incorrect Format";
+                            } else {
+                              return null;
+                            }
+                          },
+                          decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.phone,
+                                color: Colors.deepPurple,
+                              ),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15.0)),
+                              labelText: "Phone Number",
+                              hintText: "8-digits Number"),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 18),
+                        )),
+                  ),
+                  Container(
+                    height: screenHeight / 10,
+                    padding: EdgeInsets.only(
+                      left: screenWidth / 25,
+                      right: screenWidth / 25,
+                      bottom: screenHeight / 40,
+                    ),
+                    child: Form(
+                        key: _formKeyPass,
+                        child: TextFormField(
+                          onChanged: (value) {
+                            setState(() {
+                              _password = value.trim();
+                            });
+                          },
+                          onTap: () {
+                            setState(() {
+                              _formKeyPass.currentState.reset();
+                            });
+                          },
+                          textAlignVertical: TextAlignVertical(y: 1),
+                          controller: _PasswordController,
+                          validator: (String value) {
+                            if (value.isEmpty) {
+                              return "This field cannot be Empty";
+                            } else if (value.length < 6) {
+                              return "Password has to be at least 6 characters long.";
+                            } else {
+                              return null;
+                            }
+                          },
+                          obscureText: true,
+                          decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.lock,
+                                color: Colors.deepPurple,
+                              ),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15.0)),
+                              labelText: "Password",
+                              hintText:
+                                  "Strong Password is at least 8 character long."),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 18),
+                        )),
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(
+                        left: screenWidth / 15,
+                        right: screenWidth / 15,
+                        bottom: screenHeight / 40,
+                      ),
+                      child: FlutterPasswordStrength(
+                          password: _PasswordController.value.text,
+                          strengthCallback: (strength) {
+                            debugPrint(strength.toString());
+                          })),
+                  Container(
+                    height: screenHeight / 10,
+                    padding: EdgeInsets.only(
+                      left: screenWidth / 25,
+                      right: screenWidth / 25,
+                      bottom: screenHeight / 40,
+                    ),
+                    child: Form(
+                        key: _formKeyConf,
+                        child: TextFormField(
+                          onTap: () {
+                            setState(() {
+                              _formKeyConf.currentState.reset();
+                            });
+                          },
+                          textAlignVertical: TextAlignVertical(y: 1),
+                          controller: _ConfirmPasswordController,
+                          validator: (String value) {
+                            if (value.isEmpty) {
+                              return "This field cannot be Empty";
+                            } else if (value !=
+                                _PasswordController.value.text) {
+                              return "Password Mismatch";
+                            } else {
+                              return null;
+                            }
+                          },
+                          obscureText: true,
+                          decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.lock,
+                                color: Colors.deepPurple,
+                              ),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15.0)),
+                              labelText: "Confirm Password",
+                              hintText: "Re-enter your password"),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 18),
+                        )),
+                  ),
+                  Container(height: screenHeight / 20),
+                  Container(
+                    height: screenHeight / 10,
+                    padding: EdgeInsets.only(
+                      bottom: screenHeight / 30,
+                    ),
+                    child: RaisedButton(
+                        color: Colors.deepPurple,
+                        child: Text(
+                          "Create Account",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.w900),
+                        ),
+                        onPressed: () {
+                          if (_formKeyFname.currentState.validate() &&
+                              _formKeyLname.currentState.validate() &&
+                              _formKeyEmail.currentState.validate() &&
+                              _formKeyPhone.currentState.validate() &&
+                              _formKeyPass.currentState.validate() &&
+                              _formKeyConf.currentState.validate()) {
+                            _showDialog("Account Verification",
+                                "Verify your Account via:", context);
+                          }
+                        }),
                   )
-            ],
-          ),
-        ));
+                ],
+              ),
+            )));
   }
 }
