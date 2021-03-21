@@ -5,6 +5,7 @@ import 'nav-drawer.dart';
 import 'ListOfExperts.dart';
 
 class MainDashboard extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return Dashboard();
@@ -38,7 +39,8 @@ class DashboardState extends State<Dashboard> {
             makeDashboardItem("PE", Icons.sports_handball),
             makeDashboardItem("Handyman", Icons.handyman_outlined),
             makeDashboardItem("Architect", Icons.apartment_rounded),
-            makeDashboardItem("Electrician", Icons.electrical_services_outlined),
+            makeDashboardItem(
+                "Electrician", Icons.electrical_services_outlined),
             makeDashboardItem("Carpenter", Icons.carpenter_outlined),
             makeDashboardItem("Interior Designer", Icons.home_outlined),
             makeDashboardItem("BlackSmith", Icons.construction),
@@ -89,5 +91,3 @@ class DashboardState extends State<Dashboard> {
         ));
   }
 }
-
-

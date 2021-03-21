@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:istishara_test/DashBoard.dart';
 import 'package:istishara_test/ExpertSignUp.dart';
 import 'package:istishara_test/Login.dart';
 import 'UserSignUp.dart';
@@ -84,7 +84,7 @@ class _StartState extends State<_Start> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (_) =>ExpertSU()));
+                                      builder: (_) => ExpertSU()));
                             },
                             style: ElevatedButton.styleFrom(
                               side: BorderSide(width: 3.0, color: Colors.black),
@@ -108,7 +108,7 @@ class _StartState extends State<_Start> {
                       child: OutlinedButton(
                         onPressed: () {
                           Navigator.push(context,
-                              MaterialPageRoute(builder: (_) => MyApp()));
+                              MaterialPageRoute(builder: (_) => LoginDemo()));
                         },
                         child: Text("Sign In",
                             style: TextStyle(

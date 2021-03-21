@@ -79,7 +79,7 @@ final makeListTile = ListTile(
             child: LinearProgressIndicator(
                 backgroundColor: Color.fromRGBO(209, 224, 224, 0.2),
                 value:
-                    0.5, //this should be expert.reputation where it will be brought from the expert's database@roshdiAlMajzoub
+                    1, //this should be expert.reputation where it will be brought from the expert's database@roshdiAlMajzoub
                 valueColor: AlwaysStoppedAnimation(Colors.green)),
           )),
       Expanded(

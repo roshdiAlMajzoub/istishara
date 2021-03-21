@@ -39,6 +39,7 @@ dependencies:
   firebase_storage: ^8.0.0
   file_picker: ^3.0.0
   path_provider: ^2.0.1
+  syncfusion_flutter_calendar: ^18.4.46
   http:
   
   
@@ -84,6 +85,7 @@ flutter:
       - asset/images/nb10.png
       - asset/images/user.png
       - asset/images/menu.png
+      - asset/images/flower.jpg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
