@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:istishara_test/Reset.dart';
-import './DashBoard.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -22,8 +21,7 @@ class _LoginDemoState extends State<LoginDemo> {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: _email, password: _password);
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => Dashboard()));
+      Navigator.of(context).pushNamed('/UserMain');
     } catch (e) {
       setState(() {
         _error = e.message;
@@ -71,8 +69,13 @@ class _LoginDemoState extends State<LoginDemo> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
+    return WillPopScope(
+        onWillPop: () async {
+          Navigator.of(context).pushReplacementNamed('/Start');
+          return false;
+        },
+        child: Scaffold(
+          appBar: AppBar(
           title: Text("Login Page"),
           elevation: 0,
           backgroundColor: Color(0xFF311B92)),
@@ -154,9 +157,8 @@ class _LoginDemoState extends State<LoginDemo> {
               ),
             ),
             TextButton(
-              onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> ResetDemo())),
-
-              
+              onPressed: () => Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => ResetDemo())),
               child: Text(
                 'Forgot Password',
                 style: TextStyle(color: Colors.deepPurple[900], fontSize: 15),
@@ -184,6 +186,6 @@ class _LoginDemoState extends State<LoginDemo> {
           ],
         ),
       ),
-    );
+    ));
   }
 }

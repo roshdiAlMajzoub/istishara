@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/material/dropdown.dart';
-import 'package:istishara_test/DashBoard.dart';
-import 'package:istishara_test/UserSignUp.dart';
+
 
 class ExpertType {
   int id;

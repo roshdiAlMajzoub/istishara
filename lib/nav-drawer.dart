@@ -26,11 +26,6 @@ class NavDrawer extends StatelessWidget {
             onTap: () => {},
           ),
           ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Settings'),
-            onTap: () => {Navigator.of(context).pop()},
-          ),
-          ListTile(
             leading: Icon(Icons.border_color),
             title: Text('Feedback'),
             onTap: () => {Navigator.of(context).pop()},
@@ -44,12 +39,16 @@ class NavDrawer extends StatelessWidget {
             },
           ),
           ListTile(
+            leading: Icon(Icons.settings),
+            title: Text('Settings'),
+            onTap: () => {Navigator.of(context).pop()},
+          ),
+          ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('Logout'),
             onTap: () {
               auth.signOut();
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => LoginDemo()));
+              Navigator.of(context).pushReplacementNamed('/Login');
             },
           ),
         ],

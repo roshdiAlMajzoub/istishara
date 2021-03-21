@@ -1,16 +1,8 @@
-import 'package:istishara_test/DashBoard.dart';
 import 'ListOfExperts.dart';
 import 'package:flutter/material.dart';
 import 'nav-drawer.dart';
-import 'ListOfExperts.dart';
-
-class MainDashboard extends StatelessWidget {
-
-  @override
-  Widget build(BuildContext context) {
-    return Dashboard();
-  }
-}
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
+import 'dart:io';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -26,7 +18,20 @@ class DashboardState extends State<Dashboard> {
           title: Text("Dashboard"),
           elevation: .1,
           backgroundColor: Color(0xff5848CF)),
-      body: Container(
+      body:DoubleBackToCloseApp(
+                snackBar: SnackBar(
+                  content: Text('Tap back again to Exit'),
+                ),
+                child:WillPopScope(
+                    onWillPop: () async {
+                      if (Platform.isAndroid) {
+                        exit(0);
+                      } else if (Platform.isIOS) {
+                        exit(0);
+                      }
+                      return false;
+                    },
+                    child: Container(
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 2.0),
         child: GridView.count(
           crossAxisCount: 2,
@@ -48,7 +53,7 @@ class DashboardState extends State<Dashboard> {
           ],
         ),
       ),
-    );
+    )));
   }
 
   Card makeDashboardItem(

@@ -1,13 +1,10 @@
 import 'dart:async';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_password_strength/flutter_password_strength.dart';
-import 'package:istishara_test/DashBoard.dart';
 import 'package:istishara_test/Database.dart';
 import 'package:istishara_test/Login.dart';
-import 'ExpertType.dart';
 import 'dart:ui';
+
 
 import 'package:flutter/material.dart';
 
@@ -29,6 +26,15 @@ final _FirstNameController = TextEditingController();
 final _LastNameController = TextEditingController();
 final _PhoneController = TextEditingController();
 final _EmailController = TextEditingController();
+void clearInfo() {
+  _PasswordController.clear();
+  _ConfirmPasswordController.clear();
+  _FirstNameController.clear();
+  _LastNameController.clear();
+  _PhoneController.clear();
+  _EmailController.clear();
+}
+
 int radioValue = 0;
 
 class _USignUpState extends State<UserSignUp> {
@@ -283,71 +289,108 @@ class _USignUpState extends State<UserSignUp> {
   static final _formKeyPhone = GlobalKey<FormState>();
   static final _formKeyPass = GlobalKey<FormState>();
   static final _formKeyConf = GlobalKey<FormState>();
+  void _showDialog2(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              insetPadding: EdgeInsets.symmetric(
+                horizontal: 5.0,
+              ),
+              title: Text(
+                "Give up?!",
+                style: TextStyle(
+                    color: Colors.deepPurple, fontWeight: FontWeight.w900),
+              ),
+              content: Text(
+                  "Are you sure you want to give up on setting up your account?\n\nInformation entered will be disregarded."),
+              actions: <Widget>[
+                TextButton(
+                    onPressed:(){
+                       setState(() {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                        clearInfo();
+                      });
+                    },
+                    child: Text("Yes")),
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("No"))
+              ]);
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
-        appBar: AppBar(
-            title: Text("Help-Seeker Set up Account",
-                style: TextStyle(
-                  fontSize: 20,
-                ))),
-        backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              showAlert(),
-              Container(
-                height: screenHeight / 20,
-              ),
-              Container(
-                height: screenHeight / 10,
-                padding: EdgeInsets.only(
-                  left: screenWidth / 25,
-                  right: screenWidth / 25,
-                  bottom: screenHeight / 40,
-                ),
-                child: Form(
-                  key: _formKeyFname,
-                  child: TextFormField(
-                    onChanged: (value) {
-                      setState(() {
-                        _firstName = value.trim();
-                      });
-                    },
-                    onTap: () {
-                      setState(() {
-                        _formKeyFname.currentState.reset();
-                      });
-                    },
-                    textAlignVertical: TextAlignVertical(y: 1),
-                    controller: _FirstNameController,
-                    validator: (String value) {
-                      if (value.isEmpty) {
-                        return "This field cannot be Empty";
-                      } else if (value.length < 3) {
-                        return "First name has to be at least 3 characters long";
-                      } else {
-                        return null;
-                      }
-                    },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15.0)),
-                        prefixIcon: Icon(
-                          Icons.person,
-                          color: Colors.deepPurple,
-                        ),
-                        hintText: "Do not use nick names",
-                        labelText: "First Name"),
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+    return WillPopScope(
+        onWillPop: () async {
+          _showDialog2(context);
+          return false;
+        },
+        child: Scaffold(
+            appBar: AppBar(
+                title: Text("Help-Seeker Set up Account",
+                    style: TextStyle(
+                      fontSize: 18,
+                    ))),
+            backgroundColor: Colors.white,
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    height: screenHeight / 20,
                   ),
-                ),
-              ),
-              Container(
-                height: screenHeight / 10,
+                  Container(
+                    height: screenHeight / 10,
+                    padding: EdgeInsets.only(
+                      left: screenWidth / 25,
+                      right: screenWidth / 25,
+                      bottom: screenHeight / 40,
+                    ),
+                    child: Form(
+                      key: _formKeyFname,
+                      child: TextFormField(
+                        onChanged: (value) {
+                          setState(() {
+                            _firstName = value.trim();
+                          });
+                        },
+                        onTap: () {
+                          setState(() {
+                            _formKeyFname.currentState.reset();
+                          });
+                        },
+                        textAlignVertical: TextAlignVertical(y: 1),
+                        controller: _FirstNameController,
+                        validator: (String value) {
+                          if (value.isEmpty) {
+                            return "This field cannot be Empty";
+                          } else if (value.length < 3) {
+                            return "First name has to be at least 3 characters long";
+                          } else {
+                            return null;
+                          }
+                        },
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15.0)),
+                            prefixIcon: Icon(
+                              Icons.person,
+                              color: Colors.deepPurple,
+                            ),
+                            hintText: "Do not use nick names",
+                            labelText: "First Name"),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 18),
+                      ),
+                    ),
+                  ),
+                    Container(height: screenHeight / 10,
                 padding: EdgeInsets.only(
                   left: screenWidth / 25,
                   right: screenWidth / 25,
@@ -601,6 +644,6 @@ class _USignUpState extends State<UserSignUp> {
               )
             ],
           ),
-        ));
+        )));
   }
 }

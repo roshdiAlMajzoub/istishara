@@ -1,12 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:istishara_test/DashBoard.dart';
+import 'package:istishara_test/ExpertSignUp.dart';
+import 'package:istishara_test/Login.dart';
+import 'package:istishara_test/UserSignUp.dart';
 import 'dart:async';
 import 'package:loading_animations/loading_animations.dart';
 import 'dart:math';
 import './Start.dart';
 import 'package:connectivity/connectivity.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(Display());
@@ -20,9 +26,19 @@ class Display extends StatelessWidget {
         primarySwatch: Colors.deepPurple,
       ),
       home: DisplayDemo(),
+      routes: <String, WidgetBuilder>{
+        '/Display': (BuildContext context) => DisplayDemo(),
+        '/Start': (BuildContext context) => StartApp(),
+        '/ExpertSU': (BuildContext context) => ExpertSU(),
+        '/UserSU': (BuildContext context) => UserSU(),
+        '/UserMain': (BuildContext context) => Dashboard(),
+        '/Login': (BuildContext context) => MyApp(),
+      },
     );
   }
 }
+
+enum AuthStatus {NotLoggedIn,LoggedIn}
 
 class DisplayDemo extends StatefulWidget {
   @override
@@ -50,7 +66,26 @@ void _showDialog(String title, String content, BuildContext context) {
       });
 }
 
+
+String onStartUp()
+{
+  String val = "failed";
+  try {
+         FirebaseAuth _auth = FirebaseAuth.instance;
+         User user = _auth.currentUser;
+         String email = user.email;
+         String uid = user.uid;
+         val = "success";
+         } catch(e)
+         {
+           return val;
+         }
+         return val;
+}
+
 class _DisplayState extends State<DisplayDemo> {
+
+  
   @override
   void initState() {
     super.initState();
@@ -61,8 +96,21 @@ class _DisplayState extends State<DisplayDemo> {
         if (response == ConnectivityResult.mobile ||
             response == ConnectivityResult.wifi) {
           connection = "Connected";
-          Navigator.of(context)
-              .pushReplacement(MaterialPageRoute(builder: (_) => StartApp()));
+         var  _authStatus = AuthStatus.NotLoggedIn;
+         String res = onStartUp();
+         if (res=="success")
+         {
+           _authStatus=AuthStatus.LoggedIn;
+         }
+         switch(_authStatus){
+           case AuthStatus.NotLoggedIn:
+                Navigator.of(context).pushNamed('/Start');
+                break;
+             case AuthStatus.LoggedIn:
+                Navigator.of(context).pushNamed('/UserMain');
+                break;
+
+         }
         }
         a++;
         if (a == 2) {

@@ -36,11 +36,13 @@ dependencies:
   firebase_core: "^1.0.1"
   firebase_auth: "^1.0.1"
   cloud_firestore: ^1.0.1
+  #fluttertoast: ^7.1.6
   firebase_storage: ^8.0.0
   file_picker: ^3.0.0
   path_provider: ^2.0.1
-  syncfusion_flutter_calendar: ^18.4.46
-  http:
+  double_back_to_close_app: ^2.0.1
+  syncfusion_flutter_calendar: ^18.4.48
+
   
   
 
