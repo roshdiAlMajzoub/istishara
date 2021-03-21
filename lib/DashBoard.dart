@@ -67,7 +67,7 @@ class DashboardState extends State<Dashboard> {
           child: new InkWell(
             onTap: () {
               Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => ListPage()));
+                  context, MaterialPageRoute(builder: (_) => ListPage(title)));
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
