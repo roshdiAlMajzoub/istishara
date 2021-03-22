@@ -28,20 +28,20 @@ class DataBaseServiceExperts {
       'last name': lname,
       'email': email,
       'phone number': pnumber,
-      'reputation' : 0,
+      'reputation': 0,
     });
   }
 }
 
 class DataBaseList {
-  
-
   Future getUsersList(coll) async {
-    CollectionReference collectionReference =
-      FirebaseFirestore.instance.collection(coll);
+    //CollectionReference collectionReference =
+      //  FirebaseFirestore.instance.collection(coll);
     List expertList = [];
+    Query colcollectionReference =
+        FirebaseFirestore.instance.collection(coll).orderBy('reputation', descending: true);
     try {
-      await collectionReference.get().then((QuerySnapshot) {
+      await colcollectionReference.get().then((QuerySnapshot) {
         QuerySnapshot.docs.forEach((element) {
           expertList.add(element.data());
         });

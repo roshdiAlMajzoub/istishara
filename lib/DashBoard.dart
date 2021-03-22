@@ -70,7 +70,7 @@ class DashboardState extends State<Dashboard> {
             
             onTap: () {
               Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => ListPage()));
+                  context, MaterialPageRoute(builder: (_) => ListPage(title)));
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
