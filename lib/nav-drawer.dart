@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:istishara_test/Calendar.dart';
+import 'package:istishara_test/DashBoard.dart';
 import 'Login.dart';
+import 'Profile.dart';
+import 'Settings.dart';
 
 class NavDrawer extends StatelessWidget {
   final auth = FirebaseAuth.instance;
@@ -23,12 +26,8 @@ class NavDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.verified_user),
             title: Text('Profile'),
-            onTap: () => {},
-          ),
-          ListTile(
-            leading: Icon(Icons.border_color),
-            title: Text('Feedback'),
-            onTap: () => {Navigator.of(context).pop()},
+            onTap: () => { Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => Profile()))},
           ),
           ListTile(
             leading: Icon(Icons.calendar_today),
@@ -39,8 +38,22 @@ class NavDrawer extends StatelessWidget {
             },
           ),
           ListTile(
+            leading: Icon(Icons.dashboard),
+            title: Text('Dashboard'),
+            onTap: () => {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => Dashboard()))
+            },
+          ),
+          ListTile(
             leading: Icon(Icons.settings),
             title: Text('Settings'),
+            onTap: () => {Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => Settings()))},
+          ),
+           ListTile(
+            leading: Icon(Icons.border_color),
+            title: Text('Feedback'),
             onTap: () => {Navigator.of(context).pop()},
           ),
           ListTile(

@@ -42,6 +42,7 @@ dependencies:
   path_provider: ^2.0.1
   double_back_to_close_app: ^2.0.1
   syncfusion_flutter_calendar: ^18.4.48
+  settings_ui: ^0.6.0
 
   
   
@@ -87,7 +88,7 @@ flutter:
       - asset/images/nb10.png
       - asset/images/user.png
       - asset/images/menu.png
-      - asset/images/flower.jpg
+      - asset/images/head.jpg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

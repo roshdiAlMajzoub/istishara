@@ -13,47 +13,47 @@ class DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavDrawer(),
-      appBar: AppBar(
-          title: Text("Dashboard"),
-          elevation: .1,
-          backgroundColor: Color(0xff5848CF)),
-      body:DoubleBackToCloseApp(
-                snackBar: SnackBar(
-                  content: Text('Tap back again to Exit'),
+        drawer: NavDrawer(),
+        appBar: AppBar(
+            title: Text("Dashboard"),
+            elevation: .1,
+            backgroundColor: Color(0xff5848CF)),
+        body: DoubleBackToCloseApp(
+            snackBar: SnackBar(
+              content: Text('Tap back again to Exit'),
+            ),
+            child: WillPopScope(
+              onWillPop: () async {
+                if (Platform.isAndroid) {
+                  exit(0);
+                } else if (Platform.isIOS) {
+                  exit(0);
+                }
+                return false;
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 2.0),
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  padding: EdgeInsets.all(3.0),
+                  children: <Widget>[
+                    makeDashboardItem("Software Engineer", Icons.computer),
+                    makeDashboardItem("Civil Engineering", Icons.build),
+                    makeDashboardItem("Nutritionist", Icons.flaky_rounded),
+                    makeDashboardItem("Plumber", Icons.plumbing),
+                    makeDashboardItem("PE", Icons.sports_handball),
+                    makeDashboardItem("Handyman", Icons.handyman_outlined),
+                    makeDashboardItem("Architect", Icons.apartment_rounded),
+                    makeDashboardItem(
+                        "Electrician", Icons.electrical_services_outlined),
+                    makeDashboardItem("Carpenter", Icons.carpenter_outlined),
+                    makeDashboardItem("Interior Designer", Icons.home_outlined),
+                    makeDashboardItem("BlackSmith", Icons.construction),
+                    makeDashboardItem("Industrial Engineer", Icons.work),
+                  ],
                 ),
-                child:WillPopScope(
-                    onWillPop: () async {
-                      if (Platform.isAndroid) {
-                        exit(0);
-                      } else if (Platform.isIOS) {
-                        exit(0);
-                      }
-                      return false;
-                    },
-                    child: Container(
-        padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 2.0),
-        child: GridView.count(
-          crossAxisCount: 2,
-          padding: EdgeInsets.all(3.0),
-          children: <Widget>[
-            makeDashboardItem("Software Engineer", Icons.computer),
-            makeDashboardItem("Civil Engineering", Icons.build),
-            makeDashboardItem("Nutritionist", Icons.flaky_rounded),
-            makeDashboardItem("Plumber", Icons.plumbing),
-            makeDashboardItem("PE", Icons.sports_handball),
-            makeDashboardItem("Handyman", Icons.handyman_outlined),
-            makeDashboardItem("Architect", Icons.apartment_rounded),
-            makeDashboardItem(
-                "Electrician", Icons.electrical_services_outlined),
-            makeDashboardItem("Carpenter", Icons.carpenter_outlined),
-            makeDashboardItem("Interior Designer", Icons.home_outlined),
-            makeDashboardItem("BlackSmith", Icons.construction),
-            makeDashboardItem("Industrial Engineer", Icons.work),
-          ],
-        ),
-      ),
-    )));
+              ),
+            )));
   }
 
   Card makeDashboardItem(
@@ -61,11 +61,13 @@ class DashboardState extends State<Dashboard> {
     IconData icon,
   ) {
     return Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
         elevation: 1.0,
         margin: new EdgeInsets.all(8.0),
         child: Container(
-          decoration: BoxDecoration(color: Color.fromRGBO(220, 220, 220, 1.0)),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(50.0),color: Color.fromRGBO(220, 220, 220, 1.0)),
           child: new InkWell(
+            
             onTap: () {
               Navigator.push(
                   context, MaterialPageRoute(builder: (_) => ListPage()));
