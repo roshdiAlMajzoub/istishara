@@ -40,6 +40,7 @@ class SettingsState extends State<Settings> {
                   leading: Icon(Icons.delete),
                   onPressed: (BuildContext context) {},
                 ),
+               
               ],
             ),
             SettingsSection(
@@ -50,13 +51,31 @@ class SettingsState extends State<Settings> {
                   title: 'Available',
                   leading: Icon(Icons.event_available_outlined),
                   switchValue: true,
-                  onToggle: (bool value) {
-
-                  },
+                  onToggle: (bool value) {},
                   switchActiveColor: Colors.orange[800],
                 ),
               ],
             ),
+            SettingsSection(
+              titlePadding: EdgeInsets.all(20),
+              title: 'App',
+              tiles: [
+                SettingsTile(
+                  title: 'Terms of Service',
+                  leading: Icon(Icons.assistant_photo),
+                  trailing: Icon(Icons.arrow_forward_ios),
+                  onPressed: (BuildContext context) {},
+                ),
+                SettingsTile(
+                  title: 'Open Source Licenses',
+                  leading: Icon(Icons.app_settings_alt_outlined),
+                  trailing: Icon(Icons.arrow_forward_ios),
+                  onPressed: (BuildContext context) {},
+                ),
+               
+              ],
+            ),
+            
           ],
         ));
   }

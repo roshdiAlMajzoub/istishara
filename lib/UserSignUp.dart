@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_password_strength/flutter_password_strength.dart';
-import 'package:istishara_test/Database.dart';
-import 'package:istishara_test/Login.dart';
+import 'Database.dart';
+import 'Login.dart';
 import 'dart:ui';
 
 

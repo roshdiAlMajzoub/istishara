@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:istishara_test/Login.dart';
+import 'Login.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 
 class StartApp extends StatelessWidget {

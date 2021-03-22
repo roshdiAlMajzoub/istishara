@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:istishara_test/Calendar.dart';
-import 'package:istishara_test/DashBoard.dart';
+import 'Calendar.dart';
+import 'DashBoard.dart';
 import 'Login.dart';
 import 'Profile.dart';
 import 'Settings.dart';
@@ -24,7 +24,7 @@ class NavDrawer extends StatelessWidget {
             child: null,
           ),
           ListTile(
-            leading: Icon(Icons.verified_user),
+            leading: Icon(Icons.person_outline_rounded),
             title: Text('Profile'),
             onTap: () => { Navigator.push(
                   context, MaterialPageRoute(builder: (_) => Profile()))},

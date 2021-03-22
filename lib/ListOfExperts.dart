@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:istishara_test/Database.dart';
-import 'package:istishara_test/nav-drawer.dart';
+import 'Database.dart';
+import 'nav-drawer.dart';
 
 class MainListPage extends StatelessWidget {
   var t;
