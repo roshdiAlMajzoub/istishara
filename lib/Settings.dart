@@ -19,7 +19,7 @@ class SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: NavDrawer(),
+        drawer: NavDrawer(type:"Expert"),
         appBar: AppBar(
             title: Text("Settings"),
             elevation: .1,

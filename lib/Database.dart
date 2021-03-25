@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DataBaseServiceHelp {
   CollectionReference collectionReference =
-      FirebaseFirestore.instance.collection('help seekers');
+      FirebaseFirestore.instance.collection('help_seekers');
 
   final String uid;
   DataBaseServiceHelp({this.uid});

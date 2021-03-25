@@ -18,7 +18,7 @@ class CalendarState extends State<Calendar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavDrawer(),
+      drawer: NavDrawer(type: "Expert",),
       appBar: AppBar(
           title: Text("Calendar"),
           elevation: .1,
