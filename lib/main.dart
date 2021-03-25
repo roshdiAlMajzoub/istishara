@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:istishara_test/Credentials.dart';
 import 'package:istishara_test/DashBoard.dart';
-import 'package:istishara_test/ExpertSignUp.dart';
+import 'package:istishara_test/Databasers.dart';
 import 'package:istishara_test/Login.dart';
-import 'package:istishara_test/UserSignUp.dart';
 import 'dart:async';
 import 'package:loading_animations/loading_animations.dart';
 import 'dart:math';
@@ -29,10 +29,13 @@ class Display extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/Display': (BuildContext context) => DisplayDemo(),
         '/Start': (BuildContext context) => StartApp(),
-        '/ExpertSU': (BuildContext context) => ExpertSU(),
-        '/UserSU': (BuildContext context) => UserSU(),
-        '/UserMain': (BuildContext context) => Dashboard(),
+        '/ExpertSU': (BuildContext context) => Credentials(descirbe: "Expert", barTitle: "Expert Sign Up",isProfile:false),
+        '/UserSU': (BuildContext context) =>Credentials(descirbe: "User",barTitle: "Help-Seeker Sign Up",isProfile: false,),
+        '/UserMain': (BuildContext context) => Dashboard(type:"User"),
+        '/ExpertMain': (BuildContext context) => Dashboard(type: "Expert",),
         '/Login': (BuildContext context) => MyApp(),
+        '/EProfile': (BuildContext context) => Credentials(descirbe: "Expert Profile", barTitle: "Expert Profile", isProfile: true),
+        '/UProfile': (BuildContext context) => Credentials(descirbe: "Help-Seeker Profile", barTitle: "Help-Seeker Profile", isProfile: true),
       },
     );
   }
@@ -96,22 +99,24 @@ class _DisplayState extends State<DisplayDemo> {
         if (response == ConnectivityResult.mobile ||
             response == ConnectivityResult.wifi) {
           connection = "Connected";
-         var  _authStatus = AuthStatus.NotLoggedIn;
-         String res = onStartUp();
-         if (res=="success")
-         {
-           _authStatus=AuthStatus.LoggedIn;
-         }
-         switch(_authStatus){
-           case AuthStatus.NotLoggedIn:
-                Navigator.of(context).pushNamed('/Start');
-                break;
-             case AuthStatus.LoggedIn:
-                Navigator.of(context).pushNamed('/UserMain');
-                break;
+          try{
+              FirebaseAuth _auth = FirebaseAuth.instance;
+              User user = _auth.currentUser;
+              String uid = user.uid;
+              bool docExists = await d.checkIfDocExists(uid,"help_seekers");
+              if (docExists==true) {
+              Navigator.of(context).pushNamed('/UserMain');
+            } else {
+              Navigator.of(context).pushNamed('/ExpertMain');
+              }
+            } catch(e)
+            {
+             Navigator.of(context).pushNamed('/Start');
+            }
+
+
 
          }
-        }
         a++;
         if (a == 2) {
           _showDialog(connection,

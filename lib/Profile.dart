@@ -1,4 +1,3 @@
-import 'package:settings_ui/settings_ui.dart';
 import 'package:flutter/material.dart';
 import 'nav-drawer.dart';
 
@@ -14,8 +13,6 @@ class Profile extends StatefulWidget {
   ProfileState createState() => ProfileState();
 }
 
-enum field { name, email, phone, pass, conf }
-
 class ProfileState extends State<Profile> {
   bool showPassword = true;
   bool editableFN = false;
@@ -26,7 +23,7 @@ class ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: NavDrawer(),
+        drawer: NavDrawer(type:"o" ,),
         appBar: AppBar(
             title: Text("Profile"),
             elevation: .1,
@@ -34,15 +31,15 @@ class ProfileState extends State<Profile> {
         body: Container(
             padding: EdgeInsets.only(left: 16, top: 25, right: 16),
             child: GestureDetector(
-              onTap: ()  {setState(() {
-                FocusScope.of(context).unfocus();
-                editableFN = false;
-                editableEmail = false;
-                editablePhone = false;
-                editablePass = false;
-                editableConf = false;
-                              
-                            });
+              onTap: () {
+                setState(() {
+                  FocusScope.of(context).unfocus();
+                  editableFN = false;
+                  editableEmail = false;
+                  editablePhone = false;
+                  editablePass = false;
+                  editableConf = false;
+                });
               },
               child: ListView(children: [
                 SizedBox(
@@ -110,11 +107,11 @@ class ProfileState extends State<Profile> {
                               onPressed: () {
                                 setState(() {
                                   editableFN = !editableFN;
-                                   
-                editableEmail = false;
-                editablePhone = false;
-                editablePass = false;
-                editableConf = false;
+
+                                  editableEmail = false;
+                                  editablePhone = false;
+                                  editablePass = false;
+                                  editableConf = false;
                                 });
                               },
                               icon: Icon(
@@ -139,10 +136,10 @@ class ProfileState extends State<Profile> {
                               onPressed: () {
                                 setState(() {
                                   editableEmail = !editableEmail;
-                                   editableFN = false;
-                editablePhone = false;
-                editablePass = false;
-                editableConf = false;
+                                  editableFN = false;
+                                  editablePhone = false;
+                                  editablePass = false;
+                                  editableConf = false;
                                 });
                               },
                               icon: Icon(
@@ -167,10 +164,10 @@ class ProfileState extends State<Profile> {
                               onPressed: () {
                                 setState(() {
                                   editablePhone = !editablePhone;
-                                   editableFN = false;
-                editableEmail = false;
-                editablePass = false;
-                editableConf = false;
+                                  editableFN = false;
+                                  editableEmail = false;
+                                  editablePass = false;
+                                  editableConf = false;
                                 });
                               },
                               icon: Icon(
@@ -195,10 +192,10 @@ class ProfileState extends State<Profile> {
                               onPressed: () {
                                 setState(() {
                                   editablePass = !editablePass;
-                                   editableFN = false;
-                editableEmail = false;
-                editablePhone = false;
-                editableConf = false;
+                                  editableFN = false;
+                                  editableEmail = false;
+                                  editablePhone = false;
+                                  editableConf = false;
                                 });
                               },
                               icon: Icon(
@@ -223,10 +220,10 @@ class ProfileState extends State<Profile> {
                               onPressed: () {
                                 setState(() {
                                   editableConf = !editableConf;
-                                   editableFN = false;
-                editableEmail = false;
-                editablePhone = false;
-                editablePass = false;
+                                  editableFN = false;
+                                  editableEmail = false;
+                                  editablePhone = false;
+                                  editablePass = false;
                                 });
                               },
                               icon: Icon(

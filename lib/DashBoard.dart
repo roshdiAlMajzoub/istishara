@@ -1,3 +1,5 @@
+import 'package:flutter/services.dart';
+
 import 'ListOfExperts.dart';
 import 'package:flutter/material.dart';
 import 'nav-drawer.dart';
@@ -5,15 +7,19 @@ import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'dart:io';
 
 class Dashboard extends StatefulWidget {
+  final String type;
+  Dashboard({@required this.type});
   @override
-  DashboardState createState() => DashboardState();
+  DashboardState createState() => DashboardState(type: type);
 }
 
 class DashboardState extends State<Dashboard> {
+  final String type;
+  DashboardState({@required this.type});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: NavDrawer(),
+        drawer: NavDrawer(type: type,),
         appBar: AppBar(
             title: Text("Dashboard"),
             elevation: .1,
@@ -24,11 +30,7 @@ class DashboardState extends State<Dashboard> {
             ),
             child: WillPopScope(
               onWillPop: () async {
-                if (Platform.isAndroid) {
-                  exit(0);
-                } else if (Platform.isIOS) {
-                  exit(0);
-                }
+                SystemChannels.platform.invokeMethod<void>('SystemNavigator.pop');
                 return false;
               },
               child: Container(
@@ -61,13 +63,15 @@ class DashboardState extends State<Dashboard> {
     IconData icon,
   ) {
     return Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
         elevation: 1.0,
         margin: new EdgeInsets.all(8.0),
         child: Container(
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(50.0),color: Color.fromRGBO(220, 220, 220, 1.0)),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50.0),
+              color: Color.fromRGBO(220, 220, 220, 1.0)),
           child: new InkWell(
-            
             onTap: () {
               Navigator.push(
                   context, MaterialPageRoute(builder: (_) => ListPage(title)));

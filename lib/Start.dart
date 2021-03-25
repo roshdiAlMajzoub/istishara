@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:istishara_test/Login.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 
@@ -32,13 +33,9 @@ class _StartState extends State<_Start> {
                   content: Text('Tap back again to Exit'),
                 ),
                 child: WillPopScope(
+                    // ignore: missing_return
                     onWillPop: () async {
-                      if (Platform.isAndroid) {
-                        exit(0);
-                      } else if (Platform.isIOS) {
-                        exit(0);
-                      }
-                      return false;
+                      SystemChannels.platform.invokeMethod<void>('SystemNavigator.pop');
                     },
                     child: Stack(
                       children: [
