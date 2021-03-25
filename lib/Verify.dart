@@ -80,7 +80,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
                 TextButton(
                     onPressed: () {
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (_) => Dashboard()));
+                          MaterialPageRoute(builder: (_) => Dashboard(type: "Expert",)));
                     },
                     child: Text("Verify"))
               ]);
@@ -93,7 +93,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
     if (user.emailVerified) {
       timer.cancel();
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => Dashboard()));
+          MaterialPageRoute(builder: (context) => Dashboard(type: "Expert",)));
     }
   }
 }
