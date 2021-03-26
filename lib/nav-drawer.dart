@@ -13,6 +13,7 @@ class NavDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var count = 0;         //retrieve from firebase 
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -26,17 +27,46 @@ class NavDrawer extends StatelessWidget {
             child: null,
           ),
           ListTile(
-              leading: Icon(Icons.verified_user),
+              leading: Icon(Icons.person),
               title: Text('Profile'),
-              onTap: (){
-                if(type == "Expert")
-                  {
-                    Navigator.pushNamed(context, "/EProfile");
-                  }
-                  else{
-                    Navigator.pushNamed(context, "/UProfile");
-                    }
-                    }),
+              onTap: () {
+                if (type == "Expert") {
+                  Navigator.pushNamed(context, "/EProfile");
+                } else {
+                  Navigator.pushNamed(context, "/UProfile");
+                }
+              }),
+          ListTile(
+            leading: new Stack(
+    children: <Widget>[
+      new Icon(Icons.notifications),
+      new Positioned(
+        right: 0,
+        child: new Container(
+          padding: EdgeInsets.all(1),
+          decoration: new BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.circular(6),
+          ),
+          constraints: BoxConstraints(
+            minWidth: 13,
+            minHeight: 13,
+          ),
+          child: new Text(
+            '$count',
+            style: new TextStyle(
+              color: Colors.white,
+              fontSize: 8,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      )
+    ],
+  ),
+  title: Text('Notifications'),
+  onTap: (){},
+          ),
           ListTile(
             leading: Icon(Icons.calendar_today),
             title: Text('Calendar'),
@@ -50,7 +80,11 @@ class NavDrawer extends StatelessWidget {
             title: Text('Dashboard'),
             onTap: () => {
               Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => Dashboard(type: type,)))
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => Dashboard(
+                            type: type,
+                          )))
             },
           ),
           ListTile(
