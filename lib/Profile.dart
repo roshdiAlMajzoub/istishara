@@ -1,4 +1,3 @@
-import 'package:settings_ui/settings_ui.dart';
 import 'package:flutter/material.dart';
 import 'nav-drawer.dart';
 
@@ -15,11 +14,16 @@ class Profile extends StatefulWidget {
 }
 
 class ProfileState extends State<Profile> {
-  bool showPassword = false;
+  bool showPassword = true;
+  bool editableFN = false;
+  bool editableEmail = false;
+  bool editablePhone = false;
+  bool editablePass = false;
+  bool editableConf = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: NavDrawer(),
+        drawer: NavDrawer(type:"o" ,),
         appBar: AppBar(
             title: Text("Profile"),
             elevation: .1,
@@ -28,7 +32,14 @@ class ProfileState extends State<Profile> {
             padding: EdgeInsets.only(left: 16, top: 25, right: 16),
             child: GestureDetector(
               onTap: () {
-                FocusScope.of(context).unfocus();
+                setState(() {
+                  FocusScope.of(context).unfocus();
+                  editableFN = false;
+                  editableEmail = false;
+                  editablePhone = false;
+                  editablePass = false;
+                  editableConf = false;
+                });
               },
               child: ListView(children: [
                 SizedBox(
@@ -86,12 +97,147 @@ class ProfileState extends State<Profile> {
                 SizedBox(
                   height: 30,
                 ),
-                buildText("Full Name", "Name", false),
-                buildText("Email Address", "abc@mail.com", false),
-                buildText("Phone Number", "03xxxxxx", false),
-                buildText("Password", "Choose a Strong Password", true),
-                buildText("Confirm Password",
-                    "Make sure that the two passwords match!", true),
+                Padding(
+                    padding: const EdgeInsets.only(bottom: 35.0),
+                    child: TextField(
+                        //obscureText: isPassword ? showPassword : false,
+                        readOnly: !editableFN,
+                        decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  editableFN = !editableFN;
+
+                                  editableEmail = false;
+                                  editablePhone = false;
+                                  editablePass = false;
+                                  editableConf = false;
+                                });
+                              },
+                              icon: Icon(
+                                Icons.edit,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            labelText: "Full Name",
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            hintText: "Name",
+                            hintStyle: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey,
+                            )))),
+                Padding(
+                    padding: const EdgeInsets.only(bottom: 35.0),
+                    child: TextField(
+                        //obscureText: isPassword ? showPassword : false,
+                        readOnly: !editableEmail,
+                        decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  editableEmail = !editableEmail;
+                                  editableFN = false;
+                                  editablePhone = false;
+                                  editablePass = false;
+                                  editableConf = false;
+                                });
+                              },
+                              icon: Icon(
+                                Icons.edit,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            labelText: "Email Address",
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            hintText: "abc@mail.com",
+                            hintStyle: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey,
+                            )))),
+                Padding(
+                    padding: const EdgeInsets.only(bottom: 35.0),
+                    child: TextField(
+                        //obscureText: isPassword ? showPassword : false,
+                        readOnly: !editablePhone,
+                        decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  editablePhone = !editablePhone;
+                                  editableFN = false;
+                                  editableEmail = false;
+                                  editablePass = false;
+                                  editableConf = false;
+                                });
+                              },
+                              icon: Icon(
+                                Icons.edit,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            labelText: "Phone Number",
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            hintText: "03XXXXXX",
+                            hintStyle: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey,
+                            )))),
+                Padding(
+                    padding: const EdgeInsets.only(bottom: 35.0),
+                    child: TextField(
+                        //obscureText: isPassword ? showPassword : false,
+                        readOnly: !editablePass,
+                        decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  editablePass = !editablePass;
+                                  editableFN = false;
+                                  editableEmail = false;
+                                  editablePhone = false;
+                                  editableConf = false;
+                                });
+                              },
+                              icon: Icon(
+                                Icons.edit,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            labelText: "Password",
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            hintText: "Choose a strong Password",
+                            hintStyle: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey,
+                            )))),
+                Padding(
+                    padding: const EdgeInsets.only(bottom: 35.0),
+                    child: TextField(
+                        //obscureText: isPassword ? showPassword : false,
+                        readOnly: !editableConf,
+                        decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  editableConf = !editableConf;
+                                  editableFN = false;
+                                  editableEmail = false;
+                                  editablePhone = false;
+                                  editablePass = false;
+                                });
+                              },
+                              icon: Icon(
+                                Icons.edit,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            labelText: "Confirm Password",
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            hintText: "Must matches password",
+                            hintStyle: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey,
+                            )))),
                 SizedBox(
                   height: 35,
                 ),
@@ -114,7 +260,15 @@ class ProfileState extends State<Profile> {
                         padding: EdgeInsets.symmetric(horizontal: 50),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            editableFN = false;
+                            editableEmail = false;
+                            editablePhone = false;
+                            editablePass = false;
+                            editableConf = false;
+                          });
+                        },
                         elevation: 2,
                         color: Colors.green,
                         child: Text("Save",
@@ -128,25 +282,25 @@ class ProfileState extends State<Profile> {
             )));
   }
 
-  Widget buildText(String labelText, String placeholder, bool isPassword) {
+  Widget buildText(
+      String labelText, String placeholder, bool isPassword, bool isWrite) {
     return Padding(
         padding: const EdgeInsets.only(bottom: 35.0),
         child: TextField(
-          obscureText: isPassword ? showPassword : false,
+          //obscureText: isPassword ? showPassword : false,
+          readOnly: !isWrite,
           decoration: InputDecoration(
-              suffixIcon: isPassword
-                  ? IconButton(
-                      onPressed: () {
-                        setState(() {
-                          showPassword = !showPassword;
-                        });
-                      },
-                      icon: Icon(
-                        Icons.remove_red_eye,
-                        color: Colors.grey,
-                      ),
-                    )
-                  : null,
+              suffixIcon: IconButton(
+                onPressed: () {
+                  setState(() {
+                    isWrite = !isWrite;
+                  });
+                },
+                icon: Icon(
+                  Icons.edit,
+                  color: Colors.grey,
+                ),
+              ),
               labelText: labelText,
               floatingLabelBehavior: FloatingLabelBehavior.always,
               hintText: placeholder,
