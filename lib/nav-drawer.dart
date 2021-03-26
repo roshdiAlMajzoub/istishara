@@ -1,3 +1,4 @@
+import 'package:ISTISHARA/NotificationsPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'Calendar.dart';
@@ -65,7 +66,8 @@ class NavDrawer extends StatelessWidget {
     ],
   ),
   title: Text('Notifications'),
-  onTap: (){},
+  onTap: ()=>{Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => NotificationsPage()))},
           ),
           ListTile(
             leading: Icon(Icons.calendar_today),

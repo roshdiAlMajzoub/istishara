@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'Database.dart';
 import 'nav-drawer.dart';
 
+// ignore: must_be_immutable
 class MainListPage extends StatelessWidget {
   var t;
   @override
@@ -10,6 +11,7 @@ class MainListPage extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class ListPage extends StatefulWidget {
   var t;
   ListPage(t) {
