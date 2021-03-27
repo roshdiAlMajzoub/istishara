@@ -7,9 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:istishara_test/Login.dart';
-
-import 'package:istishara_test/main.dart';
+import 'package:ISTISHARA/Login.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
