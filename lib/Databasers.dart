@@ -10,6 +10,20 @@ import 'ShowDialog.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:cloud_firestore/cloud_firestore.dart' as cloud;
 
+var listOfExperts = [
+  'Software Engineer',
+  'Civil Engineer',
+  'Electrician',
+  'Dietician',
+  'Personal Trainer',
+  'Business Analyst',
+  'Architect',
+  'Plumber',
+  'Data Scientist',
+  'Industrial Engineer',
+  'IT Specialist'
+];
+
 class Databasers {
   final auth = FirebaseAuth.instance;
   Timer timer;
@@ -132,5 +146,15 @@ class Databasers {
     } catch (e) {
       return false;
     }
+  }
+
+  Future<String> docExistsIn(String docId) async {
+    for (int i = 0; i < listOfExperts.length; i++) {
+      bool docExists = await checkIfDocExists(docId, listOfExperts[i]);
+      if (docExists == true) {
+        return listOfExperts[i];
+      }
+    }
+     return "help_seekers";
   }
 }

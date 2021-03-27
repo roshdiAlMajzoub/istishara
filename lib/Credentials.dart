@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_password_strength/flutter_password_strength.dart';
 import 'package:flutter/foundation.dart';
@@ -8,6 +10,7 @@ import 'dart:ui';
 import 'Helper.dart';
 import 'ShowDialog.dart';
 import './Databasers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' as cloud;
 
 class Credentials extends StatefulWidget {
   final String descirbe;
@@ -442,9 +445,11 @@ class CredentialsState extends State<Credentials> {
                                     return null;
                                   }
                                 },
-                                obscureText: true,
+                                 obscureText:
+                                    isProfile == true ? showPassword : true,
                                 readOnly:
                                     isProfile == true ? !editablePass : false,
+                                  
                                 decoration: InputDecoration(
                                     suffixIcon: isProfile == true
                                         ? IconButton(
@@ -453,6 +458,7 @@ class CredentialsState extends State<Credentials> {
                                               color: Colors.grey,
                                             ),
                                             onPressed: () {
+
                                               setState(() {
                                                 editablePass = !editablePass;
                                                 editableEmail = false;
