@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_password_strength/flutter_password_strength.dart';
 import 'package:flutter/foundation.dart';
@@ -8,6 +10,7 @@ import 'dart:ui';
 import 'Helper.dart';
 import 'ShowDialog.dart';
 import './Databasers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' as cloud;
 
 class Credentials extends StatefulWidget {
   final String descirbe;
@@ -105,14 +108,13 @@ class CredentialsState extends State<Credentials> {
                   Container(
                       child: Column(children: [
                     Show.showAlert(_error, this),
-                    Container(height: screenHeight / 20),
                     isProfile == true
                         ? Center(
                             child: Stack(
                             children: [
                               Container(
                                   width: screenWidth/3,
-                                  height: screenHeight/3,
+                                  height: screenHeight/3.5,
                                   decoration: BoxDecoration(
                                     border: Border.all(
                                       width: 4,
@@ -156,9 +158,32 @@ class CredentialsState extends State<Credentials> {
                                   ),
                                 ),
                               ),
-                            ],
+                    ] 
                           ))
                         : Text(""),
+                        describe=="Expert Profile" ?
+                        Padding( padding: EdgeInsets.only(bottom: 20),
+                          child:  Card(
+                    color: Colors.white,
+                    elevation: 8.0,
+                    margin:
+                        EdgeInsets.symmetric(horizontal: 18.0, vertical: 6.0),
+                    child: SizedBox(
+                      height: screenHeight / 7,
+                      child: Row(children: [
+                        h.buildText(" Reputation:","3.4"),
+                        VerticalDivider(
+                          color: Colors.black,
+                          indent: 15,endIndent: 15,thickness: 1,
+                        ),
+                         h.buildText("Price Range:","2-3 LBP"),
+                        VerticalDivider(
+                          color: Colors.black,
+                          indent: 15,endIndent: 15,thickness: 1,
+                        ),
+                        h.buildText("Records:","10")
+                        ])))):Text("")
+                        ,
                     Container(
                       height: screenHeight / 10,
                       padding: EdgeInsets.only(
@@ -442,9 +467,11 @@ class CredentialsState extends State<Credentials> {
                                     return null;
                                   }
                                 },
-                                obscureText: true,
+                                 obscureText:
+                                    isProfile == true ? showPassword : true,
                                 readOnly:
                                     isProfile == true ? !editablePass : false,
+                                  
                                 decoration: InputDecoration(
                                     suffixIcon: isProfile == true
                                         ? IconButton(
@@ -453,6 +480,7 @@ class CredentialsState extends State<Credentials> {
                                               color: Colors.grey,
                                             ),
                                             onPressed: () {
+
                                               setState(() {
                                                 editablePass = !editablePass;
                                                 editableEmail = false;

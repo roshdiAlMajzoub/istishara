@@ -48,6 +48,7 @@ class CalendarState extends State<Calendar> {
           elevation: .1,
           backgroundColor: Color(0xff5848CF)),
       body: SfCalendar(
+
         view: CalendarView.week,
         firstDayOfWeek: 6,
         dataSource: MeetingDataSource(_getData()),
@@ -174,8 +175,7 @@ DataSource _getCalendarDataSource() {
         'Conference', startTime, endTime, const Color(0xFF0F8644), false),
     /*startTime: DateTime.now(),
          endTime: DateTime.now().add(
-             Duration(hours: 2)),
-         isAllDay: true,
+             Duration(hours: 1)),
          subject: 'Meeting',
          color: Colors.blue,
          startTimeZone: '',
