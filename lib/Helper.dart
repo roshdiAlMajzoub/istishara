@@ -46,8 +46,16 @@ class Helper {
     return false;
   }
 
-  IconButton whichIcon()
-  {
-    
-  }
+ Widget buildText(String content,String value) {
+  return RichText(text:TextSpan(
+    text: " "+content+'\n',
+    style: TextStyle(color: Colors.deepPurple, fontSize: 18, fontWeight: FontWeight.bold),
+    children:[
+      TextSpan(
+        text: "\n      "+value,
+        style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w300)
+      )
+    ]
+  ));
+}
 }

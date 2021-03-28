@@ -108,14 +108,13 @@ class CredentialsState extends State<Credentials> {
                   Container(
                       child: Column(children: [
                     Show.showAlert(_error, this),
-                    Container(height: screenHeight / 20),
                     isProfile == true
                         ? Center(
                             child: Stack(
                             children: [
                               Container(
                                   width: screenWidth/3,
-                                  height: screenHeight/3,
+                                  height: screenHeight/3.5,
                                   decoration: BoxDecoration(
                                     border: Border.all(
                                       width: 4,
@@ -159,9 +158,32 @@ class CredentialsState extends State<Credentials> {
                                   ),
                                 ),
                               ),
-                            ],
+                    ] 
                           ))
                         : Text(""),
+                        describe=="Expert Profile" ?
+                        Padding( padding: EdgeInsets.only(bottom: 20),
+                          child:  Card(
+                    color: Colors.white,
+                    elevation: 8.0,
+                    margin:
+                        EdgeInsets.symmetric(horizontal: 18.0, vertical: 6.0),
+                    child: SizedBox(
+                      height: screenHeight / 7,
+                      child: Row(children: [
+                        h.buildText(" Reputation:","3.4"),
+                        VerticalDivider(
+                          color: Colors.black,
+                          indent: 15,endIndent: 15,thickness: 1,
+                        ),
+                         h.buildText("Price Range:","2-3 LBP"),
+                        VerticalDivider(
+                          color: Colors.black,
+                          indent: 15,endIndent: 15,thickness: 1,
+                        ),
+                        h.buildText("Records:","10")
+                        ])))):Text("")
+                        ,
                     Container(
                       height: screenHeight / 10,
                       padding: EdgeInsets.only(

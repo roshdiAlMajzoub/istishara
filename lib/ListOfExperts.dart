@@ -1,3 +1,4 @@
+import 'package:ISTISHARA/ViewExpert.dart';
 import 'package:flutter/material.dart';
 import 'Database.dart';
 import 'nav-drawer.dart';
@@ -15,7 +16,7 @@ class MainListPage extends StatelessWidget {
 class ListPage extends StatefulWidget {
   var t;
   ListPage(t) {
-    this.t=t;
+    this.t = t;
   }
   @override
   _ListPageState createState() => _ListPageState(t);
@@ -30,14 +31,13 @@ class _ListPageState extends State<ListPage> {
 
   var type;
   _ListPageState(type) {
-    this.type= type;
+    this.type = type;
   }
 
   List expertProfileList = [];
 
   fetchDataBaseList() async {
     dynamic resultant = await DataBaseList().getUsersList(type);
-
 
     if (resultant == null) {
       print("unable to retrieve");
@@ -52,12 +52,12 @@ class _ListPageState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      drawer: new NavDrawer(type:"Expert") ,
+        drawer: new NavDrawer(type: "Expert"),
         backgroundColor: Colors.blue[800],
         appBar: AppBar(
           elevation: 0.1,
           backgroundColor: Colors.blue[900],
-          title: Text(type +"'s " + "List"),
+          title: Text(type + "'s " + "List"),
         ),
         body: new Container(
           child: ListView.builder(
@@ -83,7 +83,9 @@ class _ListPageState extends State<ListPage> {
                           child: Icon(Icons.person, color: Colors.white),
                         ),
                         title: Text(
-                          expertProfileList[index]['first name']+" "+expertProfileList[index]['last name'],
+                          expertProfileList[index]['first name'] +
+                              " " +
+                              expertProfileList[index]['last name'],
                           //"John Marlin",
 
                           ///this should be expert.name where name is the expert's name@roshdiAlMajzoub
@@ -101,7 +103,8 @@ class _ListPageState extends State<ListPage> {
                                       backgroundColor:
                                           Color.fromRGBO(209, 224, 224, 0.2),
                                       value: expertProfileList[index]
-                                          ['reputation'],
+                                              ['reputation']
+                                          ,
                                       //0.5, //this should be expert.reputation where it will be brought from the expert's database@roshdiAlMajzoub
                                       valueColor:
                                           AlwaysStoppedAnimation(Colors.green)),
@@ -118,7 +121,14 @@ class _ListPageState extends State<ListPage> {
                         ),
                         trailing: Icon(Icons.keyboard_arrow_right,
                             color: Colors.white, size: 30.0),
-                        onTap: () {},
+                        onTap: () {
+                         Navigator.push(context,MaterialPageRoute(
+                              builder: (context) => (ViewExpert(
+                                  name: expertProfileList[index]['first name'] +
+                                      " " +
+                                      expertProfileList[index]['last name'],
+                                  field: type))));
+                        },
                       )),
                 );
               }),

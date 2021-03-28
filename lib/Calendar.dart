@@ -24,9 +24,12 @@ class CalendarState extends State<Calendar> {
           elevation: .1,
           backgroundColor: Color(0xff5848CF)),
       body: SfCalendar(
+
         view: CalendarView.week,
-        firstDayOfWeek: 6,
+        firstDayOfWeek: 1,
+        timeSlotViewSettings: TimeSlotViewSettings(endHour: 24,startHour: 8,minimumAppointmentDuration: Duration(minutes: 30),timeIntervalHeight: 80),
         dataSource: _getCalendarDataSource(),
+        
       ),
     );
   }
@@ -44,8 +47,7 @@ DataSource _getCalendarDataSource() {
        Appointment(
          startTime: DateTime.now(),
          endTime: DateTime.now().add(
-             Duration(hours: 2)),
-         isAllDay: true,
+             Duration(hours: 1)),
          subject: 'Meeting',
          color: Colors.blue,
          startTimeZone: '',
