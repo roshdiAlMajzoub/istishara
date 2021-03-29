@@ -16,7 +16,7 @@ class Dashboard extends StatefulWidget {
 
 class DashboardState extends State<Dashboard> {
   final String type;
-  
+
   bool isExtended = false;
   DashboardState({@required this.type});
 
@@ -28,7 +28,7 @@ class DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    var availableMoney = 500000000000;
+    var availableMoney = 50000;
     return Scaffold(
         drawer: NavDrawer(
           type: type,
@@ -47,10 +47,20 @@ class DashboardState extends State<Dashboard> {
               ? Row(
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Icon(Icons.attach_money,)
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Icon(
+                          Icons.attach_money,
+                        )),
+                    Countup(
+                      begin: 0,
+                      end: double.parse("$availableMoney"),
+                      duration: Duration(seconds: 2),
+                      separator: ',',
+                      style: TextStyle(
+                        fontSize: 15,
+                      ),
                     ),
-                    Text("$availableMoney"+" L.L"),
+                     Text(" L.L"),
                   ],
                 )
               : Icon(Icons.attach_money),
