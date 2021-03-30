@@ -7,47 +7,39 @@ import 'nav-drawer.dart';
 
 class MainCalendar extends StatelessWidget {
   var id;
-  var type;
-  var color;
-  MainCalendar(id, type, color) {
+  
+  MainCalendar(id) {
     this.id = id;
-    this.type = type;
-    this.color = color;
+    
   }
   @override
   Widget build(BuildContext context) {
-    return Calendar(id, type, color);
+    return MyCalendar(id);
   }
 }
 
-class Calendar extends StatefulWidget {
+class MyCalendar extends StatefulWidget {
   var id;
-  var type;
-  var color;
-  Calendar(id, type, color) {
+  MyCalendar(id) {
     this.id = id;
-    this.type = type;
-    this.color = color;
   }
   @override
-  CalendarState createState() => CalendarState(id, type, color);
+  CalendarState createState() => CalendarState(id);
 }
 
-class CalendarState extends State<Calendar> {
+class CalendarState extends State<MyCalendar> {
   var id;
-  var type;
-  var color;
-  CalendarState(id, type, color) {
+  
+  CalendarState(id) {
     this.id = id;
-    this.type = type;
-    this.color = color;
+
   }
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   List apptt = [];
   fetchDatabaseAppt() async {
     final User user = auth.currentUser;
-    dynamic resultant = await DatabaseAppt().getAppt(id, type) as List;
+    dynamic resultant = await DatabaseAppt().getMyAppt(id) as List;
     if (resultant == null) {
       print("unable to retrieve");
     } else {
@@ -55,6 +47,12 @@ class CalendarState extends State<Calendar> {
         apptt = resultant;
       });
     }
+  }
+
+  book() {
+    final User user = auth.currentUser;
+    DatabaseBookAppt().bookAppt(user.uid, 'uid2', DateTime.now(),
+        DateTime.now().add(Duration(hours: 2)));
   }
 
   @override
@@ -73,15 +71,28 @@ class CalendarState extends State<Calendar> {
     );
   }
 
+  getConflictappt() async {
+    final User user = auth.currentUser;
+    dynamic bool = await DatabaseBookAppt().checkAp(
+        'Electrician',
+        user.uid,
+        DateTime.now().add(Duration(hours: 1, minutes: 5)),
+        DateTime.now().add(Duration(hours: 3)));
+    print(bool);
+  }
+
   List<Meeting> _getData() {
     final User user = auth.currentUser;
+    //getConflictappt();
+    //print(DateTime.now());
+
     fetchDatabaseAppt();
     List meetings = <Meeting>[];
     for (var ap in apptt) {
       DateTime st = ap['start time'].toDate();
       DateTime et = ap['end time'].toDate();
 
-      meetings.add(Meeting('Taken', st, et, color, false));
+      meetings.add(Meeting('test', st, et, Color(0xFF0F8644), false));
     }
     return meetings;
   }

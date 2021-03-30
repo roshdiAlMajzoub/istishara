@@ -47,6 +47,7 @@ String _email,
     _error,
     exp,
     _Cpassword;
+
 Helper h = Helper();
 Databasers d = Databasers();
 
@@ -110,80 +111,83 @@ class CredentialsState extends State<Credentials> {
                     Show.showAlert(_error, this),
                     isProfile == true
                         ? Center(
-                            child: Stack(
-                            children: [
-                              Container(
-                                  width: screenWidth/3,
-                                  height: screenHeight/3.5,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      width: 4,
-                                      color: Theme.of(context)
-                                          .scaffoldBackgroundColor,
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        spreadRadius: 2,
-                                        blurRadius: 10,
-                                        color: Colors.black.withOpacity(0.1),
-                                        offset: Offset(0, 10),
-                                      )
-                                    ],
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: AssetImage(
-                                            'asset/images/head.jpg')),
-                                  )),
-                              Positioned(
-                                bottom:0,
-                                right: 0,
-                                child: Container(
-                                  height: screenHeight/6.5,
-                                  width: screenWidth/6.5,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      width: 4,
-                                      color: Theme.of(context)
-                                          .scaffoldBackgroundColor,
-                                    ),
-                                    color: Colors.deepPurple,
+                            child: Stack(children: [
+                            Container(
+                                width: screenWidth / 3,
+                                height: screenHeight / 3.5,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    width: 4,
+                                    color: Theme.of(context)
+                                        .scaffoldBackgroundColor,
                                   ),
-                                  child: IconButton(
-                                    icon: Icon(
-                                      Icons.edit,
-                                    ),
-                                    onPressed: () {},
+                                  boxShadow: [
+                                    BoxShadow(
+                                      spreadRadius: 2,
+                                      blurRadius: 10,
+                                      color: Colors.black.withOpacity(0.1),
+                                      offset: Offset(0, 10),
+                                    )
+                                  ],
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image:
+                                          AssetImage('asset/images/head.jpg')),
+                                )),
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                height: screenHeight / 6.5,
+                                width: screenWidth / 6.5,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    width: 4,
+                                    color: Theme.of(context)
+                                        .scaffoldBackgroundColor,
                                   ),
+                                  color: Colors.deepPurple,
+                                ),
+                                child: IconButton(
+                                  icon: Icon(
+                                    Icons.edit,
+                                  ),
+                                  onPressed: () {},
                                 ),
                               ),
-                    ] 
-                          ))
+                            ),
+                          ]))
                         : Text(""),
-                        describe=="Expert Profile" ?
-                        Padding( padding: EdgeInsets.only(bottom: 20),
-                          child:  Card(
-                    color: Colors.white,
-                    elevation: 8.0,
-                    margin:
-                        EdgeInsets.symmetric(horizontal: 18.0, vertical: 6.0),
-                    child: SizedBox(
-                      height: screenHeight / 7,
-                      child: Row(children: [
-                        h.buildText(" Reputation:","3.4"),
-                        VerticalDivider(
-                          color: Colors.black,
-                          indent: 15,endIndent: 15,thickness: 1,
-                        ),
-                         h.buildText("Price Range:","2-3 LBP"),
-                        VerticalDivider(
-                          color: Colors.black,
-                          indent: 15,endIndent: 15,thickness: 1,
-                        ),
-                        h.buildText("Records:","10")
-                        ])))):Text("")
-                        ,
+                    describe == "Expert Profile"
+                        ? Padding(
+                            padding: EdgeInsets.only(bottom: 20),
+                            child: Card(
+                                color: Colors.white,
+                                elevation: 8.0,
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 18.0, vertical: 6.0),
+                                child: SizedBox(
+                                    height: screenHeight / 7,
+                                    child: Row(children: [
+                                      h.buildText(" Reputation:", "3.4"),
+                                      VerticalDivider(
+                                        color: Colors.black,
+                                        indent: 15,
+                                        endIndent: 15,
+                                        thickness: 1,
+                                      ),
+                                      h.buildText("Price Range:", "2-3 LBP"),
+                                      VerticalDivider(
+                                        color: Colors.black,
+                                        indent: 15,
+                                        endIndent: 15,
+                                        thickness: 1,
+                                      ),
+                                      h.buildText("Records:", "10")
+                                    ]))))
+                        : Text(""),
                     Container(
                       height: screenHeight / 10,
                       padding: EdgeInsets.only(
@@ -467,11 +471,10 @@ class CredentialsState extends State<Credentials> {
                                     return null;
                                   }
                                 },
-                                 obscureText:
+                                obscureText:
                                     isProfile == true ? showPassword : true,
                                 readOnly:
                                     isProfile == true ? !editablePass : false,
-                                  
                                 decoration: InputDecoration(
                                     suffixIcon: isProfile == true
                                         ? IconButton(
@@ -480,7 +483,6 @@ class CredentialsState extends State<Credentials> {
                                               color: Colors.grey,
                                             ),
                                             onPressed: () {
-
                                               setState(() {
                                                 editablePass = !editablePass;
                                                 editableEmail = false;
@@ -676,7 +678,8 @@ class CredentialsState extends State<Credentials> {
                                               _firstName,
                                               _lastName,
                                               _phoneNumber,
-                                              h.expertt());
+                                              h.expertt(),
+                                              d.cvN);
                                         } else {
                                           print("here");
                                         }
@@ -763,7 +766,7 @@ class CredentialsState extends State<Credentials> {
                                               _firstName,
                                               _lastName,
                                               _phoneNumber,
-                                              "help_seekers");
+                                              "help_seekers",d.cvN);
                                         }
                                       }))
                             ]))

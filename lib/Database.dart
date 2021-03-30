@@ -21,7 +21,7 @@ class DataBaseServiceHelp {
 class DataBaseServiceExperts {
   final String uid;
   DataBaseServiceExperts({this.uid});
-  Future updateuserData(fname, lname, pnumber, email, exp) async {
+  Future updateuserData(fname, lname, pnumber, email, exp,cvN) async {
     CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(exp);
 
@@ -32,6 +32,7 @@ class DataBaseServiceExperts {
       'phone number': pnumber,
       'reputation': 0,
       'id': uid,
+      'CV name': cvN,
     });
   }
 }
@@ -55,8 +56,6 @@ class DataBaseList {
       print(e.toString());
     }
   }
-
-
 }
 
 class DatabaseBookAppt {
@@ -164,18 +163,61 @@ class DatabaseBookAppt {
 }
 
 class DatabaseAppt {
-  Future getAppt(uid) async {
+  Future getMyAppt(uid) async {
     List appts = [];
     List coll = [
       'Plumber',
       'Personal Trainer',
       'Electrician',
-      'Data Scientist'
+      'Data Scientist',
+      'Software Engineer',
+      'Civil Engineers',
+      'Nutritionist',
+      'PE',
+      'Handyman',
+      'Architect',
+      'Electrician',
+      'Carpenter',
+      'Interior Designer',
+      'BlackSmith',
+      'Industrial Engineer'
     ];
     Query colcollectionReference;
     for (var col in coll) {
       Query colcollectionReference = await FirebaseFirestore.instance
           .collection(col)
+          .doc(uid)
+          .collection('appt');
+      
+      try {
+        await colcollectionReference.get().then((QuerySnapshot) {
+          QuerySnapshot.docs.forEach((element) {
+            appts.add(element.data());
+          });
+        });
+      } catch (e) {
+        print(e.toString());
+      }
+      
+    }
+    return appts;
+  }
+
+  Future getAppt(uid,type) async {
+    List appts = [];
+    List coll = [
+      'Plumber',
+      'Personal Trainer',
+      'Electrician',
+      'Data Scientist','Software Engineer', 'Civil Engineers', 'Nutritionist','PE','Handyman','Architect','Electrician','Carpenter','Interior Designer','BlackSmith','Industrial Engineer'
+    ];
+    /*for (var col in coll) {
+      Query colcollectionReference = await FirebaseFirestore.instance
+          .collection(col)
+          .doc(uid)
+          .collection('appt');*/
+       Query  colcollectionReference = await FirebaseFirestore.instance
+          .collection(type)
           .doc(uid)
           .collection('appt');
       try {
@@ -187,10 +229,11 @@ class DatabaseAppt {
       } catch (e) {
         print(e.toString());
       }
+      return appts;
     }
-    return appts;
+    
   }
-}
+
 
 class DataBaseService {
   /*List proff = [];
@@ -202,7 +245,12 @@ class DataBaseService {
   
   }*/
   final FirebaseAuth auth = FirebaseAuth.instance;
-  Future getCurrentUSerData() async {
+
+  
+
+
+
+  Future getCurrentUSerData(id) async {
     List coll = [
       'Plumber',
       'Personal Trainer',
@@ -215,7 +263,7 @@ class DataBaseService {
     for (var col in coll) {
       await FirebaseFirestore.instance
           .collection(col)
-          .doc(user.uid)
+          .doc(id)
           .get()
           .then((DocumentSnapshot documentSnapshot) {
         if (documentSnapshot.exists) {
