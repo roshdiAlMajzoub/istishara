@@ -127,7 +127,9 @@ class _ListPageState extends State<ListPage> {
                                   name: expertProfileList[index]['first name'] +
                                       " " +
                                       expertProfileList[index]['last name'],
-                                  field: type))));
+                                  field: type,
+                                  rep:expertProfileList[index]
+                                              ['reputation'].toString()))));
                         },
                       )),
                 );
