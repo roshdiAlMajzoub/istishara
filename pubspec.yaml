@@ -46,6 +46,7 @@ dependencies:
   url_launcher: ^6.0.3
   http: 
 
+  countup: ^0.1.3
   
   
 
