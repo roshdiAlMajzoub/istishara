@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'nav-drawer.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'dart:io';
+import 'package:countup/countup.dart';
 
 class Dashboard extends StatefulWidget {
   final String type;
@@ -15,22 +16,63 @@ class Dashboard extends StatefulWidget {
 
 class DashboardState extends State<Dashboard> {
   final String type;
+
+  bool isExtended = false;
   DashboardState({@required this.type});
+
+  void _switchActionBar() {
+    setState(() {
+      isExtended = !isExtended;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    var availableMoney = 50000;
     return Scaffold(
-        drawer: NavDrawer(type: type,),
+        drawer: NavDrawer(
+          type: type,
+        ),
         appBar: AppBar(
             title: Text("Dashboard"),
             elevation: .1,
             backgroundColor: Color(0xff5848CF)),
+        floatingActionButton: FloatingActionButton.extended(
+          backgroundColor: Colors.green,
+          isExtended: isExtended,
+          onPressed: () {
+            _switchActionBar();
+          },
+          label: isExtended
+              ? Row(
+                  children: <Widget>[
+                    Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Icon(
+                          Icons.attach_money,
+                        )),
+                    Countup(
+                      begin: 0,
+                      end: double.parse("$availableMoney"),
+                      duration: Duration(seconds: 2),
+                      separator: ',',
+                      style: TextStyle(
+                        fontSize: 15,
+                      ),
+                    ),
+                     Text(" L.L"),
+                  ],
+                )
+              : Icon(Icons.attach_money),
+        ),
         body: DoubleBackToCloseApp(
             snackBar: SnackBar(
               content: Text('Tap back again to Exit'),
             ),
             child: WillPopScope(
               onWillPop: () async {
-                SystemChannels.platform.invokeMethod<void>('SystemNavigator.pop');
+                SystemChannels.platform
+                    .invokeMethod<void>('SystemNavigator.pop');
                 return false;
               },
               child: Container(

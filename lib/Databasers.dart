@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'package:path_provider/path_provider.dart';
+import 'package:firebase_core/firebase_core.dart' as firebase_core;
+import 'dart:io' as io;
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'Database.dart';
 import 'package:flutter/foundation.dart';
 import 'Login.dart';
@@ -90,6 +94,62 @@ class Databasers {
     return Future.value(uploadTask);
   }
 
+  Future downloadLink(firebase_storage.Reference ref) async {
+    try {
+      final link = await ref.getDownloadURL();
+
+      await Clipboard.setData(ClipboardData(
+        text: link,
+      ));
+
+      return link;
+    } catch (e) {
+      final l = await firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child('playground')
+          .child("profile1.jpg")
+          .getDownloadURL();
+      print(e.message);
+      return l;
+    }
+    return Text(
+      'Success!\n Copied download URL to Clipboard!',
+    );
+  }
+
+  Future<void> downloadFile(firebase_storage.Reference ref) async {
+    final io.Directory systemTempDir = io.Directory.systemTemp;
+    final io.File tempFile = io.File('${systemTempDir.path}/temp-${ref.name}');
+    if (tempFile.existsSync()) await tempFile.delete();
+
+    await ref.writeToFile(tempFile);
+
+    return Container(
+      child: Text(
+        'Success!\n Downloaded ${ref.name} \n from bucket: ${ref.bucket}\n '
+        'at path: ${ref.fullPath} \n'
+        'Wrote "${ref.fullPath}" to tmp-${ref.name}.txt',
+      ),
+    );
+  }
+
+  Future<void> downloadFileExample() async {
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    File downloadToFile = File('${appDocDir.path}/Istishara');
+
+    try {
+      await firebase_storage.FirebaseStorage.instance
+          .ref('playground/Lecture28.4up.pdf')
+          .writeToFile(downloadToFile);
+      print("hey");
+      print(appDocDir);
+      print(downloadToFile);
+    } on firebase_core.FirebaseException catch (e) {
+      print(e.message);
+      // e.g, e.code == 'canceled'
+    }
+  }
+
   Future<void> signup(
       State widget,
       User user,
@@ -99,13 +159,14 @@ class Databasers {
       String firstName,
       String lastName,
       String phoneNumber,
-      String exp) async {
+      String exp,
+      String cvName) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
       if (exp != "help_seekers") {
         await DataBaseServiceExperts(uid: userCredential.user.uid)
-            .updateuserData(firstName, lastName, phoneNumber, email, exp);
+            .updateuserData(firstName, lastName, phoneNumber, email, exp, cvN);
         uploadFile(CV, context);
       } else {
         await DataBaseServiceHelp(uid: userCredential.user.uid)
@@ -155,6 +216,6 @@ class Databasers {
         return listOfExperts[i];
       }
     }
-     return "help_seekers";
+    return "help_seekers";
   }
 }

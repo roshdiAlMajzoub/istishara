@@ -43,7 +43,10 @@ dependencies:
   double_back_to_close_app: ^2.0.1
   syncfusion_flutter_calendar: ^18.4.48
   settings_ui: ^0.6.0
+  url_launcher: ^6.0.3
+  http: 
 
+  countup: ^0.1.3
   
   
 

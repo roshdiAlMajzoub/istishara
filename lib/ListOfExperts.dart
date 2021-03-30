@@ -1,7 +1,9 @@
+import 'package:ISTISHARA/Databasers.dart';
 import 'package:ISTISHARA/ViewExpert.dart';
 import 'package:flutter/material.dart';
 import 'Database.dart';
 import 'nav-drawer.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 // ignore: must_be_immutable
 class MainListPage extends StatelessWidget {
@@ -27,11 +29,25 @@ class _ListPageState extends State<ListPage> {
   void initState() {
     super.initState();
     fetchDataBaseList();
+    print(imName);
   }
 
   var type;
   _ListPageState(type) {
     this.type = type;
+  }
+  var imName;
+  viewImage(i) async {
+    var img = await Databasers().downloadLink(firebase_storage
+        .FirebaseStorage.instance
+        .ref()
+        .child('playground')
+        .child(expertProfileList[i]['image name']));
+    setState(() {
+      imName = img;
+    });
+    return img;
+    //print("rosh"+ x);
   }
 
   List expertProfileList = [];
@@ -103,8 +119,7 @@ class _ListPageState extends State<ListPage> {
                                       backgroundColor:
                                           Color.fromRGBO(209, 224, 224, 0.2),
                                       value: expertProfileList[index]
-                                              ['reputation']
-                                          ,
+                                          ['reputation'],
                                       //0.5, //this should be expert.reputation where it will be brought from the expert's database@roshdiAlMajzoub
                                       valueColor:
                                           AlwaysStoppedAnimation(Colors.green)),
@@ -122,14 +137,21 @@ class _ListPageState extends State<ListPage> {
                         trailing: Icon(Icons.keyboard_arrow_right,
                             color: Colors.white, size: 30.0),
                         onTap: () {
-                         Navigator.push(context,MaterialPageRoute(
-                              builder: (context) => (ViewExpert(
-                                  name: expertProfileList[index]['first name'] +
-                                      " " +
-                                      expertProfileList[index]['last name'],
-                                  field: type,
-                                  rep:expertProfileList[index]
-                                              ['reputation'].toString()))));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => (ViewExpert(
+                                        name: expertProfileList[index]
+                                                ['first name'] +
+                                            " " +
+                                            expertProfileList[index]
+                                                ['last name'],
+                                        field: type,
+                                        id: expertProfileList[index]['id'],
+                                        cvName: expertProfileList[index]
+                                            ['CV name'],
+                                        imgPath: expertProfileList[index]['image name'],
+                                      ))));
                         },
                       )),
                 );
