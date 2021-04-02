@@ -15,6 +15,8 @@ class MainNotificationsPage extends StatelessWidget {
 
 // ignore: must_be_immutable
 class NotificationsPage extends StatefulWidget {
+  NotificationsPage();
+
   @override
   _NotificationsPageState createState() => _NotificationsPageState();
 }

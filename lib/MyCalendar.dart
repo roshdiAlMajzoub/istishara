@@ -67,8 +67,13 @@ class CalendarState extends State<MyCalendar> {
           elevation: .1,
           backgroundColor: Color(0xff5848CF)),
       body: SfCalendar(
+        timeSlotViewSettings: TimeSlotViewSettings(
+            endHour: 24,
+            startHour: 8,
+            minimumAppointmentDuration: Duration(minutes: 15),
+            timeIntervalHeight: 80),
         view: CalendarView.week,
-        firstDayOfWeek: 6,
+        firstDayOfWeek: 1,
         dataSource: MeetingDataSource(_getData()),
       ),
     );

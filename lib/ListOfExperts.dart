@@ -35,6 +35,7 @@ class _ListPageState extends State<ListPage> {
     print(imName);
   }
 
+  String t2;
   var type;
   var collection;
   _ListPageState(type, collection) {
