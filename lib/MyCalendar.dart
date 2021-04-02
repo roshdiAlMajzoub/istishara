@@ -7,32 +7,36 @@ import 'nav-drawer.dart';
 
 class MainCalendar extends StatelessWidget {
   var id;
-  
-  MainCalendar(id) {
+  String type;
+
+  MainCalendar(id, type) {
     this.id = id;
-    
+    this.type = type;
   }
   @override
   Widget build(BuildContext context) {
-    return MyCalendar(id);
+    return MyCalendar(id,type);
   }
 }
 
 class MyCalendar extends StatefulWidget {
   var id;
-  MyCalendar(id) {
+  String type;
+  MyCalendar(id, type) {
     this.id = id;
+    this.type = type;
   }
   @override
-  CalendarState createState() => CalendarState(id);
+  CalendarState createState() => CalendarState(id, type);
 }
 
 class CalendarState extends State<MyCalendar> {
   var id;
-  
-  CalendarState(id) {
-    this.id = id;
+  String type;
 
+  CalendarState(id, type) {
+    this.id = id;
+    this.type = type;
   }
   final FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -58,14 +62,21 @@ class CalendarState extends State<MyCalendar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavDrawer(),
+      drawer: NavDrawer(
+        type: type,
+      ),
       appBar: AppBar(
           title: Text("Calendar"),
           elevation: .1,
           backgroundColor: Color(0xff5848CF)),
       body: SfCalendar(
+        timeSlotViewSettings: TimeSlotViewSettings(
+            endHour: 24,
+            startHour: 8,
+            minimumAppointmentDuration: Duration(minutes: 15),
+            timeIntervalHeight: 80),
         view: CalendarView.week,
-        firstDayOfWeek: 6,
+        firstDayOfWeek: 1,
         dataSource: MeetingDataSource(_getData()),
       ),
     );

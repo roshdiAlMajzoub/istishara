@@ -13,6 +13,8 @@ class MainNotificationsPage extends StatelessWidget {
 
 // ignore: must_be_immutable
 class NotificationsPage extends StatefulWidget {
+  NotificationsPage();
+
   @override
   _NotificationsPageState createState() => _NotificationsPageState();
 }
@@ -21,7 +23,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        drawer: new NavDrawer(type: '',),
+        drawer: new NavDrawer(
+          type: '',
+        ),
         backgroundColor: Colors.white,
         appBar: AppBar(
           elevation: 0.1,
@@ -52,8 +56,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
                             ///this should be expert.name where name is the expert's name@roshdiAlMajzoub
                             style: TextStyle(
-                                color: Colors.grey,
-                                ),
+                              color: Colors.grey,
+                            ),
                           ),
                           // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
                         ),

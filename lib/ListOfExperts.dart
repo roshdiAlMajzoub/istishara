@@ -6,22 +6,15 @@ import 'nav-drawer.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 // ignore: must_be_immutable
-class MainListPage extends StatelessWidget {
-  var t;
-  @override
-  Widget build(BuildContext context) {
-    return new ListPage(t);
-  }
-}
-
-// ignore: must_be_immutable
 class ListPage extends StatefulWidget {
   var t;
-  ListPage(t) {
+  String t2;
+  ListPage(t, t2) {
     this.t = t;
+    this.t2 = t2;
   }
   @override
-  _ListPageState createState() => _ListPageState(t);
+  _ListPageState createState() => _ListPageState(t,t2);
 }
 
 class _ListPageState extends State<ListPage> {
@@ -32,9 +25,11 @@ class _ListPageState extends State<ListPage> {
     print(imName);
   }
 
+  String t2;
   var type;
-  _ListPageState(type) {
+  _ListPageState(type, t2) {
     this.type = type;
+    this.t2 = t2;
   }
   var imName;
   viewImage(i) async {
@@ -68,7 +63,7 @@ class _ListPageState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        drawer: new NavDrawer(type: "Expert"),
+        drawer: new NavDrawer(type: t2),
         backgroundColor: Colors.blue[800],
         appBar: AppBar(
           elevation: 0.1,
@@ -150,7 +145,9 @@ class _ListPageState extends State<ListPage> {
                                         id: expertProfileList[index]['id'],
                                         cvName: expertProfileList[index]
                                             ['CV name'],
-                                        imgPath: expertProfileList[index]['image name'],
+                                        imgPath: expertProfileList[index]
+                                            ['image name'],
+                                            
                                       ))));
                         },
                       )),

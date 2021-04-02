@@ -47,6 +47,8 @@ dependencies:
   http: 
 
   countup: ^0.1.3
+  datetime_picker_formfield: ^2.0.0
+  date_format: ^2.0.2
   
   
 

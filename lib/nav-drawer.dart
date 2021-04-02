@@ -75,7 +75,7 @@ class NavDrawer extends StatelessWidget {
             title: Text('Calendar'),
             onTap: () => {
               Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => MyCalendar(auth.currentUser.uid)))
+                  context, MaterialPageRoute(builder: (_) => MyCalendar(auth.currentUser.uid,type)))
             },
           ),
           ListTile(

@@ -5,19 +5,10 @@ import 'Database.dart';
 import 'ExpertType.dart';
 
 class Helper {
-  int clearInfo(
-      TextEditingController _FirstNameController,
-      TextEditingController _LastNameController,
-      TextEditingController _PhoneController,
-      TextEditingController _EmailController,
-      TextEditingController _PasswordController,
-      TextEditingController _ConfirmPasswordController) {
-    _FirstNameController.clear();
-    _LastNameController.clear();
-    _PhoneController.clear();
-    _EmailController.clear();
-    _PasswordController.clear();
-    _ConfirmPasswordController.clear();
+  int clearInfo(List<TextEditingController> l) {
+    for (int i = 0; i < l.length; i++) {
+      l[i].clear();
+    }
     return 0;
   }
 
@@ -46,16 +37,21 @@ class Helper {
     return false;
   }
 
- Widget buildText(String content,String value) {
-  return RichText(text:TextSpan(
-    text: " "+content+'\n',
-    style: TextStyle(color: Colors.deepPurple, fontSize: 18, fontWeight: FontWeight.bold),
-    children:[
-      TextSpan(
-        text: "\n      "+value,
-        style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w300)
-      )
-    ]
-  ));
-}
+  Widget buildText(String content, String value) {
+    return RichText(
+        text: TextSpan(
+            text: " " + content + '\n',
+            style: TextStyle(
+                color: Colors.deepPurple,
+                fontSize: 18,
+                fontWeight: FontWeight.bold),
+            children: [
+          TextSpan(
+              text: "\n      " + value,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w300))
+        ]));
+  }
 }

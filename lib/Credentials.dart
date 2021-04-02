@@ -32,6 +32,14 @@ TextEditingController PhoneController = TextEditingController();
 TextEditingController EmailController = TextEditingController();
 TextEditingController PasswordController = TextEditingController();
 TextEditingController ConfirmPasswordController = TextEditingController();
+List<TextEditingController> l = [
+  FirstNameController,
+  LastNameController,
+  PhoneController,
+  EmailController,
+  PasswordController,
+  ConfirmPasswordController
+];
 bool showPassword = true;
 bool editableFN = false;
 bool editableEmail = false;
@@ -90,18 +98,7 @@ class CredentialsState extends State<Credentials> {
             },
             child: WillPopScope(
                 onWillPop: () async {
-                  Show.showDialogGiveUp(
-                      context,
-                      this,
-                      () => {
-                            h.clearInfo(
-                                FirstNameController,
-                                LastNameController,
-                                PhoneController,
-                                EmailController,
-                                PasswordController,
-                                ConfirmPasswordController)
-                          });
+                  Show.showDialogGiveUp(context,"Setting up your account", this, () => {h.clearInfo(l)});
                   return false;
                 },
                 child: SingleChildScrollView(
@@ -766,7 +763,8 @@ class CredentialsState extends State<Credentials> {
                                               _firstName,
                                               _lastName,
                                               _phoneNumber,
-                                              "help_seekers",d.cvN);
+                                              "help_seekers",
+                                              d.cvN);
                                         }
                                       }))
                             ]))

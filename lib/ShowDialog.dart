@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 
 class Show {
- static  Future<AlertDialog> showDialogGiveUp(BuildContext context, State widget,Function clearInfo) {
+ static  Future<AlertDialog> showDialogGiveUp(BuildContext context,String giveUpWhat, State widget,Function clearInfo) {
     return showDialog<AlertDialog>(
         context: context,
         builder: (BuildContext context) {
@@ -15,14 +15,13 @@ class Show {
                     color: Colors.deepPurple, fontWeight: FontWeight.w900),
               ),
               content: Text(
-                  "Are you sure you want to give up on setting up your account?\n\nInformation entered will be disregarded."),
+                  "Are you sure you want to give up on "+giveUpWhat+"?\n\nInformation entered will be disregarded."),
               actions: <Widget>[
                 TextButton(
                     onPressed: () {
                       widget.setState(() {
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
-
                         clearInfo();
                       });
                     },

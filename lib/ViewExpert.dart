@@ -1,5 +1,6 @@
 import 'package:ISTISHARA/Calendar.dart';
 import 'package:ISTISHARA/Databasers.dart';
+import 'package:ISTISHARA/ViewCalendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -11,14 +12,12 @@ class ViewExpert extends StatelessWidget {
   final String id;
   final String cvName;
   final String imgPath;
-  final String rep;
   ViewExpert(
       {@required this.name,
       @required this.field,
       this.id,
       this.cvName,
-      this.imgPath,
-      this.rep});
+      this.imgPath});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +32,7 @@ class ViewExpert extends StatelessWidget {
 }
 
 class _ViewExpert extends StatefulWidget {
-  final String rep;
+
   final String name;
   final String field;
   final String id;
@@ -44,11 +43,10 @@ class _ViewExpert extends StatefulWidget {
       @required this.field,
       this.id,
       this.cvName,
-      this.imgPath,
-      this.rep});
+      this.imgPath,});
   @override
   State<_ViewExpert> createState() => _ViewExpertState(
-      name: name, field: field, id: id, cvName: cvName, imgPath: imgPath,rep:this.rep);
+      name: name, field: field, id: id, cvName: cvName, imgPath: imgPath);
 }
 
 class _ViewExpertState extends State<_ViewExpert> {
@@ -209,7 +207,7 @@ class _ViewExpertState extends State<_ViewExpert> {
                     child: SizedBox(
                       height: screenHeight / 7,
                       child: Row(children: [
-                        buildText(" Reputation:", rep),
+                        buildText(" Reputation:", "2.5"),
                         VerticalDivider(
                           color: Colors.black,
                           indent: 15,
@@ -226,6 +224,7 @@ class _ViewExpertState extends State<_ViewExpert> {
                         buildText("Records:", "10")
                       ]),
                     )),
+                    Container(height: screenHeight/10,),
                 Container(
                     padding: EdgeInsets.only(bottom: 20, top: 20),
                     child: RaisedButton(
@@ -245,19 +244,11 @@ class _ViewExpertState extends State<_ViewExpert> {
                     padding: EdgeInsets.only(bottom: 20),
                     child: RaisedButton(
                       onPressed: () {
-                        Navigator.push(
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => Calendar(id, field,Colors.grey)));
+                                builder: (_) => ViewCalendar(id: id,name:name, field: field, color: Colors.grey)));
                       },
-                      child: Text("View Available time slots",
-                          style: TextStyle(color: Colors.white)),
-                      color: Colors.deepPurple,
-                    )),
-                Container(
-                    padding: EdgeInsets.only(bottom: 20),
-                    child: RaisedButton(
-                      onPressed: () {},
                       child: Text("Book Consultation",
                           style: TextStyle(color: Colors.white)),
                       color: Colors.deepPurple,
