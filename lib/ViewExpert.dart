@@ -1,4 +1,5 @@
 import 'package:ISTISHARA/Calendar.dart';
+import 'package:ISTISHARA/Database.dart';
 import 'package:ISTISHARA/Databasers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -69,12 +70,14 @@ class _ViewExpertState extends State<_ViewExpert> {
         .ref()
         .child('playground')
         .child(imgPath));
-    
-      x = img;
-    
+
+    x = img;
+
     return img;
     //print("rosh"+ x);
   }
+
+  
 
   /*Future<Widget> _getImage(BuildContext context, String imageName) async {
     Image image;
@@ -147,18 +150,16 @@ class _ViewExpertState extends State<_ViewExpert> {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
                           return Container(
-                            decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: NetworkImage(x)
-                          )));
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(x))));
                         }
 
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
                           return Container(
-                            
                             child: CircularProgressIndicator(
                               backgroundColor: Colors.white,
                               strokeWidth: 15.5,
@@ -242,7 +243,8 @@ class _ViewExpertState extends State<_ViewExpert> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => Calendar(id, field,Colors.grey)));
+                                builder: (_) =>
+                                    Calendar(id, field, Colors.grey)));
                       },
                       child: Text("View Available time slots",
                           style: TextStyle(color: Colors.white)),
@@ -251,7 +253,9 @@ class _ViewExpertState extends State<_ViewExpert> {
                 Container(
                     padding: EdgeInsets.only(bottom: 20),
                     child: RaisedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                       
+                      },
                       child: Text("Book Consultation",
                           style: TextStyle(color: Colors.white)),
                       color: Colors.deepPurple,

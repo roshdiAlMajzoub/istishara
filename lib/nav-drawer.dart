@@ -3,19 +3,31 @@ import 'package:ISTISHARA/NotificationsPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'Calendar.dart';
+import 'Credentials.dart';
 import 'DashBoard.dart';
 import 'Login.dart';
-import 'Profile.dart';
+import 'ProfileView.dart';
 import 'Settings.dart';
+import 'Database.dart';
 
 class NavDrawer extends StatelessWidget {
   final auth = FirebaseAuth.instance;
   final String type;
-  NavDrawer({@required this.type});
+  final String collection;
+  NavDrawer({@required this.type, this.collection});
+
+  List proff = [];
+  getData() async {
+    dynamic prof = await DataBaseService()
+        .getCurrentUSerData(auth.currentUser.uid, collection);
+    proff = prof;
+    print(proff[0]['first name']);
+  }
 
   @override
   Widget build(BuildContext context) {
-    var count = 0;         //retrieve from firebase 
+    getData();
+    var count = 0; //retrieve from firebase
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -33,49 +45,75 @@ class NavDrawer extends StatelessWidget {
               title: Text('Profile'),
               onTap: () {
                 if (type == "Expert") {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Profile(
+                                descirbe: "Expert Profile",
+                                barTitle: "Expert's Profile",
+                                isProfile: true,
+                                lst: proff,
+                              )));
+                } else {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Profile(
+                                descirbe: "Help-Seeker Profile",
+                                barTitle: "Help-Seeker's Profile",
+                                isProfile: true,
+                                lst: proff,
+                              )));
+                }
+                /* if (type == "Expert") {
                   Navigator.pushNamed(context, "/EProfile");
                 } else {
                   Navigator.pushNamed(context, "/UProfile");
-                }
+                }*/
               }),
           ListTile(
             leading: new Stack(
-    children: <Widget>[
-      new Icon(Icons.notifications),
-      new Positioned(
-        right: 0,
-        child: new Container(
-          padding: EdgeInsets.all(1),
-          decoration: new BoxDecoration(
-            color: Colors.red,
-            borderRadius: BorderRadius.circular(6),
-          ),
-          constraints: BoxConstraints(
-            minWidth: 13,
-            minHeight: 13,
-          ),
-          child: new Text(
-            '$count',
-            style: new TextStyle(
-              color: Colors.white,
-              fontSize: 8,
+              children: <Widget>[
+                new Icon(Icons.notifications),
+                new Positioned(
+                  right: 0,
+                  child: new Container(
+                    padding: EdgeInsets.all(1),
+                    decoration: new BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    constraints: BoxConstraints(
+                      minWidth: 13,
+                      minHeight: 13,
+                    ),
+                    child: new Text(
+                      '$count',
+                      style: new TextStyle(
+                        color: Colors.white,
+                        fontSize: 8,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                )
+              ],
             ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-      )
-    ],
-  ),
-  title: Text('Notifications'),
-  onTap: ()=>{Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => NotificationsPage()))},
+            title: Text('Notifications'),
+            onTap: () => {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => NotificationsPage()))
+            },
           ),
           ListTile(
             leading: Icon(Icons.calendar_today),
             title: Text('Calendar'),
             onTap: () => {
               Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => MyCalendar(auth.currentUser.uid)))
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => Calendar(
+                          auth.currentUser.uid, collection, Colors.blue)))
             },
           ),
           ListTile(
@@ -95,7 +133,9 @@ class NavDrawer extends StatelessWidget {
             title: Text('Settings'),
             onTap: () => {
               Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => Settings()))
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => Settings(collection, proff)))
             },
           ),
           ListTile(

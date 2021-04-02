@@ -7,39 +7,42 @@ import 'nav-drawer.dart';
 
 class MainCalendar extends StatelessWidget {
   var id;
-  
+  var collection;
   MainCalendar(id) {
     this.id = id;
-    
+    this.collection = collection;
   }
   @override
   Widget build(BuildContext context) {
-    return MyCalendar(id);
+    return MyCalendar(id,collection);
   }
 }
 
 class MyCalendar extends StatefulWidget {
   var id;
-  MyCalendar(id) {
+  var collection;
+  MyCalendar(id,collection) {
     this.id = id;
+    this.collection = collection;
   }
   @override
-  CalendarState createState() => CalendarState(id);
+  CalendarState createState() => CalendarState(id, collection);
 }
 
 class CalendarState extends State<MyCalendar> {
   var id;
-  
-  CalendarState(id) {
-    this.id = id;
+  var collection;
 
+  CalendarState(id,collection) {
+    this.id = id;
+    this.collection = collection;
   }
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   List apptt = [];
   fetchDatabaseAppt() async {
     final User user = auth.currentUser;
-    dynamic resultant = await DatabaseAppt().getMyAppt(id) as List;
+    dynamic resultant = await DatabaseAppt().getAppt(id,collection) as List;
     if (resultant == null) {
       print("unable to retrieve");
     } else {
@@ -58,7 +61,7 @@ class CalendarState extends State<MyCalendar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavDrawer(),
+      drawer: NavDrawer(type: "hey",collection: collection,),
       appBar: AppBar(
           title: Text("Calendar"),
           elevation: .1,

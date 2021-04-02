@@ -1,6 +1,15 @@
+import 'dart:convert';
+
 import 'package:ISTISHARA/Databasers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart' as fcm;
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:async';
 
 class DataBaseServiceHelp {
   CollectionReference collectionReference =
@@ -21,7 +30,7 @@ class DataBaseServiceHelp {
 class DataBaseServiceExperts {
   final String uid;
   DataBaseServiceExperts({this.uid});
-  Future updateuserData(fname, lname, pnumber, email, exp,cvN) async {
+  Future updateuserData(fname, lname, pnumber, email, exp, cvN) async {
     CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(exp);
 
@@ -188,7 +197,7 @@ class DatabaseAppt {
           .collection(col)
           .doc(uid)
           .collection('appt');
-      
+
       try {
         await colcollectionReference.get().then((QuerySnapshot) {
           QuerySnapshot.docs.forEach((element) {
@@ -198,42 +207,50 @@ class DatabaseAppt {
       } catch (e) {
         print(e.toString());
       }
-      
     }
     return appts;
   }
 
-  Future getAppt(uid,type) async {
+  Future getAppt(uid, type) async {
     List appts = [];
     List coll = [
       'Plumber',
       'Personal Trainer',
       'Electrician',
-      'Data Scientist','Software Engineer', 'Civil Engineers', 'Nutritionist','PE','Handyman','Architect','Electrician','Carpenter','Interior Designer','BlackSmith','Industrial Engineer'
+      'Data Scientist',
+      'Software Engineer',
+      'Civil Engineers',
+      'Nutritionist',
+      'PE',
+      'Handyman',
+      'Architect',
+      'Electrician',
+      'Carpenter',
+      'Interior Designer',
+      'BlackSmith',
+      'Industrial Engineer'
     ];
     /*for (var col in coll) {
       Query colcollectionReference = await FirebaseFirestore.instance
           .collection(col)
           .doc(uid)
           .collection('appt');*/
-       Query  colcollectionReference = await FirebaseFirestore.instance
-          .collection(type)
-          .doc(uid)
-          .collection('appt');
-      try {
-        await colcollectionReference.get().then((QuerySnapshot) {
-          QuerySnapshot.docs.forEach((element) {
-            appts.add(element.data());
-          });
+    Query colcollectionReference = await FirebaseFirestore.instance
+        .collection(type)
+        .doc(uid)
+        .collection('appt');
+    try {
+      await colcollectionReference.get().then((QuerySnapshot) {
+        QuerySnapshot.docs.forEach((element) {
+          appts.add(element.data());
         });
-      } catch (e) {
-        print(e.toString());
-      }
-      return appts;
+      });
+    } catch (e) {
+      print(e.toString());
     }
-    
+    return appts;
   }
-
+}
 
 class DataBaseService {
   /*List proff = [];
@@ -245,22 +262,27 @@ class DataBaseService {
   
   }*/
   final FirebaseAuth auth = FirebaseAuth.instance;
-
-  
-
-
-
-  Future getCurrentUSerData(id) async {
+  Future getCurrentUSerData(id, collection) async {
     List coll = [
       'Plumber',
       'Personal Trainer',
       'Electrician',
-      'Data Scientist'
+      'Data Scientist',
+      'Software Engineer',
+      'Civil Engineer',
+      'Nutritionis',
     ];
     User user = auth.currentUser;
     List profile = [];
-
-    for (var col in coll) {
+    print(auth.currentUser.uid);
+    await FirebaseFirestore.instance
+        .collection(collection)
+        .doc(id)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      profile.add(documentSnapshot.data());
+    });
+    /* for (var col in coll) {
       await FirebaseFirestore.instance
           .collection(col)
           .doc(id)
@@ -270,7 +292,88 @@ class DataBaseService {
           profile.add(documentSnapshot.data());
         }
       });
-    }
+    }*/
     return profile;
   }
+/*         notification functionsss
+  String constructFCMPayload() {
+    final fcm.FirebaseMessaging f = fcm.FirebaseMessaging.instance;
+    return jsonEncode({
+      'notification': {
+        'title': 'Hello FlutterFire!',
+        'body': 'This notification () was created via FCM!',
+      },
+      'to':
+          "ds-tqusgTrWsBL5KBC5IgW:APA91bEgwHI-aJ2srZJFFFaS4OIIULOsd_tcJemVke4zgaCkFvz3nfk00nWiHC-QT6RzEsebOYh4Z3Zkc5tNcPYOdtqZUjQGbWDKLhIF6CPrtVj431alg3nG2HmLbWLMZ0M3JQ15ziQN",
+      // "fmClhZ2GTkW4CO8vyYpZ0h:APA91bF7lY7DsHfapW-MRAzo3jSBAzukuGsmZvuycXSACokke3KiwXYDbXI1FOb2pTSsgXDWXG5qVxGtaeXUnTnzG5m9vLwfj0rSchARVltSsim4oQrozewQnEXIO9nvo8ocS1fbGiM6",
+    });
+  }
+
+  var postUrl = "https://fcm.googleapis.com/fcm/send";
+  Future<void> sendNotification(receiver, msg) async {
+    var token = "fmClhZ2GTkW4CO8vyYpZ0h:APA91bF7lY7DsHfapW-MRAzo3jSBAzukuGsmZvuycXSACokke3KiwXYDbXI1FOb2pTSsgXDWXG5qVxGtaeXUnTnzG5m9vLwfj0rSchARVltSsim4oQrozewQnEXIO9nvo8ocS1fbGiM6";
+    final data = jsonEncode({
+      "notification": {
+        "body": "Accept Ride Request",
+        "title": "This is Ride Request"
+      },
+      "priority": "high",
+      "data": {
+        "click_action": "FLUTTER_NOTIFICATION_CLICK",
+        "id": "1",
+        "status": "done"
+      },
+      "to":
+          "fmClhZ2GTkW4CO8vyYpZ0h:APA91bF7lY7DsHfapW-MRAzo3jSBAzukuGsmZvuycXSACokke3KiwXYDbXI1FOb2pTSsgXDWXG5qVxGtaeXUnTnzG5m9vLwfj0rSchARVltSsim4oQrozewQnEXIO9nvo8ocS1fbGiM6",
+    });
+    /*final headers = {
+      'content-type': 'application/json',
+      'Authorization': 'key=AIzaSyCItpDq0vPOViSA5VsOL8vWFZ-hQKnWIok'
+    };
+    BaseOptions options = new BaseOptions(
+      connectTimeout: 5000,
+      receiveTimeout: 3000,
+      headers: headers,
+    );*/
+    try {
+      await http.post(
+        Uri.parse('https://api.rnfirebase.io/messaging/send'),
+        headers: <String, String>{
+          "Content-Type": 'application/json',
+          "Authorization": 'key=AIzaSyCItpDq0vPOViSA5VsOL8vWFZ-hQKnWIok'
+        },
+        body: jsonEncode({
+            "token": token,
+            "data": {
+              "via": 'FlutterFire Cloud Messaging!!!',
+              "count": '2',
+            },
+            "notification": {
+              "title": 'Hello FlutterFire!',
+              "body": 'This notification 4 was created via FCM!',
+            },
+      }),
+      );
+      print('FCM request for device sent!');
+    } catch (e) {
+      print(e);
+    }
+
+    /*try {
+          final response = await Dio(options).post("https://fcm.googleapis.com/fcm/send",
+              data: data);
+
+          if (response.statusCode == 200) {
+            Fluttertoast.showToast(msg: 'Request Sent To Driver');
+          } else {
+            print('notification sending failed');
+            // on failure do sth
+          }
+        }catch(e){
+          print(e.message);
+        }*/
+  }
+*/
+  
+  
 }

@@ -1,25 +1,57 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:flutter/material.dart';
 import 'nav-drawer.dart';
 
 class MainSettings extends StatelessWidget {
+  var collection;
+  var lst;
   @override
   Widget build(BuildContext context) {
-    return Settings();
+    return Settings(collection, lst);
   }
 }
 
 class Settings extends StatefulWidget {
+  var collection;
+  var lst;
+  Settings(collection,lst) {
+    this.collection = collection;
+    this.lst = lst;
+  }
   @override
-  SettingsState createState() => SettingsState();
+  SettingsState createState() => SettingsState(collection, lst);
 }
 
 class SettingsState extends State<Settings> {
+  var collection;
+  var lst;
+  SettingsState(collection,lst) {
+    this.collection = collection;
+    this.lst = lst;
+  }
   bool temp;
+  delteAcc() async {
+    try {
+      await FirebaseAuth.instance.currentUser.delete();
+      Navigator.of(context).pushReplacementNamed('/Login');
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'requires-recent-login') {
+        print(
+            'The user must reauthenticate before this operation can be executed.');
+      }
+    }
+  }
+
+  deactivateAcc() {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: NavDrawer(type:"Expert"),
+        drawer: NavDrawer(
+          type: "Expert",
+          collection: collection,
+        ),
         appBar: AppBar(
             title: Text("Settings"),
             elevation: .1,
@@ -38,9 +70,10 @@ class SettingsState extends State<Settings> {
                 SettingsTile(
                   title: 'Delete Account',
                   leading: Icon(Icons.delete),
-                  onPressed: (BuildContext context) {},
+                  onPressed: (BuildContext context) {
+                    delteAcc();
+                  },
                 ),
-               
               ],
             ),
             SettingsSection(
@@ -51,7 +84,9 @@ class SettingsState extends State<Settings> {
                   title: 'Available',
                   leading: Icon(Icons.event_available_outlined),
                   switchValue: true,
-                  onToggle: (bool value) {},
+                  onToggle: (bool value) {
+                    value = false;
+                  },
                   switchActiveColor: Colors.orange[800],
                 ),
               ],
@@ -72,10 +107,8 @@ class SettingsState extends State<Settings> {
                   trailing: Icon(Icons.arrow_forward_ios),
                   onPressed: (BuildContext context) {},
                 ),
-               
               ],
             ),
-            
           ],
         ));
   }
