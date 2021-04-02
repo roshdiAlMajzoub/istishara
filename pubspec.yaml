@@ -46,7 +46,9 @@ dependencies:
   settings_ui: ^0.6.0
   url_launcher: ^6.0.3
   http: 
-
+  firebase_messaging: ^9.1.0
+  dio: ^4.0.0
+  fluttertoast: ^8.0.3
   countup: ^0.1.3
   
   

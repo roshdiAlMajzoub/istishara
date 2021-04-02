@@ -8,20 +8,23 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 // ignore: must_be_immutable
 class MainListPage extends StatelessWidget {
   var t;
+  var collection;
   @override
   Widget build(BuildContext context) {
-    return new ListPage(t);
+    return new ListPage(t, collection);
   }
 }
 
 // ignore: must_be_immutable
 class ListPage extends StatefulWidget {
   var t;
-  ListPage(t) {
+  var collection;
+  ListPage(t, collection) {
     this.t = t;
+    this.collection=collection;
   }
   @override
-  _ListPageState createState() => _ListPageState(t);
+  _ListPageState createState() => _ListPageState(t, collection);
 }
 
 class _ListPageState extends State<ListPage> {
@@ -33,8 +36,10 @@ class _ListPageState extends State<ListPage> {
   }
 
   var type;
-  _ListPageState(type) {
+  var collection;
+  _ListPageState(type, collection) {
     this.type = type;
+    this.collection=collection;
   }
   var imName;
   viewImage(i) async {
@@ -67,8 +72,13 @@ class _ListPageState extends State<ListPage> {
 
   @override
   Widget build(BuildContext context) {
+    print("hey");
+    print(collection);
     return new Scaffold(
-        drawer: new NavDrawer(type: "Expert"),
+        drawer: new NavDrawer(
+          type: "Expert",
+          collection: collection,
+        ),
         backgroundColor: Colors.blue[800],
         appBar: AppBar(
           elevation: 0.1,
@@ -150,7 +160,8 @@ class _ListPageState extends State<ListPage> {
                                         id: expertProfileList[index]['id'],
                                         cvName: expertProfileList[index]
                                             ['CV name'],
-                                        imgPath: expertProfileList[index]['image name'],
+                                        imgPath: expertProfileList[index]
+                                            ['image name'],
                                       ))));
                         },
                       )),
