@@ -7,21 +7,31 @@ import 'package:flutter_svg/flutter_svg.dart';
 // ignore: must_be_immutable
 class MainNotificationsPage extends StatelessWidget {
   var t;
+  var noti;
   @override
   Widget build(BuildContext context) {
-    return new NotificationsPage();
+    return new NotificationsPage(noti);
   }
 }
 
 // ignore: must_be_immutable
 class NotificationsPage extends StatefulWidget {
+  var noti;
+  NotificationsPage(noti) {
+    this.noti = noti;
+  }
   @override
-  _NotificationsPageState createState() => _NotificationsPageState();
+  _NotificationsPageState createState() => _NotificationsPageState(noti);
 }
 
 class _NotificationsPageState extends State<NotificationsPage> {
+  var noti;
+  _NotificationsPageState(noti) {
+    this.noti = noti;
+  }
   @override
   Widget build(BuildContext context) {
+    print(noti);
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     return new Scaffold(
@@ -34,16 +44,15 @@ class _NotificationsPageState extends State<NotificationsPage> {
           backgroundColor: Color(0x66666),
           title: Text("Notifications"),
           leading: Icon(Icons.notifications),
-          
         ),
         body: new Container(
           child: ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
-              itemCount: 10, //depends on firebase count;;
+              itemCount: noti.length , //depends on firebase count;;
               itemBuilder: (BuildContext context, int index) {
                 return SizedBox(
-                    height: screenHeight / 9,
+                    height: screenHeight / 6.5,
                     child: Card(
                       elevation: 8.0,
                       margin: new EdgeInsets.symmetric(
@@ -63,7 +72,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                     showAlertDialog(context);
                                   },
                                 )),
-                            title: Text("You've Received new Notification"),
+                            title: Text("New Meeting at " + noti[index]['start time'].toDate().toString() +"-"+ noti[index]['end time'].toDate().toString()),
                             trailing: IconButton(
                               icon: SvgPicture.asset("asset/images/cancel.svg"),
                               color: Colors.green,

@@ -1,3 +1,4 @@
+import 'package:ISTISHARA/Database.dart';
 import 'package:ISTISHARA/Databasers.dart';
 import 'package:ISTISHARA/ProfileView.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -38,11 +39,28 @@ class DashboardState extends State<Dashboard> {
     });
   }
 
+  List notificationList = [];
+
+  fetchDataBaseNotificationList() async {
+    dynamic resultant =
+        await DataBaseList().getNotificationList('Software Engineer');
+
+    if (resultant == null) {
+      print("unable to retrieve");
+    } else {
+      setState(() {
+        notificationList = resultant;
+      });
+      print(notificationList);
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getCollection();
+    fetchDataBaseNotificationList();
   }
 
   getToken() async {
@@ -54,13 +72,16 @@ class DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
+    print(notificationList);
     getToken();
     var availableMoney = 50000;
     print(collection);
+    print(notificationList);
     return Scaffold(
         drawer: NavDrawer(
           type: type,
           collection: collection,
+          noti: notificationList,
         ),
         appBar: AppBar(
             title: Text("Dashboard"),

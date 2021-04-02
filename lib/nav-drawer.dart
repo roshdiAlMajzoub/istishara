@@ -14,7 +14,8 @@ class NavDrawer extends StatelessWidget {
   final auth = FirebaseAuth.instance;
   final String type;
   final String collection;
-  NavDrawer({@required this.type, this.collection});
+  List noti;
+  NavDrawer({@required this.type, this.collection, this.noti});
 
   List proff = [];
   getData() async {
@@ -26,6 +27,8 @@ class NavDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("roshdi  roshdi  roshdi");
+    print(noti);
     getData();
     var count = 0; //retrieve from firebase
     return Drawer(
@@ -102,7 +105,7 @@ class NavDrawer extends StatelessWidget {
             title: Text('Notifications'),
             onTap: () => {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => NotificationsPage()))
+                  MaterialPageRoute(builder: (_) => NotificationsPage(noti)))
             },
           ),
           ListTile(

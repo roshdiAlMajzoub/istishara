@@ -47,6 +47,7 @@ class DataBaseServiceExperts {
 }
 
 class DataBaseList {
+  FirebaseAuth auth = FirebaseAuth.instance;
   Future getUsersList(coll) async {
     //CollectionReference collectionReference =
     //  FirebaseFirestore.instance.collection(coll);
@@ -54,6 +55,26 @@ class DataBaseList {
     Query colcollectionReference = FirebaseFirestore.instance
         .collection(coll)
         .orderBy('reputation', descending: true);
+    try {
+      await colcollectionReference.get().then((QuerySnapshot) {
+        QuerySnapshot.docs.forEach((element) {
+          expertList.add(element.data());
+        });
+      });
+      return expertList;
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future getNotificationList(coll) async {
+    //CollectionReference collectionReference =
+    //  FirebaseFirestore.instance.collection(coll);
+    List expertList = [];
+    Query colcollectionReference = FirebaseFirestore.instance
+        .collection(coll)
+        .doc(auth.currentUser.uid).collection('appt')
+        .orderBy('start time', descending: true);
     try {
       await colcollectionReference.get().then((QuerySnapshot) {
         QuerySnapshot.docs.forEach((element) {
@@ -374,6 +395,5 @@ class DataBaseService {
         }*/
   }
 */
-  
-  
+
 }
