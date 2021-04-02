@@ -169,7 +169,7 @@ class ProfileState extends State<Profile> {
               });
             },
             child: WillPopScope(
-                onWillPop: () async {
+                /*onWillPop: () async {
                   Show.showDialogGiveUp(
                       context,
                       this,
@@ -183,7 +183,7 @@ class ProfileState extends State<Profile> {
                                 ConfirmPasswordController)
                           });
                   return false;
-                },
+                },*/
                 child: SingleChildScrollView(
                     child: Column(children: [
                   Container(
