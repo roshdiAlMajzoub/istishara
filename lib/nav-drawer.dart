@@ -6,6 +6,7 @@ import 'Calendar.dart';
 import 'DashBoard.dart';
 import 'Login.dart';
 import 'Profile.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'Settings.dart';
 
 class NavDrawer extends StatelessWidget {
@@ -15,7 +16,7 @@ class NavDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var count = 0;         //retrieve from firebase 
+    var count = 0; //retrieve from firebase
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -40,42 +41,46 @@ class NavDrawer extends StatelessWidget {
               }),
           ListTile(
             leading: new Stack(
-    children: <Widget>[
-      new Icon(Icons.notifications),
-      new Positioned(
-        right: 0,
-        child: new Container(
-          padding: EdgeInsets.all(1),
-          decoration: new BoxDecoration(
-            color: Colors.red,
-            borderRadius: BorderRadius.circular(6),
-          ),
-          constraints: BoxConstraints(
-            minWidth: 13,
-            minHeight: 13,
-          ),
-          child: new Text(
-            '$count',
-            style: new TextStyle(
-              color: Colors.white,
-              fontSize: 8,
+              children: <Widget>[
+                new Icon(Icons.inbox),
+                new Positioned(
+                  right: 0,
+                  child: new Container(
+                    padding: EdgeInsets.all(1),
+                    decoration: new BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    constraints: BoxConstraints(
+                      minWidth: 13,
+                      minHeight: 13,
+                    ),
+                    child: new Text(
+                      '$count',
+                      style: new TextStyle(
+                        color: Colors.white,
+                        fontSize: 8,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                )
+              ],
             ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-      )
-    ],
-  ),
-  title: Text('Notifications'),
-  onTap: ()=>{Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => NotificationsPage()))},
+            title: Text('Notifications'),
+            onTap: () => {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => NotificationsPage()))
+            },
           ),
           ListTile(
             leading: Icon(Icons.calendar_today),
             title: Text('Calendar'),
             onTap: () => {
               Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => MyCalendar(auth.currentUser.uid)))
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => MyCalendar(auth.currentUser.uid)))
             },
           ),
           ListTile(
