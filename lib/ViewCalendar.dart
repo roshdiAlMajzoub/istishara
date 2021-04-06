@@ -86,9 +86,15 @@ class _ViewCalendarState extends State<ViewCalendar> {
         endTime,
         token,
       );
+      showAlertDialog(context, "Your request has been sent to the expert.",
+          "You will recieve notification once your request is approved.");
       print(token);
       print('done');
     } else {
+      showAlertDialog(
+          context,
+          "This appointemnet is in conflict with another one",
+          "Try another one!");
       print('not');
     }
     //print(startTime);
@@ -235,4 +241,31 @@ class _ViewCalendarState extends State<ViewCalendar> {
                   ]),
                 ))));
   }
+}
+
+showAlertDialog(BuildContext context, txt, txt1) {
+  // set up the buttons
+  Widget cancelButton = FlatButton(
+    child: Text("OK"),
+    onPressed: () {
+      Navigator.of(context).pop();
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text(txt),
+    content: Text(txt1),
+    actions: [
+      cancelButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }
