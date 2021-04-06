@@ -52,11 +52,11 @@ class CalendarState extends State<MyCalendar> {
     }
   }
 
-  book() {
+  /*book() {
     final User user = auth.currentUser;
     DatabaseBookAppt().bookAppt(user.uid, 'uid2', DateTime.now(),
         DateTime.now().add(Duration(hours: 2)));
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +100,7 @@ class CalendarState extends State<MyCalendar> {
       DateTime st = ap['start time'].toDate();
       DateTime et = ap['end time'].toDate();
 
-      meetings.add(Meeting('test', st, et, Color(0xFF0F8644), false));
+      meetings.add(Meeting('Appt', st, et, Color(0xFF0F8644), false));
     }
     return meetings;
   }

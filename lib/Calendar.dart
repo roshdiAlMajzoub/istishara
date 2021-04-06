@@ -47,7 +47,7 @@ class CalendarState extends State<Calendar> {
   List apptt = [];
   fetchDatabaseAppt() async {
     final User user = auth.currentUser;
-    dynamic resultant = await DatabaseAppt().getAppt(id, type) as List;
+    dynamic resultant = await DatabaseAppt().getExpAppt(id, type) as List;
     if (resultant == null) {
       print("unable to retrieve");
     } else {
@@ -59,6 +59,7 @@ class CalendarState extends State<Calendar> {
 
   @override
   Widget build(BuildContext context) {
+    //print(apptt);
     return Scaffold(
         drawer: NavDrawer(
           type: "",

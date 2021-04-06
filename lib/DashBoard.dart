@@ -1,5 +1,7 @@
+import 'package:ISTISHARA/Database.dart';
 import 'package:ISTISHARA/Databasers.dart';
 import 'package:ISTISHARA/ProfileView.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -43,20 +45,25 @@ class DashboardState extends State<Dashboard> {
     // TODO: implement initState
     super.initState();
     getCollection();
+    getToken();
   }
 
+  String token;
   getToken() async {
     FirebaseAuth auth = FirebaseAuth.instance;
-    //String fcmToken = await auth.currentUser.getIdToken();
     String t = await FirebaseMessaging.instance.getToken();
-    print(t);
+    await FirebaseFirestore.instance
+        .collection(collection)
+        .doc(auth.currentUser.uid)
+        .update({'token': t});
   }
 
   @override
   Widget build(BuildContext context) {
     getToken();
+    //rprint(token);
     var availableMoney = 50000;
-    print(collection);
+    //print(collection);
     return Scaffold(
         drawer: NavDrawer(
           type: type,
