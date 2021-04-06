@@ -108,7 +108,7 @@ class BasicTimeField extends StatelessWidget {
                 return "Please Choose End Time";
               } else if (value.hour < start.hour) {
                 return "Start and End Time Overlap";
-              } else if (value.minute < start.minute + 10) {
+              } else if (value.minute < start.minute + 10 && value.hour==start.hour) {
                 return "Consultation can not be at least 10 minutes";
               } else {
                 return null;
