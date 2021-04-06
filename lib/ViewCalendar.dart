@@ -70,12 +70,21 @@ class _ViewCalendarState extends State<ViewCalendar> {
     //print(check);
     if (h == false) {
       String token;
+      String token2;
+      print(collection);
       await FirebaseFirestore.instance
-          .collection(collection)
+          .collection(field)
           .doc(id)
           .get()
           .then((DocumentSnapshot d) {
         token = d.data()['token'];
+      });
+      await FirebaseFirestore.instance
+          .collection(collection)
+          .doc(auth.currentUser.uid)
+          .get()
+          .then((DocumentSnapshot d) {
+        token2 = d.data()['token'];
       });
       DatabaseBookAppt().bookAppt(
         auth.currentUser.uid,
@@ -85,6 +94,7 @@ class _ViewCalendarState extends State<ViewCalendar> {
         startTime,
         endTime,
         token,
+        token2,
       );
       showAlertDialog(context, "Your request has been sent to the expert.",
           "You will recieve notification once your request is approved.");

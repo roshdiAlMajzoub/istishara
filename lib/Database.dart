@@ -191,7 +191,7 @@ class DatabaseBookAppt {
     }
   }
 
-  Future bookAppt(uid1, collection, uid2, field, st, et,token) async {
+  Future bookAppt(uid1, collection, uid2, field, st, et,token,token2) async {
     List coll = [
       'Plumber',
       'Personal Trainer',
@@ -214,6 +214,7 @@ class DatabaseBookAppt {
       'id2': uid2,
       'id': auth.currentUser.uid+uid2+x,
       'token':token,
+      'SecToken': token2
     });
     /*await FirebaseFirestore.instance
         .collection(field)

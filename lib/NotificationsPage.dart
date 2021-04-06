@@ -217,8 +217,5 @@ denyAppt(col, id, uid, st) async {
   print(id);
   print(uid);
   print(st);
-  await FirebaseFirestore.instance
-      .collection('Appt')
-      .doc(uid)
-      .delete();
+  await FirebaseFirestore.instance.collection('Appt').doc(uid).delete();
 }
