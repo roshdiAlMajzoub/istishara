@@ -162,7 +162,7 @@ class _ListPageState extends State<ListPage> {
                                         cvName: expertProfileList[index]
                                             ['CV name'],
                                         imgPath: expertProfileList[index]
-                                            ['image name'],
+                                            ['image name'],collection: collection,
                                       ))));
                         },
                       )),

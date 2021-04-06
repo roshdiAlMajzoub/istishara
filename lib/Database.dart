@@ -1,6 +1,6 @@
 import 'dart:convert';
-
 import 'package:ISTISHARA/Databasers.dart';
+import 'package:ISTISHARA/ProfileView.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -72,9 +72,14 @@ class DataBaseList {
     //  FirebaseFirestore.instance.collection(coll);
     List expertList = [];
     Query colcollectionReference = FirebaseFirestore.instance
+        .collection('Appt')
+        .where('id2',isEqualTo: auth.currentUser.uid)
+        .where('state', isEqualTo: "pending");
+    /*Query colcollectionReference = FirebaseFirestore.instance
         .collection(coll)
-        .doc(auth.currentUser.uid).collection('appt')
-        .orderBy('start time', descending: true);
+        .doc(auth.currentUser.uid)
+        .collection('appt')
+        .where('state', isEqualTo: "pending");*/
     try {
       await colcollectionReference.get().then((QuerySnapshot) {
         QuerySnapshot.docs.forEach((element) {
@@ -95,7 +100,34 @@ class DatabaseBookAppt {
     List ap = [];
     List app = [];
     List conflictAppt = [];
+
     var a = await FirebaseFirestore.instance
+        .collection('Appt')
+        .where('id2', isEqualTo: userid)
+        //.where('start time', isGreaterThanOrEqualTo: Timestamp.fromDate(st))
+        //.where('start time', isLessThanOrEqualTo: Timestamp.fromDate(et))
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((element) {
+        if (element.data()['start time'].toDate().isAfter(st)) {
+          ap.add(element.data());
+        }
+      });
+    });
+    var b = await FirebaseFirestore.instance
+        .collection('Appt')
+        .where('id2', isEqualTo: userid)
+        //.where('end time', isGreaterThanOrEqualTo: Timestamp.fromDate(st))
+        //.where('start time', isLessThanOrEqualTo: Timestamp.fromDate(et))
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((element) {
+        if (element.data()['end time'].toDate().isAfter(st)) {
+          app.add(element.data());
+        }
+      });
+    });
+    /* var a = await FirebaseFirestore.instance
         .collection(col)
         .doc(userid)
         .collection('appt')
@@ -118,9 +150,10 @@ class DatabaseBookAppt {
       querySnapshot.docs.forEach((element) {
         app.add(element.data());
       });
-    });
+    });*/
 
-    if (ap.length == 0) {
+    if (ap.length == 0 && app.length == 0) {
+      return false;
       print("no elements");
     } else {
       for (var i = 0; i < app.length; i++) {
@@ -150,6 +183,7 @@ class DatabaseBookAppt {
         }
       }
       if (conflictAppt.length > 0) {
+        print("there is conflict");
         return true;
       }
 
@@ -157,17 +191,45 @@ class DatabaseBookAppt {
     }
   }
 
-  Future bookAppt(uid1, uid2, st, et) async {
+  Future bookAppt(uid1, collection, uid2, field, st, et,token) async {
     List coll = [
       'Plumber',
       'Personal Trainer',
       'Electrician',
-      'Data Scientist'
+      'Data Scientist',
+      'Software Engineer'
     ];
     User user = auth.currentUser;
-    String collection;
     List pe = [];
-    for (var col in coll) {
+    var check = await checkAp(field, uid2, st, et);
+    //print(check);
+    // ignore: unrelated_type_equality_checks
+    String x = st.toString() + et.toString();
+    await FirebaseFirestore.instance.collection('Appt').doc(auth.currentUser.uid+uid2+x).set({
+      'start time': Timestamp.fromDate(st),
+      'end time': Timestamp.fromDate(et),
+      'state': 'pending',
+      'coll': collection,
+      'id1': auth.currentUser.uid,
+      'id2': uid2,
+      'id': auth.currentUser.uid+uid2+x,
+      'token':token,
+    });
+    /*await FirebaseFirestore.instance
+        .collection(field)
+        .doc(uid2)
+        .collection('appt')
+        .doc(x)
+        .set({
+      'start time': Timestamp.fromDate(st),
+      'end time': Timestamp.fromDate(et),
+      'state': 'pending',
+      'coll': collection,
+      'id': auth.currentUser.uid,
+      'uid':x,
+    });*/
+
+    /* for (var col in coll) {
       await FirebaseFirestore.instance
           .collection(col)
           .doc(uid1)
@@ -182,12 +244,13 @@ class DatabaseBookAppt {
               .set({
             'start time': Timestamp.fromDate(st),
             'end time': Timestamp.fromDate(et),
+            'state': 'pending'
           });
 
           print(col + " document exist");
         }
       });
-    }
+    }*/
     print(pe);
   }
 }
@@ -232,34 +295,73 @@ class DatabaseAppt {
     return appts;
   }
 
-  Future getAppt(uid, type) async {
+  Future getExpAppt(uid, type) async {
     List appts = [];
-    List coll = [
-      'Plumber',
-      'Personal Trainer',
-      'Electrician',
-      'Data Scientist',
-      'Software Engineer',
-      'Civil Engineers',
-      'Nutritionist',
-      'PE',
-      'Handyman',
-      'Architect',
-      'Electrician',
-      'Carpenter',
-      'Interior Designer',
-      'BlackSmith',
-      'Industrial Engineer'
-    ];
     /*for (var col in coll) {
       Query colcollectionReference = await FirebaseFirestore.instance
           .collection(col)
           .doc(uid)
           .collection('appt');*/
     Query colcollectionReference = await FirebaseFirestore.instance
+        .collection('Appt')
+        .where('id1', isEqualTo: uid)
+        .where('state', isEqualTo: "Accepted");
+    Query colcollectionReference2 = await FirebaseFirestore.instance
+        .collection('Appt')
+        .where('id2', isEqualTo: uid)
+        .where('state', isEqualTo: "Accepted");
+    try {
+      await colcollectionReference.get().then((QuerySnapshot) {
+        QuerySnapshot.docs.forEach((element) {
+          appts.add(element.data());
+        });
+      });
+      await colcollectionReference2.get().then((QuerySnapshot) {
+        QuerySnapshot.docs.forEach((element) {
+          appts.add(element.data());
+        });
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+    return appts;
+  }
+
+  Future getAppt(uid, type) async {
+    List appts = [];
+    /*for (var col in coll) {
+      Query colcollectionReference = await FirebaseFirestore.instance
+          .collection(col)
+          .doc(uid)
+          .collection('appt');*/
+    Query colcollectionReference = await FirebaseFirestore.instance
+        .collection('Appt')
+        .where('id1', isEqualTo: auth.currentUser.uid)
+        .where('state', isEqualTo: "Accepted");
+    Query colcollectionReference2 = await FirebaseFirestore.instance
+        .collection('Appt')
+        .where('id2', isEqualTo: auth.currentUser.uid)
+        .where('state', isEqualTo: "Accepted");
+    try {
+      await colcollectionReference.get().then((QuerySnapshot) {
+        QuerySnapshot.docs.forEach((element) {
+          appts.add(element.data());
+        });
+      });
+      await colcollectionReference2.get().then((QuerySnapshot) {
+        QuerySnapshot.docs.forEach((element) {
+          appts.add(element.data());
+        });
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+    return appts;
+    /*Query colcollectionReference = await FirebaseFirestore.instance
         .collection(type)
         .doc(uid)
-        .collection('appt');
+        .collection('appt')
+        .where('state', isEqualTo: "Accepted");
     try {
       await colcollectionReference.get().then((QuerySnapshot) {
         QuerySnapshot.docs.forEach((element) {
@@ -269,7 +371,7 @@ class DatabaseAppt {
     } catch (e) {
       print(e.toString());
     }
-    return appts;
+    return appts;*/
   }
 }
 

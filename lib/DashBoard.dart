@@ -1,6 +1,7 @@
 import 'package:ISTISHARA/Database.dart';
 import 'package:ISTISHARA/Databasers.dart';
 import 'package:ISTISHARA/ProfileView.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -39,49 +40,34 @@ class DashboardState extends State<Dashboard> {
     });
   }
 
-  List notificationList = [];
-
-  fetchDataBaseNotificationList() async {
-    dynamic resultant =
-        await DataBaseList().getNotificationList('Software Engineer');
-
-    if (resultant == null) {
-      print("unable to retrieve");
-    } else {
-      setState(() {
-        notificationList = resultant;
-      });
-      print(notificationList);
-    }
-  }
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getCollection();
-    fetchDataBaseNotificationList();
+    getToken();
   }
 
+  String token;
   getToken() async {
     FirebaseAuth auth = FirebaseAuth.instance;
-    //String fcmToken = await auth.currentUser.getIdToken();
     String t = await FirebaseMessaging.instance.getToken();
-    print(t);
+    await FirebaseFirestore.instance
+        .collection(collection)
+        .doc(auth.currentUser.uid)
+        .update({'token': t});
   }
 
   @override
   Widget build(BuildContext context) {
-    print(notificationList);
     getToken();
+    //rprint(token);
     var availableMoney = 50000;
-    print(collection);
-    print(notificationList);
+    //print(collection);
     return Scaffold(
         drawer: NavDrawer(
           type: type,
           collection: collection,
-          noti: notificationList,
         ),
         appBar: AppBar(
             title: Text("Dashboard"),

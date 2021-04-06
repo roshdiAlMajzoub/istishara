@@ -1,5 +1,8 @@
 import 'package:ISTISHARA/Helper.dart';
+import 'package:ISTISHARA/ProfileView.dart';
 import 'package:ISTISHARA/Time.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'Database.dart';
 import 'ShowDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -14,14 +17,21 @@ class ViewCalendar extends StatefulWidget {
   final String field;
   final MaterialColor color;
   final String name;
+  String collection;
+  String expId;
   ViewCalendar(
       {@required this.id,
       @required this.name,
       @required this.field,
-      @required this.color});
+      @required this.color,
+      this.collection});
   @override
   State<ViewCalendar> createState() => _ViewCalendarState(
-      id: this.id, name: this.name, field: this.field, color: this.color);
+      id: this.id,
+      name: this.name,
+      field: this.field,
+      color: this.color,
+      collection: this.collection);
 }
 
 var dateControl = TextEditingController();
@@ -38,16 +48,87 @@ class _ViewCalendarState extends State<ViewCalendar> {
   final String field;
   final MaterialColor color;
   final String name;
+  String collection;
   final format = DateFormat("yyyy-MM-dd");
-  _ViewCalendarState(
-      {@required this.id,@required this.name, @required this.field, @required this.color});
+  _ViewCalendarState({
+    @required this.id,
+    @required this.name,
+    @required this.field,
+    @required this.color,
+    this.collection,
+  });
+  bool check;
+  hey() async {
+    DateTime day = DateTime.parse(dateControl.value.text);
+    var x = dateControl.value.text + " " + stControl.value.text + ":00.000";
+    var y = dateControl.value.text + " " + etControl.value.text + ":00.000";
+    DateTime startTime = DateTime.parse(x);
+    DateTime endTime = DateTime.parse(y);
+    var h = await getConflictappt(startTime, endTime);
+    print(h);
+
+    //print(check);
+    if (h == false) {
+      String token;
+      await FirebaseFirestore.instance
+          .collection(collection)
+          .doc(id)
+          .get()
+          .then((DocumentSnapshot d) {
+        token = d.data()['token'];
+      });
+      DatabaseBookAppt().bookAppt(
+        auth.currentUser.uid,
+        collection,
+        id,
+        field,
+        startTime,
+        endTime,
+        token,
+      );
+      print(token);
+      print('done');
+    } else {
+      print('not');
+    }
+    //print(startTime);
+
+    //print(Timestamp.fromDate(startTime));
+    //print(endTime);
+    //print(Timestamp.fromDate(endTime));
+  }
+
+  Future<bool> getConflictappt(st, et) async {
+    //final User user = auth.currentUser;
+    bool h = await DatabaseBookAppt().checkAp(field, id, st, et);
+    setState(() {
+      check = h;
+    });
+
+    return h;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    hey();
+  }
+
   @override
   Widget build(BuildContext context) {
+    //getConflictappt();
+    //print(collection);
+    //print(field);
+    //print(id);
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
-            title: Text(name.split(' ')[0]+" 's Calendar",style: TextStyle(fontSize: 15),),
+            title: Text(
+              name.split(' ')[0] + " 's Calendar",
+              style: TextStyle(fontSize: 15),
+            ),
             elevation: .1,
             backgroundColor: Color(0xff5848CF)),
         body: GestureDetector(
@@ -135,6 +216,7 @@ class _ViewCalendarState extends State<ViewCalendar> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20)),
                             onPressed: () {
+                              hey();
                               if (dateKey.currentState.validate() &&
                                   stKey.currentState.validate() &&
                                   etKey.currentState.validate()) {

@@ -25,12 +25,26 @@ class NavDrawer extends StatelessWidget {
     print(proff[0]['first name']);
   }
 
+  List notificationList = [];
+  var number = 0;
+  fetchDataBaseNotificationList() async {
+    dynamic resultant = await DataBaseList().getNotificationList(collection);
+
+    if (resultant == null) {
+      print("unable to retrieve");
+    } else {
+      number = resultant.length;
+      print(notificationList);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     print("roshdi  roshdi  roshdi");
     print(noti);
     getData();
-    var count = 0; //retrieve from firebase
+    fetchDataBaseNotificationList();
+    var count = number; //retrieve from firebase
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -104,8 +118,10 @@ class NavDrawer extends StatelessWidget {
             ),
             title: Text('Notifications'),
             onTap: () => {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => NotificationsPage(noti)))
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => NotificationsPage(collection)))
             },
           ),
           ListTile(
@@ -115,8 +131,10 @@ class NavDrawer extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (_) => Calendar(
-                          auth.currentUser.uid, collection, Colors.blue)))
+                      builder: (_) => MyCalendar(
+                            auth.currentUser.uid,
+                            collection,
+                          )))
             },
           ),
           ListTile(
