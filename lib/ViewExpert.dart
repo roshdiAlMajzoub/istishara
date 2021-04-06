@@ -1,4 +1,5 @@
 import 'package:ISTISHARA/Calendar.dart';
+import 'package:ISTISHARA/Database.dart';
 import 'package:ISTISHARA/Databasers.dart';
 import 'package:ISTISHARA/ViewCalendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,12 +13,14 @@ class ViewExpert extends StatelessWidget {
   final String id;
   final String cvName;
   final String imgPath;
+  String collection;
   ViewExpert(
       {@required this.name,
       @required this.field,
       this.id,
       this.cvName,
-      this.imgPath});
+      this.imgPath,
+      this.collection});
 
   @override
   Widget build(BuildContext context) {
@@ -27,26 +30,34 @@ class ViewExpert extends StatelessWidget {
       id: id,
       cvName: cvName,
       imgPath: imgPath,
+      collection: collection,
     );
   }
 }
 
 class _ViewExpert extends StatefulWidget {
-
   final String name;
   final String field;
   final String id;
   final String cvName;
   final String imgPath;
-  _ViewExpert(
-      {@required this.name,
-      @required this.field,
-      this.id,
-      this.cvName,
-      this.imgPath,});
+  String collection;
+  _ViewExpert({
+    @required this.name,
+    @required this.field,
+    this.id,
+    this.cvName,
+    this.imgPath,
+    this.collection,
+  });
   @override
   State<_ViewExpert> createState() => _ViewExpertState(
-      name: name, field: field, id: id, cvName: cvName, imgPath: imgPath);
+      name: name,
+      field: field,
+      id: id,
+      cvName: cvName,
+      imgPath: imgPath,
+      collection: collection);
 }
 
 class _ViewExpertState extends State<_ViewExpert> {
@@ -59,13 +70,15 @@ class _ViewExpertState extends State<_ViewExpert> {
   String imgPath;
   var imgName;
   var x;
+  String collection;
   _ViewExpertState(
       {@required this.name,
       @required this.field,
       this.id,
       this.cvName,
       this.imgPath,
-      this.rep});
+      this.rep,
+      this.collection});
 
   viewImage() async {
     var img = await Databasers().downloadLink(firebase_storage
@@ -73,9 +86,9 @@ class _ViewExpertState extends State<_ViewExpert> {
         .ref()
         .child('playground')
         .child(imgPath));
-    
-      x = img;
-    
+
+    x = img;
+
     return img;
     //print("rosh"+ x);
   }
@@ -117,6 +130,7 @@ class _ViewExpertState extends State<_ViewExpert> {
 
   @override
   Widget build(BuildContext context) {
+    print(collection);
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -151,18 +165,16 @@ class _ViewExpertState extends State<_ViewExpert> {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
                           return Container(
-                            decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: NetworkImage(x)
-                          )));
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(x))));
                         }
 
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
                           return Container(
-                            
                             child: CircularProgressIndicator(
                               backgroundColor: Colors.white,
                               strokeWidth: 15.5,
@@ -224,7 +236,9 @@ class _ViewExpertState extends State<_ViewExpert> {
                         buildText("Records:", "10")
                       ]),
                     )),
-                    Container(height: screenHeight/10,),
+                Container(
+                  height: screenHeight / 10,
+                ),
                 Container(
                     padding: EdgeInsets.only(bottom: 20, top: 20),
                     child: RaisedButton(
@@ -244,10 +258,14 @@ class _ViewExpertState extends State<_ViewExpert> {
                     padding: EdgeInsets.only(bottom: 20),
                     child: RaisedButton(
                       onPressed: () {
-                          Navigator.push(
+                        Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => ViewCalendar(id: id,name:name, field: field, color: Colors.grey)));
+                                builder: (_) => ViewCalendar(
+                                    id: id,
+                                    name: name,
+                                    field: field,
+                                    color: Colors.grey,collection: collection,)));
                       },
                       child: Text("Book Consultation",
                           style: TextStyle(color: Colors.white)),

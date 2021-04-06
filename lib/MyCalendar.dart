@@ -7,43 +7,42 @@ import 'nav-drawer.dart';
 
 class MainCalendar extends StatelessWidget {
   var id;
-  String type;
-
-  MainCalendar(id, type) {
+  var collection;
+  MainCalendar(id) {
     this.id = id;
-    this.type = type;
+    this.collection = collection;
   }
   @override
   Widget build(BuildContext context) {
-    return MyCalendar(id,type);
+    return MyCalendar(id,collection);
   }
 }
 
 class MyCalendar extends StatefulWidget {
   var id;
-  String type;
-  MyCalendar(id, type) {
+  var collection;
+  MyCalendar(id,collection) {
     this.id = id;
-    this.type = type;
+    this.collection = collection;
   }
   @override
-  CalendarState createState() => CalendarState(id, type);
+  CalendarState createState() => CalendarState(id, collection);
 }
 
 class CalendarState extends State<MyCalendar> {
   var id;
-  String type;
+  var collection;
 
-  CalendarState(id, type) {
+  CalendarState(id,collection) {
     this.id = id;
-    this.type = type;
+    this.collection = collection;
   }
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   List apptt = [];
   fetchDatabaseAppt() async {
     final User user = auth.currentUser;
-    dynamic resultant = await DatabaseAppt().getMyAppt(id) as List;
+    dynamic resultant = await DatabaseAppt().getAppt(id,collection) as List;
     if (resultant == null) {
       print("unable to retrieve");
     } else {
@@ -53,18 +52,16 @@ class CalendarState extends State<MyCalendar> {
     }
   }
 
-  book() {
+  /*book() {
     final User user = auth.currentUser;
     DatabaseBookAppt().bookAppt(user.uid, 'uid2', DateTime.now(),
         DateTime.now().add(Duration(hours: 2)));
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavDrawer(
-        type: type,
-      ),
+      drawer: NavDrawer(type: "hey",collection: collection,),
       appBar: AppBar(
           title: Text("Calendar"),
           elevation: .1,
@@ -103,7 +100,7 @@ class CalendarState extends State<MyCalendar> {
       DateTime st = ap['start time'].toDate();
       DateTime et = ap['end time'].toDate();
 
-      meetings.add(Meeting('test', st, et, Color(0xFF0F8644), false));
+      meetings.add(Meeting('Appt', st, et, Color(0xFF0F8644), false));
     }
     return meetings;
   }

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter_password_strength/flutter_password_strength.dart';
 import 'package:flutter/foundation.dart';
@@ -12,20 +12,19 @@ import 'ShowDialog.dart';
 import './Databasers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' as cloud;
 
-class Credentials extends StatefulWidget {
+class Profile extends StatefulWidget {
   final String descirbe;
   final String barTitle;
   final bool isProfile;
-   List lst;
-  Credentials(
+  List lst;
+  Profile(
       {@required this.descirbe,
       @required this.barTitle,
       @required this.isProfile,
-      this.lst
-      });
+      this.lst});
   @override
-  CredentialsState createState() => CredentialsState(
-      describe: descirbe, barTitle: barTitle, isProfile: isProfile,lst: lst);
+  ProfileState createState() => ProfileState(
+      describe: descirbe, barTitle: barTitle, isProfile: isProfile, lst: lst);
 }
 
 User user;
@@ -35,14 +34,6 @@ TextEditingController PhoneController = TextEditingController();
 TextEditingController EmailController = TextEditingController();
 TextEditingController PasswordController = TextEditingController();
 TextEditingController ConfirmPasswordController = TextEditingController();
-List<TextEditingController> l = [
-  FirstNameController,
-  LastNameController,
-  PhoneController,
-  EmailController,
-  PasswordController,
-  ConfirmPasswordController
-];
 bool showPassword = true;
 bool editableFN = false;
 bool editableEmail = false;
@@ -58,11 +49,13 @@ String _email,
     _error,
     exp,
     _Cpassword;
+FirebaseAuth auth = FirebaseAuth.instance;
+String id = auth.currentUser.uid;
 
 Helper h = Helper();
 Databasers d = Databasers();
 
-class CredentialsState extends State<Credentials> {
+class ProfileState extends State<Profile> {
   final _formKeyFname = GlobalKey<FormState>();
   final _formKeyLname = GlobalKey<FormState>();
   final _formKeyEmail = GlobalKey<FormState>();
@@ -72,11 +65,86 @@ class CredentialsState extends State<Credentials> {
   final String describe;
   final String barTitle;
   final bool isProfile;
-   List lst;
-  CredentialsState(
+  List lst;
+  ProfileState(
       {@required this.describe,
       @required this.barTitle,
-      @required this.isProfile,this.lst});
+      @required this.isProfile,
+      this.lst});
+  var x;
+
+  updateData() async {
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection('Software Engineer');
+    if (_firstName != null) {
+      collectionReference.doc(id).update({
+        'first name': _firstName,
+      });
+    }
+    if (_lastName != null) {
+      collectionReference.doc(id).update({
+        'last name': _lastName,
+      });
+    }
+    if (_email != null) {
+      collectionReference.doc(id).update({
+        'email': _email,
+      });
+      await changeEmail();
+    }
+
+    if (_phoneNumber != null) {
+      collectionReference.doc(id).update({
+        'phone number': _phoneNumber,
+      });
+    }
+    if (d.cvN != null) {
+      collectionReference.doc(id).update({
+        'image name': d.cvN,
+      });
+      d.uploadFile(d.CV, context);
+      x = d.cvN;
+    }
+    if (_password != null) {
+      await changePass();
+    }
+  }
+
+  void changePass() async {
+    User user = await FirebaseAuth.instance.currentUser;
+    user.updatePassword(_password).then((_) {
+      print("Successfully changed password");
+    }).catchError((error) {
+      print("password can't be changed" + error.toString());
+    });
+  }
+
+  void changeEmail() async {
+    User user = await FirebaseAuth.instance.currentUser;
+    user.updateEmail(_email).then((_) {
+      print("Successfully changed email");
+    }).catchError((error) {
+      print("email can't be changed" + error.toString());
+    });
+  }
+
+  viewImage() async {
+    var img = await Databasers().downloadLink(firebase_storage
+        .FirebaseStorage.instance
+        .ref()
+        .child('playground')
+        .child(lst[0]['image name']));
+
+    x = img;
+
+    return img;
+  }
+
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    viewImage();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,10 +169,21 @@ class CredentialsState extends State<Credentials> {
               });
             },
             child: WillPopScope(
-                onWillPop: () async {
-                  Show.showDialogGiveUp(context,"Setting up your account", this, () => {h.clearInfo(l)});
+                /*onWillPop: () async {
+                  Show.showDialogGiveUp(
+                      context,
+                      this,
+                      () => {
+                            h.clearInfo(
+                                FirstNameController,
+                                LastNameController,
+                                PhoneController,
+                                EmailController,
+                                PasswordController,
+                                ConfirmPasswordController)
+                          });
                   return false;
-                },
+                },*/
                 child: SingleChildScrollView(
                     child: Column(children: [
                   Container(
@@ -116,7 +195,47 @@ class CredentialsState extends State<Credentials> {
                             Container(
                                 width: screenWidth / 3,
                                 height: screenHeight / 3.5,
-                                decoration: BoxDecoration(
+                                child: FutureBuilder(
+                                  future: viewImage(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      return Container(
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                width: 4,
+                                                color: Theme.of(context)
+                                                    .scaffoldBackgroundColor,
+                                              ),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  spreadRadius: 2,
+                                                  blurRadius: 10,
+                                                  color: Colors.black
+                                                      .withOpacity(0.1),
+                                                  offset: Offset(0, 10),
+                                                )
+                                              ],
+                                              shape: BoxShape.circle,
+                                              image: DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image: NetworkImage(x),
+                                              )));
+                                    }
+
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return Container(
+                                        child: CircularProgressIndicator(
+                                          backgroundColor: Colors.white,
+                                          strokeWidth: 15.5,
+                                        ),
+                                      );
+                                    }
+                                    return Container();
+                                  },
+                                )
+                                /*decoration: BoxDecoration(
                                   border: Border.all(
                                     width: 4,
                                     color: Theme.of(context)
@@ -133,9 +252,10 @@ class CredentialsState extends State<Credentials> {
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
                                       fit: BoxFit.cover,
-                                      image:
-                                          AssetImage('asset/images/head.jpg')),
-                                )),
+                                      image: NetworkImage(x),
+                                          
+                                ))*/
+                                ),
                             Positioned(
                               bottom: 0,
                               right: 0,
@@ -155,7 +275,9 @@ class CredentialsState extends State<Credentials> {
                                   icon: Icon(
                                     Icons.edit,
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    d.upload();
+                                  },
                                 ),
                               ),
                             ),
@@ -172,7 +294,8 @@ class CredentialsState extends State<Credentials> {
                                 child: SizedBox(
                                     height: screenHeight / 7,
                                     child: Row(children: [
-                                      h.buildText(" Reputation:", "3.4"),
+                                      h.buildText(" Reputation:",
+                                          lst[0]['reputation'].toString()),
                                       VerticalDivider(
                                         color: Colors.black,
                                         indent: 15,
@@ -199,7 +322,7 @@ class CredentialsState extends State<Credentials> {
                       child: Form(
                         key: _formKeyFname,
                         child: TextFormField(
-                          //initialValue: lst[0]['first name'],
+                          initialValue: lst[0]['first name'],
                           onChanged: (value) {
                             setState(() {
                               _firstName = value.trim();
@@ -246,7 +369,6 @@ class CredentialsState extends State<Credentials> {
                                 Icons.person,
                                 color: Colors.deepPurple,
                               ),
-                              
                               hintText: "Do not use nick names",
                               labelText: "First Name"),
                           style: TextStyle(
@@ -264,7 +386,7 @@ class CredentialsState extends State<Credentials> {
                       child: Form(
                           key: _formKeyLname,
                           child: TextFormField(
-                            //initialValue: lst[0]['last name'],
+                            initialValue: lst[0]['last name'],
                             onChanged: (value) {
                               setState(() {
                                 _lastName = value;
@@ -327,7 +449,7 @@ class CredentialsState extends State<Credentials> {
                       child: Form(
                           key: _formKeyEmail,
                           child: TextFormField(
-                            //initialValue: lst[0]['email'],
+                            initialValue: lst[0]['email'],
                             onChanged: (value) {
                               setState(() {
                                 _email = value.trim();
@@ -392,7 +514,7 @@ class CredentialsState extends State<Credentials> {
                       child: Form(
                           key: _formKeyPhone,
                           child: TextFormField(
-                           // initialValue: lst[0]['phone number'],
+                            initialValue: lst[0]['phone number'],
                             onChanged: (value) {
                               setState(() {
                                 _phoneNumber = value.trim();
@@ -716,6 +838,7 @@ class CredentialsState extends State<Credentials> {
                                             borderRadius:
                                                 BorderRadius.circular(20)),
                                         onPressed: () {
+                                          updateData();
                                           setState(() {
                                             editableFN = false;
                                             editableEmail = false;

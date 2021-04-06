@@ -1,5 +1,10 @@
+import 'package:ISTISHARA/Database.dart';
+import 'package:ISTISHARA/Databasers.dart';
+import 'package:ISTISHARA/ProfileView.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'ListOfExperts.dart';
 import 'package:flutter/material.dart';
 import 'nav-drawer.dart';
@@ -26,12 +31,43 @@ class DashboardState extends State<Dashboard> {
     });
   }
 
+  Databasers d = Databasers();
+  var collection;
+  getCollection() async {
+    var coll = await d.docExistsIn(auth.currentUser.uid);
+    setState(() {
+      collection = coll;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getCollection();
+    getToken();
+  }
+
+  String token;
+  getToken() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    String t = await FirebaseMessaging.instance.getToken();
+    await FirebaseFirestore.instance
+        .collection(collection)
+        .doc(auth.currentUser.uid)
+        .update({'token': t});
+  }
+
   @override
   Widget build(BuildContext context) {
+    getToken();
+    //rprint(token);
     var availableMoney = 50000;
+    //print(collection);
     return Scaffold(
         drawer: NavDrawer(
           type: type,
+          collection: collection,
         ),
         appBar: AppBar(
             title: Text("Dashboard"),
@@ -60,7 +96,7 @@ class DashboardState extends State<Dashboard> {
                         fontSize: 15,
                       ),
                     ),
-                     Text(" L.L"),
+                    Text(" L.L"),
                   ],
                 )
               : Icon(Icons.attach_money),
@@ -116,7 +152,9 @@ class DashboardState extends State<Dashboard> {
           child: new InkWell(
             onTap: () {
               Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => ListPage(title,type)));
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => ListPage(title, collection)));
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
