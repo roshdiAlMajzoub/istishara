@@ -16,16 +16,15 @@ class Credentials extends StatefulWidget {
   final String descirbe;
   final String barTitle;
   final bool isProfile;
-   List lst;
+  List lst;
   Credentials(
       {@required this.descirbe,
       @required this.barTitle,
       @required this.isProfile,
-      this.lst
-      });
+      this.lst});
   @override
   CredentialsState createState() => CredentialsState(
-      describe: descirbe, barTitle: barTitle, isProfile: isProfile,lst: lst);
+      describe: descirbe, barTitle: barTitle, isProfile: isProfile, lst: lst);
 }
 
 User user;
@@ -72,11 +71,12 @@ class CredentialsState extends State<Credentials> {
   final String describe;
   final String barTitle;
   final bool isProfile;
-   List lst;
+  List lst;
   CredentialsState(
       {@required this.describe,
       @required this.barTitle,
-      @required this.isProfile,this.lst});
+      @required this.isProfile,
+      this.lst});
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +102,8 @@ class CredentialsState extends State<Credentials> {
             },
             child: WillPopScope(
                 onWillPop: () async {
-                  Show.showDialogGiveUp(context,"Setting up your account", this, () => {h.clearInfo(l)});
+                  Show.showDialogGiveUp(context, "Setting up your account",
+                      this, () => {h.clearInfo(l)});
                   return false;
                 },
                 child: SingleChildScrollView(
@@ -211,7 +212,7 @@ class CredentialsState extends State<Credentials> {
                             });
                           },
                           textAlignVertical: TextAlignVertical(y: 1),
-                          //controller: FirstNameController,
+                          controller: FirstNameController,
                           validator: (String value) {
                             if (value.isEmpty) {
                               return "This field cannot be Empty";
@@ -246,7 +247,6 @@ class CredentialsState extends State<Credentials> {
                                 Icons.person,
                                 color: Colors.deepPurple,
                               ),
-                              
                               hintText: "Do not use nick names",
                               labelText: "First Name"),
                           style: TextStyle(
@@ -276,7 +276,7 @@ class CredentialsState extends State<Credentials> {
                               });
                             },
                             textAlignVertical: TextAlignVertical(y: 1),
-                            //controller: LastNameController,
+                            controller: LastNameController,
                             validator: (String value) {
                               if (value.isEmpty) {
                                 return "This field cannot be Empty";
@@ -339,7 +339,7 @@ class CredentialsState extends State<Credentials> {
                               });
                             },
                             textAlignVertical: TextAlignVertical(y: 1),
-                            //controller: EmailController,
+                            controller: EmailController,
                             validator: (String value) {
                               if (value.isEmpty) {
                                 return "This field cannot be Empty";
@@ -352,6 +352,7 @@ class CredentialsState extends State<Credentials> {
                             readOnly:
                                 isProfile == true ? !editableEmail : false,
                             decoration: InputDecoration(
+                                isDense: true,
                                 prefixIcon: Icon(
                                   Icons.email,
                                   color: Colors.deepPurple,
@@ -392,7 +393,7 @@ class CredentialsState extends State<Credentials> {
                       child: Form(
                           key: _formKeyPhone,
                           child: TextFormField(
-                           // initialValue: lst[0]['phone number'],
+                            // initialValue: lst[0]['phone number'],
                             onChanged: (value) {
                               setState(() {
                                 _phoneNumber = value.trim();
@@ -404,7 +405,7 @@ class CredentialsState extends State<Credentials> {
                               });
                             },
                             textAlignVertical: TextAlignVertical(y: 1),
-                            //controller: PhoneController,
+                            controller: PhoneController,
                             validator: (String value) {
                               if (value.isEmpty) {
                                 return "This field cannot be Empty";
@@ -686,6 +687,7 @@ class CredentialsState extends State<Credentials> {
                                               _phoneNumber,
                                               h.expertt(),
                                               d.cvN);
+                                          h.clearInfo(l);
                                         } else {
                                           print("here");
                                         }
@@ -774,6 +776,7 @@ class CredentialsState extends State<Credentials> {
                                               _phoneNumber,
                                               "help_seekers",
                                               d.cvN);
+                                              h.clearInfo(l);
                                         }
                                       }))
                             ]))

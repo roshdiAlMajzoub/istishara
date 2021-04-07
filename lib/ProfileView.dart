@@ -16,6 +16,10 @@ class Profile extends StatefulWidget {
   final String descirbe;
   final String barTitle;
   final bool isProfile;
+  List getList() {
+    return lst;
+  }
+
   List lst;
   Profile(
       {@required this.descirbe,
@@ -28,12 +32,7 @@ class Profile extends StatefulWidget {
 }
 
 User user;
-TextEditingController FirstNameController = TextEditingController();
-TextEditingController LastNameController = TextEditingController();
-TextEditingController PhoneController = TextEditingController();
-TextEditingController EmailController = TextEditingController();
-TextEditingController PasswordController = TextEditingController();
-TextEditingController ConfirmPasswordController = TextEditingController();
+
 bool showPassword = true;
 bool editableFN = false;
 bool editableEmail = false;
@@ -41,21 +40,37 @@ bool editablePhone = false;
 bool editablePass = false;
 bool editableConf = false;
 bool editableLN = false;
-String _email,
-    _password,
-    _firstName,
-    _lastName,
-    _phoneNumber,
-    _error,
-    exp,
-    _Cpassword;
+
 FirebaseAuth auth = FirebaseAuth.instance;
 String id = auth.currentUser.uid;
 
 Helper h = Helper();
 Databasers d = Databasers();
 
+TextEditingController FirstNameController = TextEditingController();
+TextEditingController LastNameController = TextEditingController();
+TextEditingController EmailController = TextEditingController();
+TextEditingController PhoneController = TextEditingController();
+TextEditingController PasswordController = TextEditingController();
+TextEditingController ConfirmPasswordController = TextEditingController();
+List l = [
+  FirstNameController,
+  LastNameController,
+  EmailController,
+  PhoneController,
+  PasswordController,
+  ConfirmPasswordController
+];
+
 class ProfileState extends State<Profile> {
+  String _email,
+      _password,
+      _firstName,
+      _lastName,
+      _phoneNumber,
+      _error,
+      exp,
+      _Cpassword;
   final _formKeyFname = GlobalKey<FormState>();
   final _formKeyLname = GlobalKey<FormState>();
   final _formKeyEmail = GlobalKey<FormState>();
@@ -169,21 +184,11 @@ class ProfileState extends State<Profile> {
               });
             },
             child: WillPopScope(
-                /*onWillPop: () async {
-                  Show.showDialogGiveUp(
-                      context,
-                      this,
-                      () => {
-                            h.clearInfo(
-                                FirstNameController,
-                                LastNameController,
-                                PhoneController,
-                                EmailController,
-                                PasswordController,
-                                ConfirmPasswordController)
-                          });
+                onWillPop: () async {
+                  Show.showDialogGiveUp(context, "changing information", this,
+                      () => {h.clearInfo(l)});
                   return false;
-                },*/
+                },
                 child: SingleChildScrollView(
                     child: Column(children: [
                   Container(
@@ -322,7 +327,7 @@ class ProfileState extends State<Profile> {
                       child: Form(
                         key: _formKeyFname,
                         child: TextFormField(
-                          initialValue: lst[0]['first name'],
+                          controller: FirstNameController,
                           onChanged: (value) {
                             setState(() {
                               _firstName = value.trim();
@@ -334,7 +339,6 @@ class ProfileState extends State<Profile> {
                             });
                           },
                           textAlignVertical: TextAlignVertical(y: 1),
-                          //controller: FirstNameController,
                           validator: (String value) {
                             if (value.isEmpty) {
                               return "This field cannot be Empty";
@@ -369,8 +373,8 @@ class ProfileState extends State<Profile> {
                                 Icons.person,
                                 color: Colors.deepPurple,
                               ),
-                              hintText: "Do not use nick names",
-                              labelText: "First Name"),
+                              hintText: 'First Name',
+                              labelText: lst[0]['first name']),
                           style: TextStyle(
                               fontWeight: FontWeight.w500, fontSize: 18),
                         ),
@@ -386,7 +390,6 @@ class ProfileState extends State<Profile> {
                       child: Form(
                           key: _formKeyLname,
                           child: TextFormField(
-                            initialValue: lst[0]['last name'],
                             onChanged: (value) {
                               setState(() {
                                 _lastName = value;
@@ -398,7 +401,7 @@ class ProfileState extends State<Profile> {
                               });
                             },
                             textAlignVertical: TextAlignVertical(y: 1),
-                            //controller: LastNameController,
+                            controller: LastNameController,
                             validator: (String value) {
                               if (value.isEmpty) {
                                 return "This field cannot be Empty";
@@ -449,7 +452,6 @@ class ProfileState extends State<Profile> {
                       child: Form(
                           key: _formKeyEmail,
                           child: TextFormField(
-                            initialValue: lst[0]['email'],
                             onChanged: (value) {
                               setState(() {
                                 _email = value.trim();
@@ -461,7 +463,7 @@ class ProfileState extends State<Profile> {
                               });
                             },
                             textAlignVertical: TextAlignVertical(y: 1),
-                            //controller: EmailController,
+                            controller: EmailController,
                             validator: (String value) {
                               if (value.isEmpty) {
                                 return "This field cannot be Empty";
@@ -474,6 +476,7 @@ class ProfileState extends State<Profile> {
                             readOnly:
                                 isProfile == true ? !editableEmail : false,
                             decoration: InputDecoration(
+                                isDense: true,
                                 prefixIcon: Icon(
                                   Icons.email,
                                   color: Colors.deepPurple,
@@ -514,7 +517,6 @@ class ProfileState extends State<Profile> {
                       child: Form(
                           key: _formKeyPhone,
                           child: TextFormField(
-                            initialValue: lst[0]['phone number'],
                             onChanged: (value) {
                               setState(() {
                                 _phoneNumber = value.trim();
@@ -526,7 +528,7 @@ class ProfileState extends State<Profile> {
                               });
                             },
                             textAlignVertical: TextAlignVertical(y: 1),
-                            //controller: PhoneController,
+                            controller: PhoneController,
                             validator: (String value) {
                               if (value.isEmpty) {
                                 return "This field cannot be Empty";
@@ -824,7 +826,18 @@ class ProfileState extends State<Profile> {
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(20)),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          editableFN = false;
+                                          editableEmail = false;
+                                          editablePhone = false;
+                                          editablePass = false;
+                                          editableConf = false;
+                                          Show.showDialogGiveUp(
+                                              context,
+                                              "changing information",
+                                              this,
+                                              () => {h.clearInfo(l)});
+                                        },
                                         child: Text("Cancel",
                                             style: TextStyle(
                                                 fontSize: 14,
@@ -838,14 +851,25 @@ class ProfileState extends State<Profile> {
                                             borderRadius:
                                                 BorderRadius.circular(20)),
                                         onPressed: () {
-                                          updateData();
-                                          setState(() {
-                                            editableFN = false;
-                                            editableEmail = false;
-                                            editablePhone = false;
-                                            editablePass = false;
-                                            editableConf = false;
-                                          });
+                                          editableFN = false;
+                                          editableEmail = false;
+                                          editablePhone = false;
+                                          editablePass = false;
+                                          editableConf = false;
+                                          if (_formKeyFname.currentState.validate() &&
+                                              _formKeyLname.currentState
+                                                  .validate() &&
+                                              _formKeyEmail.currentState
+                                                  .validate() &&
+                                              _formKeyPhone.currentState
+                                                  .validate() &&
+                                              _formKeyPass.currentState
+                                                  .validate() &&
+                                              _formKeyConf.currentState
+                                                  .validate()) {
+                                            updateData();
+                                            setState(() {});
+                                          }
                                         },
                                         elevation: 2,
                                         color: Colors.green,
@@ -912,7 +936,18 @@ class ProfileState extends State<Profile> {
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(20)),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          editableFN = false;
+                                          editableEmail = false;
+                                          editablePhone = false;
+                                          editablePass = false;
+                                          editableConf = false;
+                                          Show.showDialogGiveUp(
+                                              context,
+                                              "changing information",
+                                              this,
+                                              () => {h.clearInfo(l)});
+                                        },
                                         child: Text("Cancel",
                                             style: TextStyle(
                                                 fontSize: 14,
@@ -932,6 +967,19 @@ class ProfileState extends State<Profile> {
                                             editablePhone = false;
                                             editablePass = false;
                                             editableConf = false;
+                                            if (_formKeyFname.currentState.validate() &&
+                                                _formKeyLname.currentState
+                                                    .validate() &&
+                                                _formKeyEmail.currentState
+                                                    .validate() &&
+                                                _formKeyPhone.currentState
+                                                    .validate() &&
+                                                _formKeyPass.currentState
+                                                    .validate() &&
+                                                _formKeyConf.currentState
+                                                    .validate()) {
+                                              updateData();
+                                            }
                                           });
                                         },
                                         elevation: 2,
