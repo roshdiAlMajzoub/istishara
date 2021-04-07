@@ -69,7 +69,7 @@ class NavDrawer extends StatelessWidget {
                                 descirbe: "Expert Profile",
                                 barTitle: "Expert's Profile",
                                 isProfile: true,
-                                lst: proff,
+                                lst: proff,collection: collection,
                               )));
                 } else {
                   Navigator.push(
@@ -79,7 +79,7 @@ class NavDrawer extends StatelessWidget {
                                 descirbe: "Help-Seeker Profile",
                                 barTitle: "Help-Seeker's Profile",
                                 isProfile: true,
-                                lst: proff,
+                                lst: proff,collection: collection,
                               )));
                 }
                 /* if (type == "Expert") {
