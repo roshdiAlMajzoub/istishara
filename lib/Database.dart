@@ -13,7 +13,7 @@ import 'dart:async';
 
 class DataBaseServiceHelp {
   CollectionReference collectionReference =
-      FirebaseFirestore.instance.collection('help seekers');
+      FirebaseFirestore.instance.collection('help_seekers');
 
   final String uid;
   DataBaseServiceHelp({this.uid});
@@ -23,6 +23,7 @@ class DataBaseServiceHelp {
       'last name': lname,
       'email': email,
       'phone number': pnumber,
+      'id': uid,
     });
   }
 }
@@ -109,7 +110,7 @@ class DatabaseBookAppt {
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((element) {
-        if (element.data()['start time'].toDate().isAfter(st)) {
+        if ((element.data()['start time'].toDate().isAfter(st)) || (element.data()['start time'].toDate()==(st)) || ((element.data()['start time'].toDate().isBefore(st))&&(element.data()['end time'].toDate().isAfter(st)) )) {
           ap.add(element.data());
         }
       });
@@ -122,7 +123,7 @@ class DatabaseBookAppt {
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((element) {
-        if (element.data()['end time'].toDate().isAfter(st)) {
+        if ((element.data()['end time'].toDate().isAfter(st)) ||  (element.data()['end time'].toDate()==(st))){
           app.add(element.data());
         }
       });
