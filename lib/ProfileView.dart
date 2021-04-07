@@ -927,17 +927,18 @@ class ProfileState extends State<Profile> {
                                         _formKeyPass.currentState.validate() &&
                                         _formKeyConf.currentState.validate() &&
                                         h.expertt() != null) {
-                                      d.signup(
-                                          this,
-                                          user,
-                                          context,
-                                          _email,
-                                          _password,
-                                          _firstName,
-                                          _lastName,
-                                          _phoneNumber,
-                                          h.expertt(),
-                                          d.cvN);
+                                     d.signup(
+                                              this,
+                                              user,
+                                              context,
+                                              _email,
+                                              _password,
+                                              _firstName,
+                                              _lastName,
+                                              _phoneNumber,
+                                              h.expertt(),
+                                              d.cvN,
+                                              () => {h.clearInfo(l)});
                                     } else {
                                       print("here");
                                     }
@@ -1021,16 +1022,17 @@ class ProfileState extends State<Profile> {
                                         _formKeyPass.currentState.validate() &&
                                         _formKeyConf.currentState.validate()) {
                                       d.signup(
-                                          this,
-                                          user,
-                                          context,
-                                          _email,
-                                          _password,
-                                          _firstName,
-                                          _lastName,
-                                          _phoneNumber,
-                                          "help_seekers",
-                                          d.cvN);
+                                              this,
+                                              user,
+                                              context,
+                                              _email,
+                                              _password,
+                                              _firstName,
+                                              _lastName,
+                                              _phoneNumber,
+                                              "help_seekers",
+                                              d.cvN,
+                                              () => {h.clearInfo(l)});
                                     }
                                   }))
                         ]))

@@ -686,8 +686,8 @@ class CredentialsState extends State<Credentials> {
                                               _lastName,
                                               _phoneNumber,
                                               h.expertt(),
-                                              d.cvN);
-                                          h.clearInfo(l);
+                                              d.cvN,
+                                              () => {h.clearInfo(l)});
                                         } else {
                                           print("here");
                                         }
@@ -765,7 +765,7 @@ class CredentialsState extends State<Credentials> {
                                                 .validate() &&
                                             _formKeyConf.currentState
                                                 .validate()) {
-                                          d.signup(
+                                           d.signup(
                                               this,
                                               user,
                                               context,
@@ -775,8 +775,8 @@ class CredentialsState extends State<Credentials> {
                                               _lastName,
                                               _phoneNumber,
                                               "help_seekers",
-                                              d.cvN);
-                                              h.clearInfo(l);
+                                              d.cvN,
+                                              () => {h.clearInfo(l)});
                                         }
                                       }))
                             ]))

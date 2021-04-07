@@ -36,7 +36,7 @@ class Databasers {
   FilePickerResult res;
   String _error;
   Future<void> checkEmailVerified(
-      User user, BuildContext context, String email) async {
+      User user, BuildContext context, String email, Function clearInfo) async {
     Show.showDialogEmailVerify("Account Verification",
         "An Email verification has been sent to: ", email, context);
     user = auth.currentUser;
@@ -44,6 +44,7 @@ class Databasers {
     await user.reload();
     if (user.emailVerified) {
       timer.cancel();
+      clearInfo();
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => LoginDemo()));
     }
@@ -160,7 +161,8 @@ class Databasers {
       String lastName,
       String phoneNumber,
       String exp,
-      String cvName) async {
+      String cvName,
+      Function clearInfo) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
@@ -171,7 +173,7 @@ class Databasers {
       } else {
         await DataBaseServiceHelp(uid: userCredential.user.uid)
             .updateuserData(firstName, lastName, phoneNumber, email);
-        checkEmailVerified(user, context, email);
+        checkEmailVerified(user, context, email, clearInfo);
       }
     } catch (e) {
       widget.setState(() {
@@ -181,7 +183,7 @@ class Databasers {
     }
     if (_error == null) {
       timer = Timer.periodic(Duration(seconds: 3), (timer) {
-        checkEmailVerified(user, context, email);
+        checkEmailVerified(user, context, email,clearInfo);
       });
     }
   }
