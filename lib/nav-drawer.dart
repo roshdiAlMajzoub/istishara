@@ -39,7 +39,7 @@ class NavDrawer extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context)  {
+  Widget build(BuildContext context) {
     print("roshdi  roshdi  roshdi");
     print(noti);
     fetchDataBaseNotificationList();
@@ -61,7 +61,7 @@ class NavDrawer extends StatelessWidget {
               title: Text('Profile'),
               onTap: () async {
                 if (type == "Expert") {
-                await  getData();
+                  await getData();
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -85,11 +85,6 @@ class NavDrawer extends StatelessWidget {
                                 collection: collection,
                               )));
                 }
-                /* if (type == "Expert") {
-                  Navigator.pushNamed(context, "/EProfile");
-                } else {
-                  Navigator.pushNamed(context, "/UProfile");
-                }*/
               }),
           ListTile(
             leading: new Stack(

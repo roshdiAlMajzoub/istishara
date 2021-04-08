@@ -241,6 +241,7 @@ class _ViewExpertState extends State<_ViewExpert> {
                 ),
                 Container(
                     padding: EdgeInsets.only(bottom: 20, top: 20),
+                    // ignore: deprecated_member_use
                     child: RaisedButton(
                       onPressed: () {
                         _showDialog("title", cvLink, context);
@@ -256,6 +257,7 @@ class _ViewExpertState extends State<_ViewExpert> {
                     )),
                 Container(
                     padding: EdgeInsets.only(bottom: 20),
+                    // ignore: deprecated_member_use
                     child: RaisedButton(
                       onPressed: () {
                         Navigator.push(

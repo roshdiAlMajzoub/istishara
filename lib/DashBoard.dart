@@ -118,7 +118,7 @@ class DashboardState extends State<Dashboard> {
                   padding: EdgeInsets.all(3.0),
                   children: <Widget>[
                     makeDashboardItem("Software Engineer", Icons.computer),
-                    makeDashboardItem("Civil Engineering", Icons.build),
+                    makeDashboardItem("Civil Engineer", Icons.build),
                     makeDashboardItem("Nutritionist", Icons.flaky_rounded),
                     makeDashboardItem("Plumber", Icons.plumbing),
                     makeDashboardItem("PE", Icons.sports_handball),
