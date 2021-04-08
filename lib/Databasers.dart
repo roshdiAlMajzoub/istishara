@@ -50,8 +50,8 @@ class Databasers {
     Show.showDialogEmailVerify("Account Verification",
         "An Email verification has been sent to: ", email, context);
     user = auth.currentUser;
-    user.sendEmailVerification();
     await user.reload();
+    user.sendEmailVerification();
       if (exp != "help_seekers") {
         uploadFile(CV, context);
       }
