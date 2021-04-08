@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'Databasers.dart';
 import 'Reset.dart';
-
+import 'ShowDialog.dart';
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -22,14 +22,21 @@ class _LoginDemoState extends State<LoginDemo> {
   Future<void> signin() async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: _email, password: _password);
-      String id = FirebaseAuth.instance.currentUser.uid;
-      print(FirebaseAuth.instance.currentUser.email);
-      bool docExists = await d.checkIfDocExists(id, "help_seekers");
-      if (docExists == true) {
-        Navigator.of(context).pushNamed('/UserMain');
-      } else {
-        Navigator.of(context).pushNamed('/ExpertMain');
+            .signInWithEmailAndPassword(email: _email, password: _password);
+      User user = FirebaseAuth.instance.currentUser;
+      if (user.emailVerified) {
+        String id = FirebaseAuth.instance.currentUser.uid;
+        bool docExists = await d.checkIfDocExists(id, "help_seekers");
+        if (docExists == true) {
+          Navigator.of(context).pushNamed('/UserMain');
+        } else {
+          Navigator.of(context).pushNamed('/ExpertMain');
+        }
+      }
+      else
+      {
+        Show.showDialogEmailVerify("Account Verification",
+        "An Email verification has been sent to: ", user.email, context);
       }
     } catch (e) {
       setState(() {

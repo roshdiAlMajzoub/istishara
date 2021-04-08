@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
 
+import 'Login.dart';
+
 class Show {
  static  Future<AlertDialog> showDialogGiveUp(BuildContext context,String giveUpWhat, State widget,Function clearInfo) {
     return showDialog<AlertDialog>(
@@ -35,10 +37,34 @@ class Show {
         });
   }
 
-static void showDialogEmailVerify(String title, String content,String email, BuildContext context1) {
+static Future<AlertDialog> showDialogEmailVerify(String title, String content,String email, BuildContext context1) {
     final double screenWidth = MediaQuery.of(context1).size.width;
     final double screenHeight = MediaQuery.of(context1).size.height;
-    showDialog(
+     return showDialog<AlertDialog>(
+        context: context1,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              insetPadding: EdgeInsets.symmetric(
+                horizontal: 5.0,
+              ),
+              title: Text(
+                "Email Verification",
+                style: TextStyle(
+                    color: Colors.deepPurple, fontWeight: FontWeight.w900),
+              ),
+              content: Text(
+                   "An Email verification has been sent to: "+email+"\nPlease verify!"),
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () {
+                       Navigator.of(context).pushReplacement(
+                       MaterialPageRoute(builder: (context) => LoginDemo()));
+                    },
+                    child: Text("OK")),
+               
+              ]);
+        });
+    /*showDialog(
         context: context1,
         builder: (BuildContext context) {
           return AlertDialog(
@@ -87,7 +113,7 @@ static void showDialogEmailVerify(String title, String content,String email, Bui
               ));
             }),
           );
-        });
+        });*/
   }
   static Widget showAlert(String error,State widget) {
     if (error != null) {

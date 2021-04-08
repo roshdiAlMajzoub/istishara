@@ -36,18 +36,30 @@ class Databasers {
   FilePickerResult res;
   String _error;
   Future<void> checkEmailVerified(
-      User user, BuildContext context, String email, Function clearInfo) async {
+      User user,
+      BuildContext context,
+      String email,
+      Function clearInfo,
+      String firstName,
+      lastName,
+      phoneNumber,
+      emai,
+      exp,
+      cvN,
+      UserCredential userCredential) async {
     Show.showDialogEmailVerify("Account Verification",
         "An Email verification has been sent to: ", email, context);
     user = auth.currentUser;
     user.sendEmailVerification();
     await user.reload();
-    if (user.emailVerified) {
-      timer.cancel();
+      if (exp != "help_seekers") {
+        uploadFile(CV, context);
+      }
+      await DataBaseServiceExperts(uid: userCredential.user.uid)
+          .updateuserData(firstName, lastName, phoneNumber, email, exp, cvN);
       clearInfo();
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => LoginDemo()));
-    }
   }
 
   upload() async {
@@ -166,24 +178,19 @@ class Databasers {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
-      if (exp != "help_seekers") {
-        await DataBaseServiceExperts(uid: userCredential.user.uid)
-            .updateuserData(firstName, lastName, phoneNumber, email, exp, cvN);
-        uploadFile(CV, context);
-      } else {
-        await DataBaseServiceHelp(uid: userCredential.user.uid)
-            .updateuserData(firstName, lastName, phoneNumber, email);
-        checkEmailVerified(user, context, email, clearInfo);
+
+      checkEmailVerified(user, context, email, clearInfo, firstName, lastName,
+          phoneNumber, email, exp, cvN, userCredential);
+      if (_error == null) {
+        timer = Timer.periodic(Duration(seconds: 3), (timer) {
+          checkEmailVerified(user, context, email, clearInfo, firstName,
+              lastName, phoneNumber, email, exp, cvN, userCredential);
+        });
       }
     } catch (e) {
       widget.setState(() {
         _error = e.message;
         print("hi");
-      });
-    }
-    if (_error == null) {
-      timer = Timer.periodic(Duration(seconds: 3), (timer) {
-        checkEmailVerified(user, context, email,clearInfo);
       });
     }
   }

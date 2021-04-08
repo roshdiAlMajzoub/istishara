@@ -39,10 +39,9 @@ class NavDrawer extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)  {
     print("roshdi  roshdi  roshdi");
     print(noti);
-    getData();
     fetchDataBaseNotificationList();
     var count = number; //retrieve from firebase
     return Drawer(
@@ -60,8 +59,9 @@ class NavDrawer extends StatelessWidget {
           ListTile(
               leading: Icon(Icons.person),
               title: Text('Profile'),
-              onTap: () {
+              onTap: () async {
                 if (type == "Expert") {
+                await  getData();
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -69,9 +69,11 @@ class NavDrawer extends StatelessWidget {
                                 descirbe: "Expert Profile",
                                 barTitle: "Expert's Profile",
                                 isProfile: true,
-                                lst: proff,collection: collection,
+                                lst: proff,
+                                collection: collection,
                               )));
                 } else {
+                  await getData();
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -79,7 +81,8 @@ class NavDrawer extends StatelessWidget {
                                 descirbe: "Help-Seeker Profile",
                                 barTitle: "Help-Seeker's Profile",
                                 isProfile: true,
-                                lst: proff,collection: collection,
+                                lst: proff,
+                                collection: collection,
                               )));
                 }
                 /* if (type == "Expert") {
