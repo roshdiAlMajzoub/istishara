@@ -50,16 +50,14 @@ class Databasers {
     Show.showDialogEmailVerify("Account Verification",
         "An Email verification has been sent to: ", email, context);
     user = auth.currentUser;
-    user.sendEmailVerification();
     await user.reload();
+    user.sendEmailVerification();
       if (exp != "help_seekers") {
         uploadFile(CV, context);
       }
       await DataBaseServiceExperts(uid: userCredential.user.uid)
           .updateuserData(firstName, lastName, phoneNumber, email, exp, cvN);
       clearInfo();
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => LoginDemo()));
   }
 
   upload() async {
@@ -181,12 +179,6 @@ class Databasers {
 
       checkEmailVerified(user, context, email, clearInfo, firstName, lastName,
           phoneNumber, email, exp, cvN, userCredential);
-      if (_error == null) {
-        timer = Timer.periodic(Duration(seconds: 3), (timer) {
-          checkEmailVerified(user, context, email, clearInfo, firstName,
-              lastName, phoneNumber, email, exp, cvN, userCredential);
-        });
-      }
     } catch (e) {
       widget.setState(() {
         _error = e.message;
