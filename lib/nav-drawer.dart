@@ -29,6 +29,12 @@ class _NavDrawerState extends State<NavDrawer> {
     });
   }
 
+  void showToast1() {
+    setState(() {
+      _isVisible = true;
+    });
+  }
+
   final auth = FirebaseAuth.instance;
 
   List proff = [];
@@ -64,7 +70,7 @@ class _NavDrawerState extends State<NavDrawer> {
     var count = number;
     if (count == 0) {
       showToast();
-    } //retrieve from firebase
+    } else {} //retrieve from firebase
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -77,7 +83,10 @@ class _NavDrawerState extends State<NavDrawer> {
             child: null,
           ),
           ListTile(
-              leading: Icon(Icons.person, color: kPrimaryColor,),
+              leading: Icon(
+                Icons.person,
+                color: kPrimaryColor,
+              ),
               title: Text('Profile'),
               onTap: () async {
                 if (widget.type == "Expert") {
@@ -109,7 +118,10 @@ class _NavDrawerState extends State<NavDrawer> {
           ListTile(
             leading: new Stack(
               children: <Widget>[
-                new Icon(Icons.notifications,color: kPrimaryColor,),
+                new Icon(
+                  Icons.notifications,
+                  color: kPrimaryColor,
+                ),
                 Visibility(
                   visible: _isVisible,
                   child: new Positioned(
@@ -146,7 +158,10 @@ class _NavDrawerState extends State<NavDrawer> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.dashboard,color: kPrimaryColor,),
+            leading: Icon(
+              Icons.dashboard,
+              color: kPrimaryColor,
+            ),
             title: Text('Dashboard'),
             onTap: () => {
               Navigator.push(
@@ -158,7 +173,10 @@ class _NavDrawerState extends State<NavDrawer> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.calendar_today,color: kPrimaryColor,),
+            leading: Icon(
+              Icons.calendar_today,
+              color: kPrimaryColor,
+            ),
             title: Text('Calendar'),
             onTap: () => {
               Navigator.push(
@@ -171,12 +189,18 @@ class _NavDrawerState extends State<NavDrawer> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.chat,color: kPrimaryColor,),
+            leading: Icon(
+              Icons.chat,
+              color: kPrimaryColor,
+            ),
             title: Text('Chat'),
             onTap: () => {},
           ),
           ListTile(
-            leading: Icon(Icons.settings,color: kPrimaryColor,),
+            leading: Icon(
+              Icons.settings,
+              color: kPrimaryColor,
+            ),
             title: Text('Settings'),
             onTap: () => {
               Navigator.push(
@@ -186,12 +210,18 @@ class _NavDrawerState extends State<NavDrawer> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.border_color,color: kPrimaryColor,),
+            leading: Icon(
+              Icons.border_color,
+              color: kPrimaryColor,
+            ),
             title: Text('Feedback'),
             onTap: () => {Navigator.of(context).pop()},
           ),
           ListTile(
-            leading: Icon(Icons.exit_to_app,color: kPrimaryColor,),
+            leading: Icon(
+              Icons.exit_to_app,
+              color: kPrimaryColor,
+            ),
             title: Text('Logout'),
             onTap: () async {
               await auth.signOut();
