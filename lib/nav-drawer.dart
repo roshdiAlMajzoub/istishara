@@ -1,3 +1,4 @@
+import 'package:ISTISHARA/LOGIN-SIGNUP/constants.dart';
 import 'package:ISTISHARA/MyCalendar.dart';
 import 'package:ISTISHARA/NotificationsPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -5,30 +6,47 @@ import 'package:flutter/material.dart';
 import 'Calendar.dart';
 import 'Credentials.dart';
 import 'DashBoard.dart';
-import 'Login.dart';
 import 'ProfileView.dart';
 import 'Settings.dart';
 import 'Database.dart';
 
-class NavDrawer extends StatelessWidget {
-  final auth = FirebaseAuth.instance;
+class NavDrawer extends StatefulWidget {
   final String type;
   final String collection;
   List noti;
   NavDrawer({@required this.type, this.collection, this.noti});
 
+  @override
+  _NavDrawerState createState() => _NavDrawerState();
+}
+
+class _NavDrawerState extends State<NavDrawer> {
+  bool _isVisible = true;
+
+  void showToast() {
+    setState(() {
+      _isVisible = false;
+    });
+  }
+
+  final auth = FirebaseAuth.instance;
+
   List proff = [];
+
   getData() async {
     dynamic prof = await DataBaseService()
-        .getCurrentUSerData(auth.currentUser.uid, collection);
+        .getCurrentUSerData(auth.currentUser.uid, widget.collection);
     proff = prof;
     print(proff[0]['first name']);
   }
 
   List notificationList = [];
+
   var number = 0;
+
   fetchDataBaseNotificationList() async {
-    dynamic resultant = await DataBaseList().getNotificationList(collection);
+    dynamic resultant =
+        await DataBaseList().getNotificationList(widget.collection);
 
     if (resultant == null) {
       print("unable to retrieve");
@@ -41,16 +59,18 @@ class NavDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print("roshdi  roshdi  roshdi");
-    print(noti);
+    print(widget.noti);
     fetchDataBaseNotificationList();
-    var count = number; //retrieve from firebase
+    var count = number;
+    if (count == 0) {
+      showToast();
+    } //retrieve from firebase
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
             decoration: BoxDecoration(
-                color: Colors.green,
                 image: DecorationImage(
                     fit: BoxFit.fill,
                     image: AssetImage('asset/images/menu.png'))),
@@ -60,7 +80,7 @@ class NavDrawer extends StatelessWidget {
               leading: Icon(Icons.person),
               title: Text('Profile'),
               onTap: () async {
-                if (type == "Expert") {
+                if (widget.type == "Expert") {
                   await getData();
                   Navigator.push(
                       context,
@@ -70,7 +90,7 @@ class NavDrawer extends StatelessWidget {
                                 barTitle: "Expert's Profile",
                                 isProfile: true,
                                 lst: proff,
-                                collection: collection,
+                                collection: widget.collection,
                               )));
                 } else {
                   await getData();
@@ -82,7 +102,7 @@ class NavDrawer extends StatelessWidget {
                                 barTitle: "Help-Seeker's Profile",
                                 isProfile: true,
                                 lst: proff,
-                                collection: collection,
+                                collection: widget.collection,
                               )));
                 }
               }),
@@ -90,25 +110,28 @@ class NavDrawer extends StatelessWidget {
             leading: new Stack(
               children: <Widget>[
                 new Icon(Icons.notifications),
-                new Positioned(
-                  right: 0,
-                  child: new Container(
-                    padding: EdgeInsets.all(1),
-                    decoration: new BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    constraints: BoxConstraints(
-                      minWidth: 13,
-                      minHeight: 13,
-                    ),
-                    child: new Text(
-                      '$count',
-                      style: new TextStyle(
-                        color: Colors.white,
-                        fontSize: 8,
+                Visibility(
+                  visible: _isVisible,
+                  child: new Positioned(
+                    right: 0,
+                    child: new Container(
+                      padding: EdgeInsets.all(1),
+                      decoration: new BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(6),
                       ),
-                      textAlign: TextAlign.center,
+                      constraints: BoxConstraints(
+                        minWidth: 13,
+                        minHeight: 13,
+                      ),
+                      child: new Text(
+                        '$count',
+                        style: new TextStyle(
+                          color: Colors.white,
+                          fontSize: 8,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                 )
@@ -119,7 +142,19 @@ class NavDrawer extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (_) => NotificationsPage(collection)))
+                      builder: (_) => NotificationsPage(widget.collection)))
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.dashboard),
+            title: Text('Dashboard'),
+            onTap: () => {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => Dashboard(
+                            type: widget.type,
+                          )))
             },
           ),
           ListTile(
@@ -131,21 +166,14 @@ class NavDrawer extends StatelessWidget {
                   MaterialPageRoute(
                       builder: (_) => MyCalendar(
                             auth.currentUser.uid,
-                            collection,
+                            widget.collection,
                           )))
             },
           ),
           ListTile(
-            leading: Icon(Icons.dashboard),
-            title: Text('Dashboard'),
-            onTap: () => {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => Dashboard(
-                            type: type,
-                          )))
-            },
+            leading: Icon(Icons.chat),
+            title: Text('Chat'),
+            onTap: () => {},
           ),
           ListTile(
             leading: Icon(Icons.settings),
@@ -154,7 +182,7 @@ class NavDrawer extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (_) => Settings(collection, proff)))
+                      builder: (_) => Settings(widget.collection, proff)))
             },
           ),
           ListTile(

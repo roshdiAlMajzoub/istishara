@@ -52,6 +52,7 @@ dependencies:
   countup: ^0.1.3
   datetime_picker_formfield: ^2.0.0
   date_format: ^2.0.2
+
   
   
 
@@ -100,6 +101,12 @@ flutter:
       - asset/images/icons8-checked.svg
       - asset/images/cancel.svg
       - asset/images/mail.svg
+      - asset/images/main_top.png
+      - asset/images/main_bottom.png
+      - asset/icons/chat.svg
+      - asset/icons/signup.svg
+      - asset/icons/login.svg
+      - asset/icons/programming.svg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

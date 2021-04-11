@@ -15,12 +15,16 @@ class ExpertType {
       ExpertType(3, 'Electrician'),
       ExpertType(4, 'Dietician'),
       ExpertType(5, 'Personal Trainer'),
-      ExpertType(6, 'Business Analyst'),
-      ExpertType(7, 'Architect'),
-      ExpertType(8, 'Plumber'),
-      ExpertType(9, 'Data Scientist'),
-      ExpertType(10, 'Industrial Engineer'),
-      ExpertType(11, 'IT Specialist'),
+      ExpertType(6, 'Plumber'),
+      ExpertType(7, 'Business Analyst'),
+      ExpertType(8, 'Architect'),
+      ExpertType(9, 'Handyman'),
+      ExpertType(10, 'Carpenter'),
+      ExpertType(11, 'Interior Designer'),
+      ExpertType(12, 'BlackSmith'),
+      ExpertType(13, 'Industrial Engineer'),
+      ExpertType(14, 'Data Scientist'),
+      ExpertType(15, 'IT Specialist'),
     ];
   }
 }

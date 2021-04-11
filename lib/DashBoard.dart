@@ -1,5 +1,6 @@
 import 'package:ISTISHARA/Database.dart';
 import 'package:ISTISHARA/Databasers.dart';
+import 'package:ISTISHARA/LOGIN-SIGNUP/constants.dart';
 import 'package:ISTISHARA/ProfileView.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -65,6 +66,7 @@ class DashboardState extends State<Dashboard> {
     var availableMoney = 50000;
     //print(collection);
     return Scaffold(
+     backgroundColor: kPrimaryLightColor,
         drawer: NavDrawer(
           type: type,
           collection: collection,
@@ -72,7 +74,7 @@ class DashboardState extends State<Dashboard> {
         appBar: AppBar(
             title: Text("Dashboard"),
             elevation: .1,
-            backgroundColor: Color(0xff5848CF)),
+            backgroundColor: kPrimaryColor,),
         floatingActionButton: FloatingActionButton.extended(
           backgroundColor: Colors.green,
           isExtended: isExtended,
@@ -117,19 +119,22 @@ class DashboardState extends State<Dashboard> {
                   crossAxisCount: 2,
                   padding: EdgeInsets.all(3.0),
                   children: <Widget>[
-                    makeDashboardItem("Software Engineer", Icons.computer),
+                    makeDashboardItem("Software Engineer", Icons.code),
                     makeDashboardItem("Civil Engineer", Icons.build),
-                    makeDashboardItem("Nutritionist", Icons.flaky_rounded),
-                    makeDashboardItem("Plumber", Icons.plumbing),
-                    makeDashboardItem("PE", Icons.sports_handball),
-                    makeDashboardItem("Handyman", Icons.handyman_outlined),
-                    makeDashboardItem("Architect", Icons.apartment_rounded),
                     makeDashboardItem(
                         "Electrician", Icons.electrical_services_outlined),
+                    makeDashboardItem("Dietition", Icons.flaky_rounded),
+                    makeDashboardItem("Personal Trainer", Icons.sports_handball),
+                    makeDashboardItem("Plumber", Icons.plumbing),
+                    makeDashboardItem("Business Analyst", Icons.business,),
+                    makeDashboardItem("Architect", Icons.apartment_rounded),
+                    makeDashboardItem("Handyman", Icons.handyman_outlined),
                     makeDashboardItem("Carpenter", Icons.carpenter_outlined),
                     makeDashboardItem("Interior Designer", Icons.home_outlined),
                     makeDashboardItem("BlackSmith", Icons.construction),
                     makeDashboardItem("Industrial Engineer", Icons.work),
+                    makeDashboardItem("Data Scientist", Icons.data_usage),
+                    makeDashboardItem("IT Specialist", Icons.computer),
                   ],
                 ),
               ),
@@ -148,7 +153,7 @@ class DashboardState extends State<Dashboard> {
         child: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(50.0),
-              color: Color.fromRGBO(220, 220, 220, 1.0)),
+              color: kPrimaryColor),
           child: new InkWell(
             onTap: () {
               Navigator.push(
@@ -168,13 +173,13 @@ class DashboardState extends State<Dashboard> {
                     child: Icon(
                   icon,
                   size: 40.0,
-                  color: Colors.black,
+                  color: Colors.white,
                 )),
                 SizedBox(height: 20.0),
                 new Center(
                   child: new Text(title,
                       style:
-                          new TextStyle(fontSize: 18.0, color: Colors.black)),
+                          new TextStyle(fontSize: 18.0, color: Colors.white)),
                 )
               ],
             ),
