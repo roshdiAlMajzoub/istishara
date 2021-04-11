@@ -1,4 +1,5 @@
 import 'package:ISTISHARA/Databasers.dart';
+import 'package:ISTISHARA/LOGIN-SIGNUP/constants.dart';
 import 'package:ISTISHARA/ViewExpert.dart';
 import 'package:flutter/material.dart';
 import 'Database.dart';
@@ -80,10 +81,10 @@ class _ListPageState extends State<ListPage> {
           type: "Expert",
           collection: collection,
         ),
-        backgroundColor: Colors.blue[800],
+        backgroundColor: kPrimaryLightColor,
         appBar: AppBar(
           elevation: 0.1,
-          backgroundColor: Colors.blue[900],
+          backgroundColor: kPrimaryColor,
           title: Text(type + "'s " + "List"),
         ),
         body: new Container(
@@ -97,7 +98,7 @@ class _ListPageState extends State<ListPage> {
                   margin:
                       new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
                   child: Container(
-                      decoration: BoxDecoration(color: Colors.blue[900]),
+                      decoration: BoxDecoration(color: kPrimaryColor),
                       child: ListTile(
                         contentPadding: EdgeInsets.symmetric(
                             horizontal: 20.0, vertical: 10.0),

@@ -2,6 +2,7 @@ import 'package:ISTISHARA/LOGIN-SIGNUP/TextFieldContainer.dart';
 import 'package:ISTISHARA/LOGIN-SIGNUP/constants.dart';
 import 'package:ISTISHARA/LOGIN-SIGNUP/rounded_button.dart';
 import 'package:ISTISHARA/LOGIN-SIGNUP/rounded_password_field.dart';
+import 'package:ISTISHARA/Reset_pass.dart';
 import 'package:ISTISHARA/Start.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -179,7 +180,7 @@ class _Login_BodyState extends State<Login_Body> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ResetDemo(),
+                        builder: (context) => Reset_Pass(),
                       ));
                 },
                 child: Text("Forgot Password")),

@@ -1,3 +1,4 @@
+import 'package:ISTISHARA/LOGIN-SIGNUP/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
       setState(() {
         notificationList = resultant;
       });
-      print(notificationList);
     }
   }
 
@@ -55,78 +55,89 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(collection);
     fetchDataBaseNotificationList();
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
-    return new Scaffold(
-        drawer: new NavDrawer(
-          type: '',
+    return new Container(
+      constraints: BoxConstraints.expand(),
+        decoration: BoxDecoration(
+        
+          image: DecorationImage(
+            image: AssetImage("asset/images/mail.png"),
+            fit: BoxFit.fill,
+          ),
         ),
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          elevation: 0.1,
-          backgroundColor: Color(0x66666),
-          title: Text("Notifications"),
-          leading: Icon(Icons.notifications),
-        ),
-        body: new Container(
-          child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: notificationList.length, //depends on firebase count;;
-              itemBuilder: (BuildContext context, int index) {
-                return SizedBox(
-                    height: screenHeight / 6.5,
-                    child: Card(
-                      elevation: 8.0,
-                      margin: new EdgeInsets.symmetric(
-                          horizontal: 10.0, vertical: 6.0),
-                      child: Container(
-                          decoration: BoxDecoration(color: Colors.white38),
-                          child: ListTile(
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 20.0, vertical: 10.0),
-                            leading: Container(
-                                padding: EdgeInsets.only(right: 12.0),
-                                child: IconButton(
+        child: Scaffold(
+            drawer: new NavDrawer(
+              type: '',
+            ),
+            backgroundColor: Colors.transparent,
+            appBar: AppBar(
+              elevation: 0.1,
+              backgroundColor: Color(0x66666),
+              title: Text("Notifications",),
+              leading: Icon(Icons.notifications, color: kPrimaryColor),
+            ),
+            body: new Container(
+              child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount:
+                      notificationList.length, //depends on firebase count;;
+                  itemBuilder: (BuildContext context, int index) {
+                    return SizedBox(
+                        height: screenHeight / 6.5,
+                        child: Card(
+                          elevation: 8.0,
+                          margin: new EdgeInsets.symmetric(
+                              horizontal: 10.0, vertical: 6.0),
+                          child: Container(
+                              decoration: BoxDecoration(color: Colors.white38),
+                              child: ListTile(
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 20.0, vertical: 10.0),
+                                leading: Container(
+                                    padding: EdgeInsets.only(right: 12.0),
+                                    child: IconButton(
+                                      icon: SvgPicture.asset(
+                                          "asset/images/icons8-checked.svg"),
+                                      color: Colors.green,
+                                      onPressed: () {
+                                        showAlertDialog(
+                                            context,
+                                            notificationList[index]['id'],
+                                            notificationList[index]['id'],
+                                            notificationList[index]['coll'],
+                                            notificationList[index]
+                                                ['start time']);
+                                      },
+                                    )),
+                                title: Text("New Meeting at " +
+                                    notificationList[index]['start time']
+                                        .toDate()
+                                        .toString() +
+                                    "-" +
+                                    notificationList[index]['end time']
+                                        .toDate()
+                                        .toString()),
+                                trailing: IconButton(
                                   icon: SvgPicture.asset(
-                                      "asset/images/icons8-checked.svg"),
+                                      "asset/images/cancel.svg"),
                                   color: Colors.green,
+                                  iconSize: 3,
                                   onPressed: () {
-                                    showAlertDialog(
+                                    showAlertDialog2(
                                         context,
                                         notificationList[index]['id'],
                                         notificationList[index]['id'],
                                         notificationList[index]['coll'],
                                         notificationList[index]['start time']);
                                   },
-                                )),
-                            title: Text("New Meeting at " +
-                                notificationList[index]['start time']
-                                    .toDate()
-                                    .toString() +
-                                "-" +
-                                notificationList[index]['end time']
-                                    .toDate()
-                                    .toString()),
-                            trailing: IconButton(
-                              icon: SvgPicture.asset("asset/images/cancel.svg"),
-                              color: Colors.green,
-                              iconSize: 3,
-                              onPressed: () {
-                                showAlertDialog2(
-                                    context,
-                                    notificationList[index]['id'],
-                                    notificationList[index]['id'],
-                                    notificationList[index]['coll'],
-                                    notificationList[index]['start time']);
-                              },
-                            ),
-                          )),
-                    ));
-              }),
-        ));
+                                ),
+                              )),
+                        ));
+                  }),
+            )));
   }
 }
 

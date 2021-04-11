@@ -95,7 +95,6 @@ flutter:
       - asset/images/nb8.png
       - asset/images/nb9.png
       - asset/images/nb10.png
-      - asset/images/user.png
       - asset/images/menu.png
       - asset/images/head.jpg
       - asset/images/icons8-checked.svg
@@ -107,6 +106,8 @@ flutter:
       - asset/icons/signup.svg
       - asset/icons/login.svg
       - asset/icons/programming.svg
+      - asset/images/mail.png
+      - asset/images/menuu.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

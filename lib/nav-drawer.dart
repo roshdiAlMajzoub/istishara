@@ -73,11 +73,11 @@ class _NavDrawerState extends State<NavDrawer> {
             decoration: BoxDecoration(
                 image: DecorationImage(
                     fit: BoxFit.fill,
-                    image: AssetImage('asset/images/menu.png'))),
+                    image: AssetImage('asset/images/menuu.png'))),
             child: null,
           ),
           ListTile(
-              leading: Icon(Icons.person),
+              leading: Icon(Icons.person, color: kPrimaryColor,),
               title: Text('Profile'),
               onTap: () async {
                 if (widget.type == "Expert") {
@@ -109,7 +109,7 @@ class _NavDrawerState extends State<NavDrawer> {
           ListTile(
             leading: new Stack(
               children: <Widget>[
-                new Icon(Icons.notifications),
+                new Icon(Icons.notifications,color: kPrimaryColor,),
                 Visibility(
                   visible: _isVisible,
                   child: new Positioned(
@@ -146,7 +146,7 @@ class _NavDrawerState extends State<NavDrawer> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.dashboard),
+            leading: Icon(Icons.dashboard,color: kPrimaryColor,),
             title: Text('Dashboard'),
             onTap: () => {
               Navigator.push(
@@ -158,7 +158,7 @@ class _NavDrawerState extends State<NavDrawer> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.calendar_today),
+            leading: Icon(Icons.calendar_today,color: kPrimaryColor,),
             title: Text('Calendar'),
             onTap: () => {
               Navigator.push(
@@ -171,12 +171,12 @@ class _NavDrawerState extends State<NavDrawer> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.chat),
+            leading: Icon(Icons.chat,color: kPrimaryColor,),
             title: Text('Chat'),
             onTap: () => {},
           ),
           ListTile(
-            leading: Icon(Icons.settings),
+            leading: Icon(Icons.settings,color: kPrimaryColor,),
             title: Text('Settings'),
             onTap: () => {
               Navigator.push(
@@ -186,12 +186,12 @@ class _NavDrawerState extends State<NavDrawer> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.border_color),
+            leading: Icon(Icons.border_color,color: kPrimaryColor,),
             title: Text('Feedback'),
             onTap: () => {Navigator.of(context).pop()},
           ),
           ListTile(
-            leading: Icon(Icons.exit_to_app),
+            leading: Icon(Icons.exit_to_app,color: kPrimaryColor,),
             title: Text('Logout'),
             onTap: () async {
               await auth.signOut();

@@ -3,7 +3,7 @@
 
     
    <application
-        android:label="istishara_test"
+        android:label="ISTISHARA"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
