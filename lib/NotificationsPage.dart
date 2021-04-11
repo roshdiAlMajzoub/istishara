@@ -1,3 +1,4 @@
+import 'package:ISTISHARA/LOGIN-SIGNUP/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
@@ -59,11 +60,18 @@ class _NotificationsPageState extends State<NotificationsPage> {
     fetchDataBaseNotificationList();
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
-    return new Scaffold(
-        drawer: new NavDrawer(
-          type: '',
+    return new Container(
+      constraints: BoxConstraints.expand(),
+        decoration: BoxDecoration(
+        
+          image: DecorationImage(
+            image: AssetImage("asset/images/mail.png"),
+            fit: BoxFit.fill,
+          ),
         ),
-        backgroundColor: Colors.white,
+        child: Scaffold(
+          drawer: NavDrawer(type: "",),
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
           elevation: 0.1,
           backgroundColor: Color(0x66666),
@@ -157,7 +165,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                       ));
                 }
               }),
-        ));
+        )));
   }
 }
 

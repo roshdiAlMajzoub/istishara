@@ -1,9 +1,11 @@
-import 'dart:io';
-
+import 'package:ISTISHARA/LOGIN-SIGNUP/constants.dart';
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'Login.dart';
-import 'package:double_back_to_close_app/double_back_to_close_app.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'LOGIN-SIGNUP/background.dart';
+import 'LOGIN-SIGNUP/rounded_button.dart';
+import 'Start.dart';
 
 class StartApp extends StatelessWidget {
   @override
@@ -20,134 +22,41 @@ class _Start extends StatefulWidget {
 }
 
 class _StartState extends State<_Start> {
-  
-
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final double screenHeight = MediaQuery.of(context).size.height;
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
         backgroundColor: Colors.white,
-        body: DoubleBackToCloseApp(
-                snackBar: SnackBar(
-                  content: Text('Tap back again to Exit'),
-                ),
-                child: WillPopScope(
-                    // ignore: missing_return
-                    onWillPop: () async {
-                      SystemChannels.platform.invokeMethod<void>('SystemNavigator.pop');
-                    },
-                    child: Stack(
-                      children: [
-                        Align(
-                            alignment: Alignment(0, -1),
-                            child: Container(
-                              child: Image.asset(
-                                  "asset/images/IstisharaImage3.png"),
-                            )),
-                        Align(
-                            alignment: Alignment(0, 0.5),
-                            child: Container(
-                              width: screenWidth,
-                              height: screenHeight / 2,
-                              alignment: Alignment.center,
-                              child: Column(children: [
-                                Center(
-                                  child: Text("\n"),
-                                ),
-                                Center(
-                                    child: Text(
-                                        "New to Istishara? Create account",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w900,
-                                            fontSize: 15))),
-                                Container(
-                                  child: Text(""),
-                                ),
-                                Row(children: [
-                                  Container(
-                                      width: screenWidth / 2.3,
-                                      height: screenHeight / 15,
-                                      child: OutlinedButton(
-                                        child: Text(" Sign Up as\n Help-Seeker",
-                                            style: TextStyle(
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.w900,
-                                                color: Color(0xff5848CF))),
-                                        onPressed: () {
-                                          Navigator.of(context)
-                                              .pushNamed('/UserSU');
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          side: BorderSide(
-                                              width: 3.0, color: Colors.black),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(32.0),
-                                          ),
-                                        ),
-                                      )),
-                                  Spacer(),
-                                  Container(
-                                      width: screenWidth / 2.3,
-                                      height: screenHeight / 15,
-                                      child: OutlinedButton(
-                                        child: Text(" Sign Up as an\n Expert",
-                                            style: TextStyle(
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.w900,
-                                                color: Color(0xff5848CF))),
-                                        onPressed: () {
-                                          Navigator.of(context)
-                                              .pushNamed('/ExpertSU');
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          side: BorderSide(
-                                              width: 3.0, color: Colors.black),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(32.0),
-                                          ),
-                                        ),
-                                      ))
-                                ]),
-                                Container(
-                                  height: screenHeight / 10,
-                                ),
-                                Center(
-                                    child: Text("Already have an account?",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w900,
-                                            fontSize: 15))),
-                                Container(
-                                  child: Text(""),
-                                ),
-                                Center(
-                                  child: OutlinedButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (_) => MyApp()));
-                                    },
-                                    child: Text("Sign In",
-                                        style: TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.w900,
-                                            color: Color(0xff5848CF))),
-                                    style: ElevatedButton.styleFrom(
-                                        side: BorderSide(
-                                            width: 3.0, color: Colors.black),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(32.0),
-                                        ),
-                                        minimumSize: Size(100, 50)),
-                                  ),
-                                ),
-                              ]),
-                            ))
-                      ],
-                    ))));
+        body: WillPopScope(
+            // ignore: missing_return
+            onWillPop: () async {
+              Navigator.of(context).pop();
+            },
+            child: Background(
+                child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SvgPicture.asset("asset/icons/signup.svg",
+                      height: size.height * 0.45),
+                  SizedBox(height: size.height * 0.03),
+                  RoundedButton(
+                      text: "SignUp as an Expert",
+                      color: kPrimaryColor,
+                      textColor: Colors.white,
+                      press: () {
+                        Navigator.of(context).pushNamed('/ExpertSU');
+                      }),
+                  RoundedButton(
+                      text: "SignUp as a Help Seeker",
+                      color: kPrimaryColor,
+                      textColor: Colors.white,
+                      press: () {
+                        Navigator.of(context).pushNamed('/UserSU');
+                      }),
+                  SizedBox(height: size.height * 0.05),
+                ],
+              ),
+            ))));
   }
 }

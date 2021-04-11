@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'Database.dart';
 import 'package:flutter/foundation.dart';
-import 'Login.dart';
 import 'ShowDialog.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:cloud_firestore/cloud_firestore.dart' as cloud;
@@ -50,16 +49,14 @@ class Databasers {
     Show.showDialogEmailVerify("Account Verification",
         "An Email verification has been sent to: ", email, context);
     user = auth.currentUser;
-    user.sendEmailVerification();
     await user.reload();
-    if (exp != "help_seekers") {
-      uploadFile(CV, context);
-    }
-    await DataBaseServiceExperts(uid: userCredential.user.uid)
-        .updateuserData(firstName, lastName, phoneNumber, email, exp, cvN);
-    clearInfo();
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (context) => LoginDemo()));
+    user.sendEmailVerification();
+      if (exp != "help_seekers") {
+        uploadFile(CV, context);
+      }
+      await DataBaseServiceExperts(uid: userCredential.user.uid)
+          .updateuserData(firstName, lastName, phoneNumber, email, exp, cvN);
+      clearInfo();
   }
 
   upload() async {

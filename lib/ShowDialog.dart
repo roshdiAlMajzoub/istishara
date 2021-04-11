@@ -1,9 +1,9 @@
+import 'package:ISTISHARA/LOGIN-SIGNUP/Log_in.dart';
 import "package:flutter/material.dart";
 
-import 'Login.dart';
-
 class Show {
- static  Future<AlertDialog> showDialogGiveUp(BuildContext context,String giveUpWhat, State widget,Function clearInfo) {
+  static Future<AlertDialog> showDialogGiveUp(BuildContext context,
+      String giveUpWhat, State widget, Function clearInfo) {
     return showDialog<AlertDialog>(
         context: context,
         builder: (BuildContext context) {
@@ -16,11 +16,13 @@ class Show {
                 style: TextStyle(
                     color: Colors.deepPurple, fontWeight: FontWeight.w900),
               ),
-              content: Text(
-                  "Are you sure you want to give up on "+giveUpWhat+"?\n\nInformation entered will be disregarded."),
+              content: Text("Are you sure you want to give up on " +
+                  giveUpWhat +
+                  "?\n\nInformation entered will be disregarded."),
               actions: <Widget>[
                 TextButton(
                     onPressed: () {
+                      // ignore: invalid_use_of_protected_member
                       widget.setState(() {
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
@@ -37,10 +39,11 @@ class Show {
         });
   }
 
-static Future<AlertDialog> showDialogEmailVerify(String title, String content,String email, BuildContext context1) {
+  static Future<AlertDialog> showDialogEmailVerify(
+      String title, String content, String email, BuildContext context1) {
     final double screenWidth = MediaQuery.of(context1).size.width;
     final double screenHeight = MediaQuery.of(context1).size.height;
-     return showDialog<AlertDialog>(
+    return showDialog<AlertDialog>(
         context: context1,
         builder: (BuildContext context) {
           return AlertDialog(
@@ -52,16 +55,16 @@ static Future<AlertDialog> showDialogEmailVerify(String title, String content,St
                 style: TextStyle(
                     color: Colors.deepPurple, fontWeight: FontWeight.w900),
               ),
-              content: Text(
-                   "An Email verification has been sent to: "+email+"\nPlease verify!"),
+              content: Text("An Email verification has been sent to: " +
+                  email +
+                  "\nPlease verify!"),
               actions: <Widget>[
                 TextButton(
                     onPressed: () {
-                       Navigator.of(context).pushReplacement(
-                       MaterialPageRoute(builder: (context) => LoginDemo()));
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => Loginscreen()));
                     },
                     child: Text("OK")),
-               
               ]);
         });
     /*showDialog(
@@ -115,7 +118,8 @@ static Future<AlertDialog> showDialogEmailVerify(String title, String content,St
           );
         });*/
   }
-  static Widget showAlert(String error,State widget) {
+
+  static Widget showAlert(String error, State widget) {
     if (error != null) {
       return Container(
         color: Colors.yellow,
@@ -150,7 +154,7 @@ static Future<AlertDialog> showDialogEmailVerify(String title, String content,St
       height: 0,
     );
   }
-   /*void _showDialog(String title, String content, BuildContext context) {
+  /*void _showDialog(String title, String content, BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     showDialog(
