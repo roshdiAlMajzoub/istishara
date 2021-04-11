@@ -43,7 +43,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
       setState(() {
         notificationList = resultant;
       });
-      print(notificationList);
+      
     }
   }
 
@@ -55,7 +55,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(collection);
+    
     fetchDataBaseNotificationList();
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
@@ -76,55 +76,86 @@ class _NotificationsPageState extends State<NotificationsPage> {
               shrinkWrap: true,
               itemCount: notificationList.length, //depends on firebase count;;
               itemBuilder: (BuildContext context, int index) {
-                return SizedBox(
-                    height: screenHeight / 6.5,
-                    child: Card(
-                      elevation: 8.0,
-                      margin: new EdgeInsets.symmetric(
-                          horizontal: 10.0, vertical: 6.0),
-                      child: Container(
-                          decoration: BoxDecoration(color: Colors.white38),
-                          child: ListTile(
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 20.0, vertical: 10.0),
-                            leading: Container(
-                                padding: EdgeInsets.only(right: 12.0),
-                                child: IconButton(
-                                  icon: SvgPicture.asset(
-                                      "asset/images/icons8-checked.svg"),
-                                  color: Colors.green,
-                                  onPressed: () {
-                                    showAlertDialog(
-                                        context,
-                                        notificationList[index]['id'],
-                                        notificationList[index]['id'],
-                                        notificationList[index]['coll'],
-                                        notificationList[index]['start time']);
-                                  },
-                                )),
-                            title: Text("New Meeting at " +
-                                notificationList[index]['start time']
-                                    .toDate()
-                                    .toString() +
-                                "-" +
-                                notificationList[index]['end time']
-                                    .toDate()
-                                    .toString()),
-                            trailing: IconButton(
-                              icon: SvgPicture.asset("asset/images/cancel.svg"),
-                              color: Colors.green,
-                              iconSize: 3,
-                              onPressed: () {
-                                showAlertDialog2(
-                                    context,
-                                    notificationList[index]['id'],
-                                    notificationList[index]['id'],
-                                    notificationList[index]['coll'],
-                                    notificationList[index]['start time']);
-                              },
-                            ),
-                          )),
-                    ));
+                if (notificationList[index]['state2'] == "p") {
+                  return SizedBox(
+                      height: screenHeight / 7.5,
+                      child: Card(
+                        elevation: 8.0,
+                        margin: new EdgeInsets.symmetric(
+                            horizontal: 10.0, vertical: 6.0),
+                        child: Container(
+                            decoration: BoxDecoration(color: Colors.white38),
+                            child: ListTile(
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 20.0, vertical: 10.0),
+                              title: Text("Your appointemnt with ..." +
+                                  "has been accepted"),
+                              trailing: Container(
+                                  padding: EdgeInsets.only(right: 1.0),
+                                  child: IconButton(
+                                    icon: SvgPicture.asset(
+                                        "asset/images/icons8-checked.svg"),
+                                    color: Colors.green,
+                                    onPressed: ()async {
+                                      await knowAcceptedAppt(
+                                          notificationList[index]['id']);
+                                    },
+                                  )),
+                            )),
+                      ));
+                } else {
+                  return SizedBox(
+                      height: screenHeight / 6.5,
+                      child: Card(
+                        elevation: 8.0,
+                        margin: new EdgeInsets.symmetric(
+                            horizontal: 10.0, vertical: 6.0),
+                        child: Container(
+                            decoration: BoxDecoration(color: Colors.white38),
+                            child: ListTile(
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 20.0, vertical: 10.0),
+                              leading: Container(
+                                  padding: EdgeInsets.only(right: 12.0),
+                                  child: IconButton(
+                                    icon: SvgPicture.asset(
+                                        "asset/images/icons8-checked.svg"),
+                                    color: Colors.green,
+                                    onPressed: () {
+                                      showAlertDialog(
+                                          context,
+                                          notificationList[index]['id'],
+                                          notificationList[index]['id'],
+                                          notificationList[index]['coll'],
+                                          notificationList[index]
+                                              ['start time']);
+                                    },
+                                  )),
+                              title: Text("New Meeting at " +
+                                  notificationList[index]['start time']
+                                      .toDate()
+                                      .toString() +
+                                  "-" +
+                                  notificationList[index]['end time']
+                                      .toDate()
+                                      .toString()),
+                              trailing: IconButton(
+                                icon:
+                                    SvgPicture.asset("asset/images/cancel.svg"),
+                                color: Colors.green,
+                                iconSize: 3,
+                                onPressed: () {
+                                  showAlertDialog2(
+                                      context,
+                                      notificationList[index]['id'],
+                                      notificationList[index]['id'],
+                                      notificationList[index]['coll'],
+                                      notificationList[index]['start time']);
+                                },
+                              ),
+                            )),
+                      ));
+                }
               }),
         ));
   }
@@ -202,10 +233,6 @@ showAlertDialog2(BuildContext context, id, uid, col, st) {
 }
 
 acceptAppt(col, id, uid, st) async {
-  //print(col);
-  //print(id);
-  print(uid);
-  //print(st);
   await FirebaseFirestore.instance
       .collection('Appt')
       .doc(uid)
@@ -213,9 +240,11 @@ acceptAppt(col, id, uid, st) async {
 }
 
 denyAppt(col, id, uid, st) async {
-  print(col);
-  print(id);
-  print(uid);
-  print(st);
   await FirebaseFirestore.instance.collection('Appt').doc(uid).delete();
+}
+
+knowAcceptedAppt(uid) async {
+  await FirebaseFirestore.instance.collection('Appt').doc(uid).update({
+    'state2': "known",
+  });
 }

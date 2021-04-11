@@ -14,8 +14,8 @@ class NavDrawer extends StatelessWidget {
   final auth = FirebaseAuth.instance;
   final String type;
   final String collection;
-  List noti;
-  NavDrawer({@required this.type, this.collection, this.noti});
+  int count;
+  NavDrawer({@required this.type, this.collection, this.count});
 
   List proff = [];
   getData() async {
@@ -25,25 +25,11 @@ class NavDrawer extends StatelessWidget {
     print(proff[0]['first name']);
   }
 
-  List notificationList = [];
-  var number = 0;
-  fetchDataBaseNotificationList() async {
-    dynamic resultant = await DataBaseList().getNotificationList(collection);
-
-    if (resultant == null) {
-      print("unable to retrieve");
-    } else {
-      number = resultant.length;
-      print(notificationList);
-    }
-  }
-
   @override
-  Widget build(BuildContext context)  {
+  Widget build(BuildContext context) {
     print("roshdi  roshdi  roshdi");
-    print(noti);
-    fetchDataBaseNotificationList();
-    var count = number; //retrieve from firebase
+    
+    //retrieve from firebase
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -61,7 +47,7 @@ class NavDrawer extends StatelessWidget {
               title: Text('Profile'),
               onTap: () async {
                 if (type == "Expert") {
-                await  getData();
+                  await getData();
                   Navigator.push(
                       context,
                       MaterialPageRoute(

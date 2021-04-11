@@ -130,7 +130,7 @@ class _ListPageState extends State<ListPage> {
                                       backgroundColor:
                                           Color.fromRGBO(209, 224, 224, 0.2),
                                       value: expertProfileList[index]
-                                          ['reputation'],
+                                          ['reputation'].toDouble(),
                                       //0.5, //this should be expert.reputation where it will be brought from the expert's database@roshdiAlMajzoub
                                       valueColor:
                                           AlwaysStoppedAnimation(Colors.green)),

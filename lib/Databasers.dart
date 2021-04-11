@@ -52,14 +52,14 @@ class Databasers {
     user = auth.currentUser;
     user.sendEmailVerification();
     await user.reload();
-      if (exp != "help_seekers") {
-        uploadFile(CV, context);
-      }
-      await DataBaseServiceExperts(uid: userCredential.user.uid)
-          .updateuserData(firstName, lastName, phoneNumber, email, exp, cvN);
-      clearInfo();
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => LoginDemo()));
+    if (exp != "help_seekers") {
+      uploadFile(CV, context);
+    }
+    await DataBaseServiceExperts(uid: userCredential.user.uid)
+        .updateuserData(firstName, lastName, phoneNumber, email, exp, cvN);
+    clearInfo();
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (context) => LoginDemo()));
   }
 
   upload() async {
@@ -71,8 +71,8 @@ class Databasers {
       File file = File(result.files.single.path);
       CV = file;
       cvN = CV.path.split('/').last;
-
-      return CV;
+      return result;
+      //return result.names[0].toString();
     } else {
       print('not done');
       // User canceled the picker
@@ -154,9 +154,6 @@ class Databasers {
       await firebase_storage.FirebaseStorage.instance
           .ref('playground/Lecture28.4up.pdf')
           .writeToFile(downloadToFile);
-      print("hey");
-      print(appDocDir);
-      print(downloadToFile);
     } on firebase_core.FirebaseException catch (e) {
       print(e.message);
       // e.g, e.code == 'canceled'
@@ -181,12 +178,6 @@ class Databasers {
 
       checkEmailVerified(user, context, email, clearInfo, firstName, lastName,
           phoneNumber, email, exp, cvN, userCredential);
-      if (_error == null) {
-        timer = Timer.periodic(Duration(seconds: 3), (timer) {
-          checkEmailVerified(user, context, email, clearInfo, firstName,
-              lastName, phoneNumber, email, exp, cvN, userCredential);
-        });
-      }
     } catch (e) {
       widget.setState(() {
         _error = e.message;

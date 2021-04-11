@@ -46,6 +46,7 @@ class DashboardState extends State<Dashboard> {
     super.initState();
     getCollection();
     getToken();
+    fetchDataBaseNotificationList();
   }
 
   String token;
@@ -58,16 +59,34 @@ class DashboardState extends State<Dashboard> {
         .update({'token': t});
   }
 
+  List notificationList = [];
+  var number = 0;
+  fetchDataBaseNotificationList() async {
+    dynamic resultant = await DataBaseList().getNotificationList(collection);
+
+    if (resultant == null) {
+      print("unable to retrieve");
+    } else {
+      setState(() {
+        number = resultant.length;
+      });
+      
+      print(notificationList);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     getToken();
     //rprint(token);
     var availableMoney = 50000;
     //print(collection);
+    print(number);
     return Scaffold(
         drawer: NavDrawer(
           type: type,
           collection: collection,
+          count: number,
         ),
         appBar: AppBar(
             title: Text("Dashboard"),
