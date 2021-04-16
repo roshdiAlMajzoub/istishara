@@ -30,6 +30,7 @@ TextEditingController password_controller = TextEditingController();
 // ignore: camel_case_types
 class _Login_BodyState extends State<Login_Body> {
   bool showPassword = true;
+  var _isloading = false;
   String _email, _password, _error;
   Databasers d = Databasers();
 
@@ -39,6 +40,9 @@ class _Login_BodyState extends State<Login_Body> {
     }
 
     try {
+      setState(() {
+         _isloading = true;
+      });
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: _email, password: _password);
       User user = FirebaseAuth.instance.currentUser; //.instance.currentUser;
@@ -53,14 +57,17 @@ class _Login_BodyState extends State<Login_Body> {
           showPassword = false;
         }
       } else {
+         setState(() {
+        _isloading = false;
+      });
         user.sendEmailVerification();
         Show.showDialogEmailVerify("Account Verification",
             "An Email verification has been sent to: ", user.email, context);
       }
+     
     } catch (e) {
       setState(() {
-        _error = e.message;
-        print("omar");
+        _isloading = false;
       });
     }
   }
@@ -144,48 +151,54 @@ class _Login_BodyState extends State<Login_Body> {
                 }),
               ),
             ),
-            RoundedButton(
-              text: "LOGIN",
-              press: () {
-                signin();
-              },
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  "Don't have an Account ?",
-                  style: TextStyle(color: kPrimaryColor),
+            if(_isloading)
+               CircularProgressIndicator(), 
+            if(!_isloading)  
+                RoundedButton(
+                  text: "LOGIN",
+                  press: () {
+                  signin();
+                 },
                 ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
+            if(!_isloading)  
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                  Text(
+                     "Don't have an Account ?",
+                         style: TextStyle(color: kPrimaryColor),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                       Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => StartApp()),
-                    );
-                  },
-                  child: Text(
-                    "Sign Up",
-                    style: TextStyle(
-                      color: kPrimaryColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: size.height * 0.05),
-            TextButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Reset_Pass(),
-                      ));
-                },
-                child: Text("Forgot Password")),
-            showAlert(),
-          ],
+                      );
+                    },
+                      child: Text(
+                       "Sign Up",
+                        style: TextStyle(
+                         color: kPrimaryColor,
+                          fontWeight: FontWeight.bold,
+                            ),
+                     ),
+                    )
+                    ],
+            )   ,
+            if(!_isloading)  
+                     SizedBox(height: size.height * 0.05),
+            if(!_isloading)  
+                        TextButton(
+                          onPressed: () {
+                           Navigator.push(
+                             context,
+                              MaterialPageRoute(
+                               builder: (context) => Reset_Pass(),
+                            ));
+                        },
+                        child: Text("Forgot Password")),
+                        showAlert(),
+                    ],
         )),
       ),
     );

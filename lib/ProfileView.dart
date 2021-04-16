@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -201,7 +202,7 @@ class ProfileState extends State<Profile> {
     // TODO: implement initState
     super.initState();
     d.cvN;
-    // viewImage();
+   viewImage();
   }
 
   @override
@@ -262,7 +263,16 @@ class ProfileState extends State<Profile> {
                             Container(
                                 width: screenWidth / 3,
                                 height: screenHeight / 3.5,
-                                child: FutureBuilder(
+                                child:  CircleAvatar(child: 
+          CachedNetworkImage(
+        imageUrl: x,
+        placeholder: (context, url) => CircularProgressIndicator(),
+        errorWidget: (context, url, error) => Icon(Icons.error),
+        fit: BoxFit.cover ,
+        useOldImageOnUrlChange: true,
+        
+     ),
+          ),),/*FutureBuilder(
                                   //  future: viewImage(),
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState ==
@@ -322,7 +332,7 @@ class ProfileState extends State<Profile> {
                                       image: NetworkImage(x),
                                           
                                 ))*/
-                                ),
+                                ),*/
                             Positioned(
                               bottom: 0,
                               right: 0,

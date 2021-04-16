@@ -2,6 +2,7 @@ import 'package:ISTISHARA/Calendar.dart';
 import 'package:ISTISHARA/Database.dart';
 import 'package:ISTISHARA/Databasers.dart';
 import 'package:ISTISHARA/ViewCalendar.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -156,11 +157,13 @@ class _ViewExpertState extends State<_ViewExpert> {
           Align(
               alignment: Alignment(0, -1),
               child: Column(children: [
+                
                 Container(
                     width: screenWidth / 2.75,
                     height: screenHeight / 3,
                     padding: EdgeInsets.only(bottom: 0),
-                    child: FutureBuilder(
+                    child:  
+                    FutureBuilder(
                       future: viewImage(),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
@@ -183,7 +186,7 @@ class _ViewExpertState extends State<_ViewExpert> {
                         }
                         return Container();
                       },
-                    )
+                    )),
 
                     /*Container(
                         child: Image.network(x),
@@ -192,7 +195,7 @@ class _ViewExpertState extends State<_ViewExpert> {
                             image: DecorationImage(
                                 fit: BoxFit.cover,
                                 image: AssetImage('asset/images/head.jpg'))))*/
-                    ),
+                
                 Container(
                     padding: EdgeInsets.only(top: 0, bottom: 15),
                     child: Text(

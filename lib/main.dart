@@ -1,3 +1,4 @@
+import 'package:ISTISHARA/Chat/Conversations.dart';
 import 'package:ISTISHARA/LOGIN-SIGNUP/Log_in.dart';
 import 'package:ISTISHARA/LOGIN-SIGNUP/Welcome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -40,6 +41,7 @@ class Display extends StatelessWidget {
         '/UProfile': (BuildContext context) => Credentials(descirbe: "Help-Seeker Profile", barTitle: "Help-Seeker Profile", isProfile: true),
         '/Welcome': (BuildContext context) => WelcomeScreen(),
         '/Login': (BuildContext context) => Loginscreen(),
+  
       },
     );
   }
