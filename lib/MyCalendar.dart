@@ -22,6 +22,7 @@ class MainCalendar extends StatelessWidget {
   var collection;
   MainCalendar(id) {
     this.id = id;
+    this.collection = collection;
   }
   @override
   Widget build(BuildContext context) {
@@ -34,8 +35,7 @@ Databasers databasers = Databasers();
 class MyCalendar extends StatefulWidget {
   var id;
   var collection;
-
-  MyCalendar(id, collection,) {
+  MyCalendar(id, collection) {
     this.id = id;
     this.collection = collection;
   }
@@ -189,7 +189,6 @@ class CalendarState extends State<MyCalendar> {
         drawer: NavDrawer(
           type: "hey",
           collection: collection,
-
         ),
         appBar: AppBar(
             title: Text("Calendar"),
@@ -236,6 +235,7 @@ class CalendarState extends State<MyCalendar> {
                           setState(() {
                             _isLoading = true;
                           });
+                          print("hiiii");
                           String imageOfTheOther = await getImageOfTheOther(i);
                           String nameOfTheOther = await getNameOfTheOther(i);
                           String IDofTheOther = await getIDOfTheOther(i);
@@ -247,17 +247,13 @@ class CalendarState extends State<MyCalendar> {
                               .collection("conversations")
                               .doc(apptt[i]['id'])
                               .set({
-                            'name1':
-                                FirebaseAuth.instance.currentUser.displayName,
-                            'name2': nameOfTheOther,
                             'id1': id1,
                             'id2': IDofTheOther,
-                            'image2': imageOfTheOther,
-                            'image1': myImage
                           });
-
-                          _isLoading = false;
-
+                          print("hiiii");
+                           setState(() {
+                            _isLoading = false;
+                          });
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
                             return ChatScreen(
