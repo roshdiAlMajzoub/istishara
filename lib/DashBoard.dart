@@ -59,21 +59,21 @@ class DashboardState extends State<Dashboard> {
         .update({'token': t});
   }
 
-
   @override
   Widget build(BuildContext context) {
     getToken();
     var availableMoney = 50000;
     return Scaffold(
-     backgroundColor: kPrimaryLightColor,
+        backgroundColor: kPrimaryLightColor,
         drawer: NavDrawer(
           type: type,
-          collection: collection,
+          
         ),
         appBar: AppBar(
-            title: Text("Dashboard"),
-            elevation: .1,
-            backgroundColor: kPrimaryColor,),
+          title: Text("Dashboard"),
+          elevation: .1,
+          backgroundColor: kPrimaryColor,
+        ),
         floatingActionButton: FloatingActionButton.extended(
           backgroundColor: Colors.green,
           isExtended: isExtended,
@@ -123,9 +123,13 @@ class DashboardState extends State<Dashboard> {
                     makeDashboardItem(
                         "Electrician", Icons.electrical_services_outlined),
                     makeDashboardItem("Dietition", Icons.flaky_rounded),
-                    makeDashboardItem("Personal Trainer", Icons.sports_handball),
+                    makeDashboardItem(
+                        "Personal Trainer", Icons.sports_handball),
                     makeDashboardItem("Plumber", Icons.plumbing),
-                    makeDashboardItem("Business Analyst", Icons.business,),
+                    makeDashboardItem(
+                      "Business Analyst",
+                      Icons.business,
+                    ),
                     makeDashboardItem("Architect", Icons.apartment_rounded),
                     makeDashboardItem("Handyman", Icons.handyman_outlined),
                     makeDashboardItem("Carpenter", Icons.carpenter_outlined),
@@ -151,8 +155,7 @@ class DashboardState extends State<Dashboard> {
         margin: new EdgeInsets.all(8.0),
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50.0),
-              color: kPrimaryColor),
+              borderRadius: BorderRadius.circular(50.0), color: kPrimaryColor),
           child: new InkWell(
             onTap: () {
               Navigator.push(

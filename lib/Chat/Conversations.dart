@@ -7,13 +7,13 @@ import 'ConversationList.dart';
 
 class Conversations extends StatefulWidget {
   @override
-  String id;
-  Conversations({@required this.id});
+  List conversations;
+  Conversations({@required this.conversations});
   State<Conversations> createState() => ConversationsState();
 }
 
 class ConversationsState extends State<Conversations> {
-  @override
+  /*@override
   void initState() {
     super.initState();
     fetchDataBaseList();
@@ -36,7 +36,7 @@ class ConversationsState extends State<Conversations> {
     } catch (e) {
       print(e.toString());
     }
-  }
+  }*
 
   List conversationsList = [];
 
@@ -52,29 +52,31 @@ class ConversationsState extends State<Conversations> {
       });
       print(conversationsList.length);
     }
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
-    return  Scaffold(
+    return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
           title: Text("Conversations"),
         ),
         drawer: Drawer(),
-        body: ListView.builder(
+        body: widget.conversations== null? Text(""):
+         ListView.builder(
           scrollDirection: Axis.vertical,
-          itemCount: conversationsList.length,
+          itemCount: widget.conversations.length,
           shrinkWrap: true,
           padding: EdgeInsets.only(top: 16),
           itemBuilder: (context, index) {
+            print(widget.conversations.length);
             return ConversationList(
-              name: conversationsList[index]['name2'],
-              imageUrl: conversationsList[index]['image2'],
-              id2: conversationsList[index]['id2'],
-              id:widget.id
+              name: widget.conversations[index]['name2'],
+              imageUrl: widget.conversations[index]['image2'],
+              id2: widget.conversations[index]['id2'],
+              id: widget.conversations[index]['id'],
             );
           },
         ));

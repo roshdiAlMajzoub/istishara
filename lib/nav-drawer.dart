@@ -1,3 +1,4 @@
+import 'package:ISTISHARA/Chat/Conversations.dart';
 import 'package:ISTISHARA/LOGIN-SIGNUP/constants.dart';
 import 'package:ISTISHARA/MyCalendar.dart';
 import 'package:ISTISHARA/NotificationsPage.dart';
@@ -13,14 +14,14 @@ import 'Database.dart';
 class NavDrawer extends StatefulWidget {
   final String type;
   final String collection;
-  NavDrawer({@required this.type, this.collection});
+  final List conversations;
+  NavDrawer({@required this.type, this.collection,@required this.conversations});
 
   @override
   _NavDrawerState createState() => _NavDrawerState();
 }
 
 class _NavDrawerState extends State<NavDrawer> {
-
   bool _isVisible = true;
 
   void showToast() {
@@ -58,7 +59,7 @@ class _NavDrawerState extends State<NavDrawer> {
       print("unable to retrieve");
     } else {
       setState(() {
-      number = resultant.length;
+        number = resultant.length;
       });
     }
   }
@@ -170,6 +171,7 @@ class _NavDrawerState extends State<NavDrawer> {
                   MaterialPageRoute(
                       builder: (_) => Dashboard(
                             type: widget.type,
+                           
                           )))
             },
           ),
@@ -184,8 +186,6 @@ class _NavDrawerState extends State<NavDrawer> {
                   context,
                   MaterialPageRoute(
                       builder: (_) => MyCalendar(
-                            auth.currentUser.uid,
-                            widget.collection,
                           )))
             },
           ),
@@ -195,7 +195,11 @@ class _NavDrawerState extends State<NavDrawer> {
               color: kPrimaryColor,
             ),
             title: Text('Chat'),
-            onTap: () => {},
+            onTap: () => {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return Conversations(conversations: widget.conversations,);
+          }))
+            },
           ),
           ListTile(
             leading: Icon(

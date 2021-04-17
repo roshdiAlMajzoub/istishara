@@ -35,8 +35,6 @@ class Display extends StatelessWidget {
         '/Start': (BuildContext context) => StartApp(),
         '/ExpertSU': (BuildContext context) => Credentials(descirbe: "Expert", barTitle: "Expert Sign Up",isProfile:false),
         '/UserSU': (BuildContext context) =>Credentials(descirbe: "User",barTitle: "Help-Seeker Sign Up",isProfile: false,),
-        '/UserMain': (BuildContext context) => Dashboard(type:"Help-Seeker"),
-        '/ExpertMain': (BuildContext context) => Dashboard(type: "Expert",),
         '/EProfile': (BuildContext context) => Credentials(descirbe: "Expert Profile", barTitle: "Expert Profile", isProfile: true),
         '/UProfile': (BuildContext context) => Credentials(descirbe: "Help-Seeker Profile", barTitle: "Help-Seeker Profile", isProfile: true),
         '/Welcome': (BuildContext context) => WelcomeScreen(),

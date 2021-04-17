@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 
 import 'MessageBubble.dart';
 
@@ -10,6 +9,7 @@ class Messages extends StatelessWidget {
   String id1;
   String id2;
   String id;
+  bool isFirstTime = true;
   getUser() async {
     await FirebaseAuth.instance.currentUser;
   }
@@ -26,8 +26,13 @@ class Messages extends StatelessWidget {
             .snapshots(),
         builder: (ctxt, ChatSnapShot) {
           {
-            if (ChatSnapShot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
+            if (ChatSnapShot.connectionState == ConnectionState.waiting &&
+                isFirstTime) {
+              isFirstTime = false;
+              return CircularProgressIndicator(
+                backgroundColor: Colors.transparent,
+                strokeWidth: 0.0,
+              );
             }
             return ListView.builder(
                 reverse: true,
@@ -38,7 +43,8 @@ class Messages extends StatelessWidget {
                   print(id1);
                   return MessageBubble(
                       message: ChatSnapShot.data.docs[index]['text'],
-                      isMe: ChatSnapShot.data.docs[index]['userID'] == FirebaseAuth.instance.currentUser.uid);
+                      isMe: ChatSnapShot.data.docs[index]['userID'] ==
+                          FirebaseAuth.instance.currentUser.uid);
                 });
           }
         });

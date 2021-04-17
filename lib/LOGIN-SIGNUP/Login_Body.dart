@@ -1,9 +1,11 @@
+import 'package:ISTISHARA/DashBoard.dart';
 import 'package:ISTISHARA/LOGIN-SIGNUP/TextFieldContainer.dart';
 import 'package:ISTISHARA/LOGIN-SIGNUP/constants.dart';
 import 'package:ISTISHARA/LOGIN-SIGNUP/rounded_button.dart';
 import 'package:ISTISHARA/LOGIN-SIGNUP/rounded_password_field.dart';
 import 'package:ISTISHARA/Reset_pass.dart';
 import 'package:ISTISHARA/Start.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'RoundedTextField.dart';
@@ -32,8 +34,10 @@ class _Login_BodyState extends State<Login_Body> {
   bool showPassword = true;
   var _isloading = false;
   String _email, _password, _error;
+  List conversations;
   Databasers d = Databasers();
 
+ 
   Future<void> signin() async {
     if (_email == null) {
       print("enull");
@@ -41,7 +45,7 @@ class _Login_BodyState extends State<Login_Body> {
 
     try {
       setState(() {
-         _isloading = true;
+        _isloading = true;
       });
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: _email, password: _password);
@@ -51,20 +55,27 @@ class _Login_BodyState extends State<Login_Body> {
         bool docExists = await d.checkIfDocExists(id, "help_seekers");
         if (docExists == true) {
           showPassword = false;
-          Navigator.of(context).pushNamed('/UserMain');
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return Dashboard(
+              type: "Help-Seeker",
+            );
+          }));
         } else {
-          Navigator.of(context).pushNamed('/ExpertMain');
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return Dashboard(
+              type: "Expert"
+            );
+          }));
           showPassword = false;
         }
       } else {
-         setState(() {
-        _isloading = false;
-      });
+        setState(() {
+          _isloading = false;
+        });
         user.sendEmailVerification();
         Show.showDialogEmailVerify("Account Verification",
             "An Email verification has been sent to: ", user.email, context);
       }
-     
     } catch (e) {
       setState(() {
         _isloading = false;
@@ -151,54 +162,52 @@ class _Login_BodyState extends State<Login_Body> {
                 }),
               ),
             ),
-            if(_isloading)
-               CircularProgressIndicator(), 
-            if(!_isloading)  
-                RoundedButton(
-                  text: "LOGIN",
-                  press: () {
+            if (_isloading) CircularProgressIndicator(),
+            if (!_isloading)
+              RoundedButton(
+                text: "LOGIN",
+                press: () {
                   signin();
-                 },
-                ),
-            if(!_isloading)  
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
+                },
+              ),
+            if (!_isloading)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
                   Text(
-                     "Don't have an Account ?",
-                         style: TextStyle(color: kPrimaryColor),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                       Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => StartApp()),
+                    "Don't have an Account ?",
+                    style: TextStyle(color: kPrimaryColor),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => StartApp()),
                       );
                     },
-                      child: Text(
-                       "Sign Up",
-                        style: TextStyle(
-                         color: kPrimaryColor,
-                          fontWeight: FontWeight.bold,
-                            ),
-                     ),
-                    )
-                    ],
-            )   ,
-            if(!_isloading)  
-                     SizedBox(height: size.height * 0.05),
-            if(!_isloading)  
-                        TextButton(
-                          onPressed: () {
-                           Navigator.push(
-                             context,
-                              MaterialPageRoute(
-                               builder: (context) => Reset_Pass(),
-                            ));
-                        },
-                        child: Text("Forgot Password")),
-                        showAlert(),
-                    ],
+                    child: Text(
+                      "Sign Up",
+                      style: TextStyle(
+                        color: kPrimaryColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            if (!_isloading) SizedBox(height: size.height * 0.05),
+            if (!_isloading)
+              TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Reset_Pass(),
+                        ));
+                  },
+                  child: Text("Forgot Password")),
+            showAlert(),
+          ],
         )),
       ),
     );

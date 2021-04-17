@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ISTISHARA/Chat/ChatScreen.dart';
 import 'package:ISTISHARA/Chat/Conversations.dart';
 import 'package:ISTISHARA/Database.dart';
 import 'package:ISTISHARA/Databasers.dart';
@@ -19,13 +20,14 @@ import 'package:intl/intl.dart';
 class MainCalendar extends StatelessWidget {
   var id;
   var collection;
+  List conversations;
   MainCalendar(id) {
     this.id = id;
     this.collection = collection;
   }
   @override
   Widget build(BuildContext context) {
-    return MyCalendar(id, collection);
+    return MyCalendar(id, collection,conversations);
   }
 }
 
@@ -34,9 +36,11 @@ Databasers databasers = Databasers();
 class MyCalendar extends StatefulWidget {
   var id;
   var collection;
-  MyCalendar(id, collection) {
+  List conversations;
+  MyCalendar(id, collection, Conversations) {
     this.id = id;
     this.collection = collection;
+    this.conversations = Conversations;
   }
   @override
   CalendarState createState() => CalendarState(id, collection);
@@ -188,6 +192,7 @@ class CalendarState extends State<MyCalendar> {
         drawer: NavDrawer(
           type: "hey",
           collection: collection,
+          conversations: widget.conversations,
         ),
         appBar: AppBar(
             title: Text("Calendar"),
@@ -258,7 +263,12 @@ class CalendarState extends State<MyCalendar> {
 
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
-                            return Conversations(id: apptt[i]['id']);
+                            return ChatScreen(
+                                id1: id1,
+                                id2: IDofTheOther,
+                                image: imageOfTheOther,
+                                name: nameOfTheOther,
+                                id: apptt[i]['id']);
                           }));
                           break;
                         } else if (startTimeFromFirebase ==
@@ -292,7 +302,7 @@ class CalendarState extends State<MyCalendar> {
     print(bool);
   }
 
-  void _getData()  async{
+  void _getData() async {
     final User user = auth.currentUser;
     //getConflictappt();
     //print(DateTime.now());
@@ -303,8 +313,7 @@ class CalendarState extends State<MyCalendar> {
       DateTime et = ap['end time'].toDate();
       String date = ap['end time'].toDate().toString().substring(0, 10);
 
-      meetings
-          .add(Meeting('Appt', st, et, Color(0xFF0F8644), false, date));
+      meetings.add(Meeting('Appt', st, et, Color(0xFF0F8644), false, date));
     }
   }
 }
@@ -346,7 +355,8 @@ class MeetingDataSource extends CalendarDataSource {
 /// information about the event data which will be rendered in calendar.
 class Meeting {
   /// Creates a meeting class with required details.
-  Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay, this.date);
+  Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay,
+      this.date);
 
   /// Event name which is equivalent to subject property of [Appointment].
   String eventName;
