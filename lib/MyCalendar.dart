@@ -235,7 +235,6 @@ class CalendarState extends State<MyCalendar> {
                           setState(() {
                             _isLoading = true;
                           });
-                          print("hiiii");
                           String imageOfTheOther = await getImageOfTheOther(i);
                           String nameOfTheOther = await getNameOfTheOther(i);
                           String IDofTheOther = await getIDOfTheOther(i);
@@ -243,20 +242,10 @@ class CalendarState extends State<MyCalendar> {
                           String myName =
                               FirebaseAuth.instance.currentUser.displayName;
                           String id1 = FirebaseAuth.instance.currentUser.uid;
-                          await FirebaseFirestore.instance
-                              .collection("conversations")
-                              .doc(apptt[i]['id'])
-                              .set({
-                            'id1': id1,
-                            'id2': IDofTheOther,
-                          });
-                          print("hiiii");
-                           setState(() {
                             _isLoading = false;
-                          });
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
-                            return ChatScreen(id1: id1,id2: IDofTheOther,image: imageOfTheOther, name: nameOfTheOther,id: apptt[i]['id']);
+                            return ChatScreen(id1: id1,image: imageOfTheOther, name: nameOfTheOther,id: apptt[i]['id']);
                           }));
                           break;
                         } else if (startTimeFromFirebase ==

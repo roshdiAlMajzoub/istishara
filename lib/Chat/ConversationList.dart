@@ -11,12 +11,10 @@ import '../Databasers.dart';
 class ConversationList extends StatefulWidget {
   String name;
   String imageUrl;
-  String id2;
   String id;
   ConversationList(
       {@required this.name,
       @required this.imageUrl,
-      @required this.id2,
       @required this.id});
   @override
   _ConversationListState createState() => _ConversationListState();
@@ -33,7 +31,6 @@ class _ConversationListState extends State<ConversationList> {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return ChatScreen(
                 id1: FirebaseAuth.instance.currentUser.uid,
-                id2: widget.id2,
                 image: widget.imageUrl,
                 name: widget.name,
                 id: widget.id);

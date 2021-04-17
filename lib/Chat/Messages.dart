@@ -7,14 +7,13 @@ import 'MessageBubble.dart';
 
 class Messages extends StatelessWidget {
   String id1;
-  String id2;
   String id;
   bool isFirstTime = true;
   getUser() async {
     await FirebaseAuth.instance.currentUser;
   }
 
-  Messages({@required this.id1, @required this.id2, @required this.id});
+  Messages({@required this.id1,  @required this.id});
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(

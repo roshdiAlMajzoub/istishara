@@ -1,6 +1,8 @@
+import 'package:ISTISHARA/Databasers.dart';
 import 'package:ISTISHARA/LOGIN-SIGNUP/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_format/date_format.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'Database.dart';
 import 'nav-drawer.dart';
@@ -132,11 +134,11 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                     onPressed: () {
                                       showAlertDialog(
                                           context,
-                                          notificationList[index]['id'],
+                                          notificationList[index]['id1'],
                                           notificationList[index]['id'],
                                           notificationList[index]['coll'],
-                                          notificationList[index]
-                                              ['start time']);
+                                           notificationList[index]['id2'],
+                                          );
                                     },
                                   )),
                               title: Text("New Meeting at " +
@@ -240,11 +242,71 @@ showAlertDialog2(BuildContext context, id, uid, col, st) {
   );
 }
 
-acceptAppt(col, id, uid, st) async {
+
+ Future<String> getName(String id) async {
+   
+    Databasers db = Databasers() ;
+    String name = "";
+    String collection = await db.docExistsIn(id);
+    Query colcollectionReference =
+        FirebaseFirestore.instance.collection(collection);
+    await colcollectionReference.get().then((QuerySnapshot) {
+      QuerySnapshot.docs.forEach((element) {
+        if (element.get('id') == id) {
+          name = element.get('first name') + " " + element.get('last name');
+        }
+      });
+    });
+
+    return name;
+  }
+
+  Future<String> getImage(String id) async {
+   
+    Databasers db = Databasers() ;
+    String image = "";
+    String collection = await db.docExistsIn(id);
+    Query colcollectionReference =
+        FirebaseFirestore.instance.collection(collection);
+    await colcollectionReference.get().then((QuerySnapshot) {
+      QuerySnapshot.docs.forEach((element) {
+        if (element.get('id') == id) {
+          image = element.get('image name');
+        }
+      });
+    });
+    
+    var img = await Databasers().downloadLink(FirebaseStorage.instance
+        .ref()
+        .child('playground')
+        .child(image));
+
+    return img;
+  }
+
+acceptAppt(col, id1, uid, id2) async {
+
+  String name1 = await getName(id1);
+  String name2 = await getName(id2);
+  String image1 = await getImage(id1);
+  String image2 = await getImage(id2);
   await FirebaseFirestore.instance
       .collection('Appt')
       .doc(uid)
       .update({'state': "Accepted"});
+  await FirebaseFirestore.instance
+                              .collection("conversations")
+                              .doc(uid)
+                              .set({
+                            'id1': id1,
+                            'id2': id2,
+                            'id': uid,
+                            'name1': name1,
+                            'name2': name2,
+                            'image1': image1,
+                            'image2':image2,
+                            
+                          });
 }
 
 denyAppt(col, id, uid, st) async {

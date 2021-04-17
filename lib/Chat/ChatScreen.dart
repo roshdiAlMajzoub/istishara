@@ -8,26 +8,24 @@ import 'package:flutter/material.dart';
 
 class ChatScreen extends StatefulWidget {
   String id1;
-  String id2;
   String image;
   String name;
   String id;
 
   ChatScreen(
       {@required String id1,
-      @required String id2,
       @required this.image,
       @required this.name,
       @required this.id});
   @override
-  _ChatScreenState createState() => _ChatScreenState(id1: id1, id2: id2);
+  _ChatScreenState createState() => _ChatScreenState(id1: id1);
 }
 
 TextEditingController msgTextField = TextEditingController();
 
 class _ChatScreenState extends State<ChatScreen> {
 
-  _ChatScreenState({@required String id1, @required String id2});
+  _ChatScreenState({@required String id1});
   bool sendButton = false;
 
   @override
@@ -86,7 +84,7 @@ class _ChatScreenState extends State<ChatScreen> {
         body: Container(
           child:
             Column(children: <Widget>[
-           Expanded(child:Messages(id1: widget.id1, id2: widget.id2, id: widget.id),),
+           Expanded(child:Messages(id1: widget.id1, id: widget.id),),
           SendTextField(id:widget.id)
         ])
         )

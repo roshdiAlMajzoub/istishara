@@ -67,7 +67,7 @@ class DashboardState extends State<Dashboard> {
         backgroundColor: kPrimaryLightColor,
         drawer: NavDrawer(
           type: type,
-          
+          collection: collection
         ),
         appBar: AppBar(
           title: Text("Dashboard"),
