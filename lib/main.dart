@@ -1,3 +1,4 @@
+import 'package:ISTISHARA/NotificationsPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -36,6 +37,7 @@ class Display extends StatelessWidget {
         '/Login': (BuildContext context) => MyApp(),
         '/EProfile': (BuildContext context) => Credentials(descirbe: "Expert Profile", barTitle: "Expert Profile", isProfile: true),
         '/UProfile': (BuildContext context) => Credentials(descirbe: "Help-Seeker Profile", barTitle: "Help-Seeker Profile", isProfile: true),
+        '/Notifications':(BuildContext context)=> NotificationsPage(dynamic),
       },
     );
   }

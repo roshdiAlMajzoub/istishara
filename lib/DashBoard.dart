@@ -42,8 +42,15 @@ class DashboardState extends State<Dashboard> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification notification = message.notification;
+      AndroidNotification android = message.notification?.android;
+     });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('A new onMessageOpenedApp event was published!');
+      Navigator.pushNamed(context, '/Notifications');
+     });
     getCollection();
     getToken();
   }
