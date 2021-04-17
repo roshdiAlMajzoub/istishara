@@ -36,7 +36,7 @@ class _NavDrawerState extends State<NavDrawer> {
         QuerySnapshot.docs.forEach((element) {
           if (element.get('id1') == id || element.get('id2') == id) {
             print("inside if");
-            conversations.add(element.data());
+            conversations.add(element.data(),);
           }
         });
       });

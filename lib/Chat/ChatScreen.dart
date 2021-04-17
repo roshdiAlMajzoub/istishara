@@ -1,22 +1,22 @@
-
+import 'package:ISTISHARA/Chat/Conversations.dart';
 import 'package:ISTISHARA/Chat/Messages.dart';
 import 'package:ISTISHARA/Chat/SendTextField.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
-
 
 class ChatScreen extends StatefulWidget {
   String id1;
   String image;
   String name;
   String id;
-
-  ChatScreen(
-      {@required String id1,
-      @required this.image,
-      @required this.name,
-      @required this.id});
+  var messages;
+  ChatScreen({
+    @required String id1,
+    @required this.image,
+    @required this.name,
+    @required this.id,
+  });
   @override
   _ChatScreenState createState() => _ChatScreenState(id1: id1);
 }
@@ -24,15 +24,26 @@ class ChatScreen extends StatefulWidget {
 TextEditingController msgTextField = TextEditingController();
 
 class _ChatScreenState extends State<ChatScreen> {
-
   _ChatScreenState({@required String id1});
   bool sendButton = false;
+  void initState() {
+    super.initState();
+    getMessages();
+  }
+
+  getMessages() async {
+    widget.messages = FirebaseFirestore.instance
+        .collection("conversations")
+        .doc(widget.id)
+        .collection("messages")
+        .orderBy('CreatedAt', descending: true)
+        .snapshots();
+  }
 
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -82,12 +93,12 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ),
         body: Container(
-          child:
-            Column(children: <Widget>[
-           Expanded(child:Messages(id1: widget.id1, id: widget.id),),
-          SendTextField(id:widget.id)
-        ])
-        )
-        );
+            child: Column(children: <Widget>[
+          Expanded(
+            child: Messages(
+                id1: widget.id1, id: widget.id, messages: widget.messages),
+          ),
+          SendTextField(id: widget.id)
+        ])));
   }
 }

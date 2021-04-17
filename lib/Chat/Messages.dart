@@ -8,42 +8,38 @@ import 'MessageBubble.dart';
 class Messages extends StatelessWidget {
   String id1;
   String id;
-  bool isFirstTime = true;
-  getUser() async {
-    await FirebaseAuth.instance.currentUser;
+  var messages;
+  getTime(String time) {
+    print(time.substring(12, 16));
+    return time.substring(11, 16);
   }
 
-  Messages({@required this.id1,  @required this.id});
+  Messages({@required this.id1, @required this.id,@required this.messages});
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection("conversations")
-            .doc(id)
-            .collection("messages")
-            .orderBy('CreatedAt', descending: true)
-            .snapshots(),
-        builder: (ctxt, ChatSnapShot) {
+        stream: messages,
+        builder: (ctxt, chatSnapShot) {
           {
-            if (ChatSnapShot.connectionState == ConnectionState.waiting &&
-                isFirstTime) {
-              isFirstTime = false;
+            if (chatSnapShot.connectionState == ConnectionState.waiting) {
               return CircularProgressIndicator(
-                backgroundColor: Colors.transparent,
-                strokeWidth: 0.0,
+                backgroundColor: Colors.transparent, strokeWidth: 0.0,
               );
             }
             return ListView.builder(
                 reverse: true,
-                //shrinkWrap: true,
-                itemCount: ChatSnapShot.data.docs.length,
+                itemCount: chatSnapShot.data.docs.length,
                 itemBuilder: (ctxt, index) {
-                  print(ChatSnapShot.data.docs[index]['userID']);
+                  print(chatSnapShot.data.docs[index]['userID']);
                   print(id1);
                   return MessageBubble(
-                      message: ChatSnapShot.data.docs[index]['text'],
-                      isMe: ChatSnapShot.data.docs[index]['userID'] ==
-                          FirebaseAuth.instance.currentUser.uid);
+                      message: chatSnapShot.data.docs[index]['text'],
+                      isMe: chatSnapShot.data.docs[index]['userID'] ==
+                          FirebaseAuth.instance.currentUser.uid,
+                      key: ValueKey(chatSnapShot.data.docs[index].id),
+                      time: getTime(chatSnapShot.data.docs[index]['CreatedAt']
+                          .toDate()
+                          .toString()));
                 });
           }
         });

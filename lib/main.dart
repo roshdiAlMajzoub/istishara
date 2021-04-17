@@ -31,14 +31,16 @@ class Display extends StatelessWidget {
       ),
       home: DisplayDemo(),
       routes: <String, WidgetBuilder>{
-        '/Display': (BuildContext context) => DisplayDemo(),
-        '/Start': (BuildContext context) => StartApp(),
+        '/Display': (BuildContext context)  => DisplayDemo(),
+        '/Start': (BuildContext context)    => StartApp(),
         '/ExpertSU': (BuildContext context) => Credentials(descirbe: "Expert", barTitle: "Expert Sign Up",isProfile:false),
-        '/UserSU': (BuildContext context) =>Credentials(descirbe: "User",barTitle: "Help-Seeker Sign Up",isProfile: false,),
+        '/UserSU': (BuildContext context)   => Credentials(descirbe: "User",barTitle: "Help-Seeker Sign Up",isProfile: false,),
         '/EProfile': (BuildContext context) => Credentials(descirbe: "Expert Profile", barTitle: "Expert Profile", isProfile: true),
         '/UProfile': (BuildContext context) => Credentials(descirbe: "Help-Seeker Profile", barTitle: "Help-Seeker Profile", isProfile: true),
-        '/Welcome': (BuildContext context) => WelcomeScreen(),
-        '/Login': (BuildContext context) => Loginscreen(),
+        '/Welcome': (BuildContext context)  => WelcomeScreen(),
+        '/Login': (BuildContext context)    => Loginscreen(),
+        '/UserMain': (BuildContext context)    => Dashboard(type:"Help-Seeker"),
+        '/ExpertMain': (BuildContext context)    => Dashboard(type: "Expert"),
   
       },
     );
