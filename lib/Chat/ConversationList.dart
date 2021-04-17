@@ -13,9 +13,7 @@ class ConversationList extends StatefulWidget {
   String imageUrl;
   String id;
   ConversationList(
-      {@required this.name,
-      @required this.imageUrl,
-      @required this.id});
+      {@required this.name, @required this.imageUrl, @required this.id});
   @override
   _ConversationListState createState() => _ConversationListState();
 }

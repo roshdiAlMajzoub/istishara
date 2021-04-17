@@ -37,7 +37,7 @@ class _NavDrawerState extends State<NavDrawer> {
           if ((element.get('id1') == id || element.get('id2') == id) &&
               element.get('start time').toDate().isBefore(DateTime.now())) {
             print("inside if");
-            conversations.add(element.data());
+            conversations.add(element.data(),);
           }
         });
       });
