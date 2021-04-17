@@ -20,14 +20,12 @@ import 'package:intl/intl.dart';
 class MainCalendar extends StatelessWidget {
   var id;
   var collection;
-  List conversations;
   MainCalendar(id) {
     this.id = id;
-    this.collection = collection;
   }
   @override
   Widget build(BuildContext context) {
-    return MyCalendar(id, collection,conversations);
+    return MyCalendar(id, collection);
   }
 }
 
@@ -36,11 +34,10 @@ Databasers databasers = Databasers();
 class MyCalendar extends StatefulWidget {
   var id;
   var collection;
-  List conversations;
-  MyCalendar(id, collection, Conversations) {
+
+  MyCalendar(id, collection,) {
     this.id = id;
     this.collection = collection;
-    this.conversations = Conversations;
   }
   @override
   CalendarState createState() => CalendarState(id, collection);
@@ -192,7 +189,7 @@ class CalendarState extends State<MyCalendar> {
         drawer: NavDrawer(
           type: "hey",
           collection: collection,
-          conversations: widget.conversations,
+
         ),
         appBar: AppBar(
             title: Text("Calendar"),

@@ -14,8 +14,7 @@ import 'Database.dart';
 class NavDrawer extends StatefulWidget {
   final String type;
   final String collection;
-  final List conversations;
-  NavDrawer({@required this.type, this.collection,@required this.conversations});
+  NavDrawer({@required this.type, this.collection});
 
   @override
   _NavDrawerState createState() => _NavDrawerState();
@@ -171,7 +170,6 @@ class _NavDrawerState extends State<NavDrawer> {
                   MaterialPageRoute(
                       builder: (_) => Dashboard(
                             type: widget.type,
-                           
                           )))
             },
           ),
@@ -181,12 +179,14 @@ class _NavDrawerState extends State<NavDrawer> {
               color: kPrimaryColor,
             ),
             title: Text('Calendar'),
-            onTap: () => {
+            onTap: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (_) => MyCalendar(
-                          )))
+                            FirebaseAuth.instance.currentUser.uid,
+                            widget.collection,
+                          )));
             },
           ),
           ListTile(
@@ -195,11 +195,13 @@ class _NavDrawerState extends State<NavDrawer> {
               color: kPrimaryColor,
             ),
             title: Text('Chat'),
-            onTap: () => {
+           /* onTap: () => {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return Conversations(conversations: widget.conversations,);
-          }))
-            },
+                return Conversations(
+                  conversations: widget.conversations,
+                );
+              }))
+            },*/
           ),
           ListTile(
             leading: Icon(
