@@ -138,6 +138,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                           notificationList[index]['id'],
                                           notificationList[index]['coll'],
                                            notificationList[index]['id2'],
+                                           notificationList[index]['start time'],
                                           );
                                     },
                                   )),
@@ -172,7 +173,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
 }
 
 // flutter defined function
-showAlertDialog(BuildContext context, id, uid, col, st) {
+showAlertDialog(BuildContext context, id1, uid, col, id2,st) {
   // set up the buttons
   Widget cancelButton = FlatButton(
     child: Text("Cancel"),
@@ -183,7 +184,7 @@ showAlertDialog(BuildContext context, id, uid, col, st) {
   Widget continueButton = FlatButton(
     child: Text("Continue"),
     onPressed: () {
-      acceptAppt(col, id, uid, st);
+      acceptAppt(col, id1, uid, id2,st);
       Navigator.of(context).pop();
     },
   );
@@ -284,16 +285,15 @@ showAlertDialog2(BuildContext context, id, uid, col, st) {
     return img;
   }
 
-acceptAppt(col, id1, uid, id2) async {
-
-  String name1 = await getName(id1);
-  String name2 = await getName(id2);
-  String image1 = await getImage(id1);
-  String image2 = await getImage(id2);
+acceptAppt(col, id1, uid, id2,st) async {
   await FirebaseFirestore.instance
       .collection('Appt')
       .doc(uid)
       .update({'state': "Accepted"});
+  String name1 = await getName(id1);
+  String name2 = await getName(id2);
+  String image1 = await getImage(id1);
+  String image2 = await getImage(id2);
   await FirebaseFirestore.instance
                               .collection("conversations")
                               .doc(uid)
@@ -305,7 +305,7 @@ acceptAppt(col, id1, uid, id2) async {
                             'name2': name2,
                             'image1': image1,
                             'image2':image2,
-                            
+                            'start time': st,
                           });
 }
 

@@ -15,13 +15,17 @@ class ViewExpert extends StatelessWidget {
   final String cvName;
   final String imgPath;
   String collection;
+  String reputation;
+  String nbOfRecords;
   ViewExpert(
       {@required this.name,
       @required this.field,
       this.id,
       this.cvName,
       this.imgPath,
-      this.collection});
+      this.collection,
+      this.reputation,
+      this.nbOfRecords});
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +36,8 @@ class ViewExpert extends StatelessWidget {
       cvName: cvName,
       imgPath: imgPath,
       collection: collection,
+      reputation: reputation,
+      nbOfRecords: nbOfRecords,
     );
   }
 }
@@ -42,7 +48,9 @@ class _ViewExpert extends StatefulWidget {
   final String id;
   final String cvName;
   final String imgPath;
+  final String reputation;
   String collection;
+  String nbOfRecords;
   _ViewExpert({
     @required this.name,
     @required this.field,
@@ -50,6 +58,8 @@ class _ViewExpert extends StatefulWidget {
     this.cvName,
     this.imgPath,
     this.collection,
+    this.reputation,
+    this.nbOfRecords,
   });
   @override
   State<_ViewExpert> createState() => _ViewExpertState(
@@ -58,7 +68,9 @@ class _ViewExpert extends StatefulWidget {
       id: id,
       cvName: cvName,
       imgPath: imgPath,
-      collection: collection);
+      collection: collection,
+      reputation: reputation,
+      nbOfRecords: nbOfRecords);
 }
 
 class _ViewExpertState extends State<_ViewExpert> {
@@ -72,6 +84,8 @@ class _ViewExpertState extends State<_ViewExpert> {
   var imgName;
   var x;
   String collection;
+  String reputation;
+  String nbOfRecords;
   _ViewExpertState(
       {@required this.name,
       @required this.field,
@@ -79,7 +93,8 @@ class _ViewExpertState extends State<_ViewExpert> {
       this.cvName,
       this.imgPath,
       this.rep,
-      this.collection});
+      this.collection,
+      this.reputation,this.nbOfRecords,});
 
   viewImage() async {
     var img = await Databasers().downloadLink(firebase_storage
@@ -157,13 +172,28 @@ class _ViewExpertState extends State<_ViewExpert> {
           Align(
               alignment: Alignment(0, -1),
               child: Column(children: [
-                
                 Container(
-                    width: screenWidth / 2.75,
+                   width: screenWidth / 2.75,
                     height: screenHeight / 3,
                     padding: EdgeInsets.only(bottom: 0),
-                    child:  
-                    FutureBuilder(
+                  child: CircleAvatar(
+                    child:
+                  CachedNetworkImage(
+                      imageUrl: x,
+                      imageBuilder: (context, imageProvider) => Container(
+                        width: screenWidth / 2.75,
+                        height: screenHeight / 3,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: imageProvider, fit: BoxFit.cover),
+                        ),
+                      ),
+                      placeholder: (context, url) => CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                    ),
+              ),),
+                    /*FutureBuilder(
                       future: viewImage(),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
@@ -178,24 +208,21 @@ class _ViewExpertState extends State<_ViewExpert> {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
                           return Container(
-                            child: CircularProgressIndicator(
-                              backgroundColor: Colors.white,
-                              strokeWidth: 15.5,
-                            ),
+                            child: CircularProgressIndicator(),
                           );
                         }
                         return Container();
                       },
-                    )),
+                    )),*/
 
-                    /*Container(
+                /*Container(
                         child: Image.network(x),
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             image: DecorationImage(
                                 fit: BoxFit.cover,
                                 image: AssetImage('asset/images/head.jpg'))))*/
-                
+
                 Container(
                     padding: EdgeInsets.only(top: 0, bottom: 15),
                     child: Text(
@@ -222,7 +249,7 @@ class _ViewExpertState extends State<_ViewExpert> {
                     child: SizedBox(
                       height: screenHeight / 7,
                       child: Row(children: [
-                        buildText(" Reputation:", "2.5"),
+                        buildText(" Reputation:", reputation),
                         VerticalDivider(
                           color: Colors.black,
                           indent: 15,
@@ -236,7 +263,7 @@ class _ViewExpertState extends State<_ViewExpert> {
                           endIndent: 15,
                           thickness: 1,
                         ),
-                        buildText("Records:", "10")
+                        buildText("Records:", nbOfRecords)
                       ]),
                     )),
                 Container(
@@ -267,10 +294,12 @@ class _ViewExpertState extends State<_ViewExpert> {
                             context,
                             MaterialPageRoute(
                                 builder: (_) => ViewCalendar(
-                                    id: id,
-                                    name: name,
-                                    field: field,
-                                    color: Colors.grey,collection: collection,)));
+                                      id: id,
+                                      name: name,
+                                      field: field,
+                                      color: Colors.grey,
+                                      collection: collection,
+                                    )));
                       },
                       child: Text("Book Consultation",
                           style: TextStyle(color: Colors.white)),

@@ -34,7 +34,8 @@ class _NavDrawerState extends State<NavDrawer> {
     try {
       await colcollectionReference.get().then((QuerySnapshot) {
         QuerySnapshot.docs.forEach((element) {
-          if (element.get('id1') == id || element.get('id2') == id) {
+          if ((element.get('id1') == id || element.get('id2') == id) &&
+              element.get('start time').toDate().isBefore(DateTime.now())) {
             print("inside if");
             conversations.add(element.data());
           }
@@ -118,6 +119,30 @@ class _NavDrawerState extends State<NavDrawer> {
     }
   }
 
+  getNumberOfRecords( id) async {
+    List nbOfRecord = [];
+    Query collectionRef = FirebaseFirestore.instance
+        .collection("Appt")
+        .where('id1', isEqualTo: id)
+        .where('state', isEqualTo: "Accepted");
+    Query collectionRef2 = FirebaseFirestore.instance
+        .collection("Appt")
+        .where('id2', isEqualTo: id)
+        .where('state', isEqualTo: "Accepted");
+
+    await collectionRef.get().then((QuerySnapshot) {
+      QuerySnapshot.docs.forEach((element) {
+        nbOfRecord.add(element.data());
+      });
+    });
+    await collectionRef2.get().then((QuerySnapshot) {
+      QuerySnapshot.docs.forEach((element) {
+        nbOfRecord.add(element.data());
+      });
+    });
+    return nbOfRecord.length.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     fetchDataBaseNotificationList();
@@ -150,6 +175,8 @@ class _NavDrawerState extends State<NavDrawer> {
                 ),
                 title: Text('Profile'),
                 onTap: () async {
+                  String nbOFRec = await getNumberOfRecords(
+                       FirebaseAuth.instance.currentUser.uid);
                   if (widget.type == "Expert") {
                     await getData();
                     Navigator.push(
@@ -161,6 +188,7 @@ class _NavDrawerState extends State<NavDrawer> {
                                   isProfile: true,
                                   lst: proff,
                                   collection: widget.collection,
+                                  nbOfRec: nbOFRec,
                                 )));
                   } else {
                     await getData();

@@ -47,6 +47,7 @@ class DashboardState extends State<Dashboard> {
     super.initState();
     getCollection();
     getToken();
+    getMyMoney();
   }
 
   String token;
@@ -59,16 +60,25 @@ class DashboardState extends State<Dashboard> {
         .update({'token': t});
   }
 
+  var availableMoney ;
+  getMyMoney() async {
+    await getCollection();
+    var docData = await FirebaseFirestore.instance
+        .collection(collection)
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .get();
+    setState(() {
+      availableMoney = docData.get('money');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     getToken();
-    var availableMoney = 50000;
+    getMyMoney();
     return Scaffold(
         backgroundColor: kPrimaryLightColor,
-        drawer: NavDrawer(
-          type: type,
-          collection: collection
-        ),
+        drawer: NavDrawer(type: type, collection: collection),
         appBar: AppBar(
           title: Text("Dashboard"),
           elevation: .1,

@@ -1,6 +1,8 @@
 import 'package:ISTISHARA/Databasers.dart';
 import 'package:ISTISHARA/LOGIN-SIGNUP/constants.dart';
 import 'package:ISTISHARA/ViewExpert.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'Database.dart';
 import 'nav-drawer.dart';
@@ -43,6 +45,30 @@ class _ListPageState extends State<ListPage> {
     this.type = type;
     this.collection = collection;
   }
+  getNumberOfRecords(type, id) async {
+    List nbOfRecord=[];
+    Query collectionRef = FirebaseFirestore.instance
+        .collection("Appt")
+        .where('id1', isEqualTo: id)
+        .where('state', isEqualTo: "Accepted");
+    Query collectionRef2 = FirebaseFirestore.instance
+        .collection("Appt")
+        .where('id2', isEqualTo: id)
+        .where('state', isEqualTo: "Accepted");
+    
+    await collectionRef.get().then((QuerySnapshot) {
+      QuerySnapshot.docs.forEach((element) {
+        nbOfRecord.add(element.data());
+      });
+    });
+    await collectionRef2.get().then((QuerySnapshot) {
+      QuerySnapshot.docs.forEach((element) {
+        nbOfRecord.add(element.data());
+      });
+    });
+    return nbOfRecord.length.toString();
+  }
+
   var imName;
   viewImage(i) async {
     var img = await Databasers().downloadLink(firebase_storage
@@ -149,7 +175,10 @@ class _ListPageState extends State<ListPage> {
                         ),
                         trailing: Icon(Icons.keyboard_arrow_right,
                             color: Colors.white, size: 30.0),
-                        onTap: () {
+                        onTap: () async {
+                          String nbOfRec = await getNumberOfRecords(
+                              type, expertProfileList[index]['id']);
+                          print("waynnnnn" + nbOfRec);
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -166,6 +195,10 @@ class _ListPageState extends State<ListPage> {
                                         imgPath: expertProfileList[index]
                                             ['image name'],
                                         collection: collection,
+                                        reputation: expertProfileList[index]
+                                                ['reputation']
+                                            .toString(),
+                                        nbOfRecords: nbOfRec,
                                       ))));
                         },
                       )),

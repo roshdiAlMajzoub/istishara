@@ -26,12 +26,14 @@ class Profile extends StatefulWidget {
 
   List lst;
   String collection;
+  String nbOfRec;
   Profile(
       {@required this.descirbe,
       @required this.barTitle,
       @required this.isProfile,
       this.lst,
-      this.collection});
+      this.collection,
+      this.nbOfRec});
   @override
   ProfileState createState() => ProfileState(
         describe: descirbe,
@@ -39,6 +41,7 @@ class Profile extends StatefulWidget {
         isProfile: isProfile,
         lst: lst,
         collection: collection,
+        nbOfRec: nbOfRec,
       );
 }
 
@@ -94,12 +97,13 @@ class ProfileState extends State<Profile> {
   final bool isProfile;
   List lst;
   String collection;
+  String nbOfRec;
   ProfileState(
       {@required this.describe,
       @required this.barTitle,
       @required this.isProfile,
       this.lst,
-      this.collection});
+      this.collection,this.nbOfRec});
   var x;
   bool flag = false;
   bool toPop = false;
@@ -192,8 +196,9 @@ class ProfileState extends State<Profile> {
         .ref()
         .child('playground')
         .child(lst[0]['image name']));
-
-    x = img;
+    setState(() {
+      x = img;
+    });
 
     return img;
   }
@@ -202,7 +207,7 @@ class ProfileState extends State<Profile> {
     // TODO: implement initState
     super.initState();
     d.cvN;
-   viewImage();
+    viewImage();
   }
 
   @override
@@ -261,18 +266,29 @@ class ProfileState extends State<Profile> {
                         ? Center(
                             child: Stack(children: [
                             Container(
-                                width: screenWidth / 3,
-                                height: screenHeight / 3.5,
-                                child:  CircleAvatar(child: 
-          CachedNetworkImage(
-        imageUrl: x,
-        placeholder: (context, url) => CircularProgressIndicator(),
-        errorWidget: (context, url, error) => Icon(Icons.error),
-        fit: BoxFit.cover ,
-        useOldImageOnUrlChange: true,
-        
-     ),
-          ),),/*FutureBuilder(
+                              width: screenWidth / 3,
+                              height: screenHeight / 3.5,
+                              child: CircleAvatar(
+                                child:
+                              CachedNetworkImage(
+                              imageUrl: x,
+                              imageBuilder: (context, imageProvider) => Container(
+                                width: screenWidth / 2.75,
+                                height: screenHeight / 3,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                    image: imageProvider, fit: BoxFit.cover),
+                                ),
+                              ),
+                              placeholder: (context, url) => CircularProgressIndicator(),
+                              errorWidget: (context, url, error) => Icon(Icons.error),
+                            ),),
+                            padding: EdgeInsets.only(bottom: 0),
+                    
+                              
+                            ),
+                            /*FutureBuilder(
                                   //  future: viewImage(),
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState ==
@@ -388,7 +404,7 @@ class ProfileState extends State<Profile> {
                                         endIndent: 15,
                                         thickness: 1,
                                       ),
-                                      h.buildText("Records:", "10")
+                                      h.buildText("Records:", nbOfRec)
                                     ]))))
                         : Text(""),
                     Container(
