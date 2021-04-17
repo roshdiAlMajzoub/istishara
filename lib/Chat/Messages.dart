@@ -27,7 +27,7 @@ class Messages extends StatelessWidget {
         builder: (ctxt, ChatSnapShot) {
           {
             if (ChatSnapShot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
+              return CircularProgressIndicator(strokeWidth: 0.0, backgroundColor: Colors.transparent,);
             }
             return ListView.builder(
                 reverse: true,
