@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ISTISHARA/Chat/ChatScreen.dart';
 import 'package:ISTISHARA/Chat/Conversations.dart';
 import 'package:ISTISHARA/Database.dart';
 import 'package:ISTISHARA/Databasers.dart';
@@ -258,7 +259,7 @@ class CalendarState extends State<MyCalendar> {
 
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
-                            return Conversations(id: apptt[i]['id']);
+                            return ChatScreen(id1: id1,id2: IDofTheOther,image: imageOfTheOther, name: nameOfTheOther,id: apptt[i]['id']);
                           }));
                           break;
                         } else if (startTimeFromFirebase ==
