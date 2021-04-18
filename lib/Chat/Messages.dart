@@ -31,7 +31,6 @@ class Messages extends StatelessWidget {
                 itemCount: chatSnapShot.data.docs.length,
                 itemBuilder: (ctxt, index) {
                   print(chatSnapShot.data.docs[index]['userID']);
-                  print(id1);
                   return MessageBubble(
                       message: chatSnapShot.data.docs[index]['text'],
                       isMe: chatSnapShot.data.docs[index]['userID'] ==

@@ -1,6 +1,7 @@
 import 'package:ISTISHARA/Chat/Conversations.dart';
 import 'package:ISTISHARA/Chat/Messages.dart';
 import 'package:ISTISHARA/Chat/SendTextField.dart';
+import 'package:ISTISHARA/Databasers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ class ChatScreen extends StatefulWidget {
   String name;
   String id;
   var messages;
+  var images;
   ChatScreen({
     @required String id1,
     @required this.image,
@@ -32,10 +34,19 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   getMessages() async {
-    widget.messages = FirebaseFirestore.instance
+    widget.images = FirebaseFirestore.instance
         .collection("conversations")
         .doc(widget.id)
         .collection("messages")
+        .orderBy('CreatedAt', descending: true)
+        .snapshots();
+  }
+
+  getPictures() async {
+    widget.messages = FirebaseFirestore.instance
+        .collection("conversations")
+        .doc(widget.id)
+        .collection("images")
         .orderBy('CreatedAt', descending: true)
         .snapshots();
   }
@@ -66,7 +77,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     width: 2,
                   ),
                   CircleAvatar(
-                    backgroundImage: NetworkImage(widget.image),
+                   // backgroundImage: NetworkImage(widget.image),
                     maxRadius: 20,
                   ),
                   SizedBox(

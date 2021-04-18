@@ -182,8 +182,9 @@ showAlertDialog(BuildContext context, id, uid, col, st) {
   );
   Widget continueButton = FlatButton(
     child: Text("Continue"),
-    onPressed: () {
-      acceptAppt(col, id, uid, st);
+    onPressed: () async {
+
+      await acceptAppt(col, id, uid, st);
       Navigator.of(context).pop();
     },
   );
@@ -261,28 +262,33 @@ showAlertDialog2(BuildContext context, id, uid, col, st) {
     return name;
   }
 
-  Future<String> getImage(String id) async {
-   
-    Databasers db = Databasers() ;
-    String image = "";
-    String collection = await db.docExistsIn(id);
-    Query colcollectionReference =
-        FirebaseFirestore.instance.collection(collection);
-    await colcollectionReference.get().then((QuerySnapshot) {
-      QuerySnapshot.docs.forEach((element) {
-        if (element.get('id') == id) {
+ Future<String> getImage(String id) async {
+  Databasers db = Databasers();
+  String image = "";
+  String collection = await db.docExistsIn(id);
+  Query colcollectionReference =
+      FirebaseFirestore.instance.collection(collection);
+  print(collection);
+  await colcollectionReference.get().then((QuerySnapshot) {
+    QuerySnapshot.docs.forEach((element) {
+      if (element.get('id') == id) {
+        try {
           image = element.get('image name');
+        } catch (e) {
+          image = "";
         }
-      });
+      }
     });
-    
-    var img = await Databasers().downloadLink(FirebaseStorage.instance
-        .ref()
-        .child('playground')
-        .child(image));
-
+  });
+  try {
+    var img = await Databasers().downloadLink(
+        FirebaseStorage.instance.ref().child('playground').child(image));
+    print("test");
     return img;
+  } catch (e) {
+    return ("");
   }
+}
 
 acceptAppt(col, id1, uid, id2) async {
 
@@ -305,7 +311,7 @@ acceptAppt(col, id1, uid, id2) async {
                             'name2': name2,
                             'image1': image1,
                             'image2':image2,
-                            
+    
                           });
 }
 

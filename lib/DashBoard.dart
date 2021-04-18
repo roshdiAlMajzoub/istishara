@@ -65,10 +65,7 @@ class DashboardState extends State<Dashboard> {
     var availableMoney = 50000;
     return Scaffold(
         backgroundColor: kPrimaryLightColor,
-        drawer: NavDrawer(
-          type: type,
-          collection: collection
-        ),
+        drawer: NavDrawer(type: type, collection: collection),
         appBar: AppBar(
           title: Text("Dashboard"),
           elevation: .1,
