@@ -74,8 +74,6 @@ class _ListPageState extends State<ListPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("hey");
-    print(collection);
     return new Scaffold(
         drawer: new NavDrawer(
           type: "Expert",

@@ -123,10 +123,9 @@ class _ViewExpertState extends State<_ViewExpert> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     downloadCV();
-    viewImage();
+    // viewImage();
   }
 
   @override
@@ -157,13 +156,11 @@ class _ViewExpertState extends State<_ViewExpert> {
           Align(
               alignment: Alignment(0, -1),
               child: Column(children: [
-                
-                Container(
+                /* Container(
                     width: screenWidth / 2.75,
                     height: screenHeight / 3,
                     padding: EdgeInsets.only(bottom: 0),
-                    child:  
-                    FutureBuilder(
+                    child: FutureBuilder(
                       future: viewImage(),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
@@ -186,16 +183,16 @@ class _ViewExpertState extends State<_ViewExpert> {
                         }
                         return Container();
                       },
-                    )),
+                    )),*/
 
-                    /*Container(
+                /*Container(
                         child: Image.network(x),
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             image: DecorationImage(
                                 fit: BoxFit.cover,
                                 image: AssetImage('asset/images/head.jpg'))))*/
-                
+
                 Container(
                     padding: EdgeInsets.only(top: 0, bottom: 15),
                     child: Text(
@@ -263,14 +260,18 @@ class _ViewExpertState extends State<_ViewExpert> {
                     // ignore: deprecated_member_use
                     child: RaisedButton(
                       onPressed: () {
+                        print(collection);
+                        print(field);
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (_) => ViewCalendar(
-                                    id: id,
-                                    name: name,
-                                    field: field,
-                                    color: Colors.grey,collection: collection,)));
+                                      id: id,
+                                      name: name,
+                                      field: field,
+                                      color: Colors.grey,
+                                      collection: collection,
+                                    )));
                       },
                       child: Text("Book Consultation",
                           style: TextStyle(color: Colors.white)),

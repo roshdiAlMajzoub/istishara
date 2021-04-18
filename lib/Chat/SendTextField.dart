@@ -10,6 +10,8 @@ class SendTextField extends StatefulWidget {
   State<SendTextField> createState() => SendTextFieldState();
 }
 
+
+
 class SendTextFieldState extends State<SendTextField> {
   final msgTextField = TextEditingController();
   void _sendMessage() async {
@@ -37,8 +39,8 @@ class SendTextFieldState extends State<SendTextField> {
         padding: EdgeInsets.all(8),
         child: Row(
           children: <Widget>[
-            Expanded(
-              child: TextField(
+            Expanded(child:
+              TextField(
                 controller: msgTextField,
                 onChanged: (value) {
                   if (value.length > 0) {
@@ -59,7 +61,7 @@ class SendTextFieldState extends State<SendTextField> {
                     hintText: "Type a message",
                     hintStyle: TextStyle(color: Colors.grey),
                     prefixIcon: Icon(Icons.keyboard),
-                    suffixIcon: Row(
+                   suffixIcon: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
@@ -68,19 +70,19 @@ class SendTextFieldState extends State<SendTextField> {
                             icon: Icon(Icons.camera_alt), onPressed: () {}),
                       ],
                     )),
+              ),),
+             CircleAvatar(
+                backgroundColor: Colors.deepPurple,
+                radius: 25,
+                child: IconButton(
+                  icon: sendButton == true || msgTextField.value.text.length > 0
+                      ? Icon(Icons.send)
+                      : Icon(Icons.mic),
+                  onPressed: _sendMessage,
+                  color: Colors.white,
+                ),
               ),
-            ),
-            CircleAvatar(
-              backgroundColor: Colors.deepPurple,
-              radius: 25,
-              child: IconButton(
-                icon: sendButton == true || msgTextField.value.text.length > 0
-                    ? Icon(Icons.send)
-                    : Icon(Icons.mic),
-                onPressed: _sendMessage,
-                color: Colors.white,
-              ),
-            ),
+          
           ],
         ));
   }

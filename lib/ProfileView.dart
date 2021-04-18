@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:ISTISHARA/picker/user_image_picker.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
@@ -7,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter_password_strength/flutter_password_strength.dart';
 import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
 import './ExpertType.dart';
 import 'ExpertType.dart';
 import 'dart:ui';
@@ -70,10 +72,13 @@ List<TextEditingController> l = [
 ];
 Helper h = Helper();
 Databasers d = Databasers();
-FilePickerResult imgRes;
 FilePickerResult cvRes;
 
 class ProfileState extends State<Profile> {
+  void _pickedImage(File image) {
+    imgRes = image ;
+  }
+File imgRes;
   String _email,
       _password,
       _firstName,
@@ -144,11 +149,11 @@ class ProfileState extends State<Profile> {
     }
 
     if (imgRes != null) {
+       final url = await d.uploadFile(imgRes, context);
       collectionReference.doc(id).update({
-        'image name': imgRes.names[0].toString(),
+        'image name': url
       });
       profileName = null;
-      d.uploadFile(File(imgRes.files.single.path), context);
     }
     if (cvRes != null) {
       collectionReference.doc(id).update({
@@ -186,6 +191,7 @@ class ProfileState extends State<Profile> {
   }
 
   viewImage() async {
+    print(lst[0]['image name']);
     var img = await Databasers().downloadLink(firebase_storage
         .FirebaseStorage.instance
         .ref()
@@ -201,7 +207,7 @@ class ProfileState extends State<Profile> {
     // TODO: implement initState
     super.initState();
     d.cvN;
-   viewImage();
+   
   }
 
   @override
@@ -257,109 +263,10 @@ class ProfileState extends State<Profile> {
                       child: Column(children: [
                     Show.showAlert(_error, this),
                     isProfile == true
-                        ? Center(
-                            child: Stack(children: [
-                            Container(
-                                width: screenWidth / 3,
-                                height: screenHeight / 3.5,
-                                child:  CircleAvatar(child: 
-          CachedNetworkImage(
-        imageUrl: x,
-        placeholder: (context, url) => CircularProgressIndicator(),
-        errorWidget: (context, url, error) => Icon(Icons.error),
-        fit: BoxFit.cover ,
-        useOldImageOnUrlChange: true,
-        
-     ),
-          ),),/*FutureBuilder(
-                                  //  future: viewImage(),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.done) {
-                                      return Container(
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                width: 4,
-                                                color: Theme.of(context)
-                                                    .scaffoldBackgroundColor,
-                                              ),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  spreadRadius: 2,
-                                                  blurRadius: 10,
-                                                  color: Colors.black
-                                                      .withOpacity(0.1),
-                                                  offset: Offset(0, 10),
-                                                )
-                                              ],
-                                              shape: BoxShape.circle,
-                                              image: DecorationImage(
-                                                fit: BoxFit.cover,
-                                                image: NetworkImage(x),
-                                              )));
-                                    }
-
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return Container(
-                                        child: CircularProgressIndicator(
-                                          backgroundColor: Colors.white,
-                                          strokeWidth: 15.5,
-                                        ),
-                                      );
-                                    }
-                                    return Container();
-                                  },
-                                )
-                                /*decoration: BoxDecoration(
-                                  border: Border.all(
-                                    width: 4,
-                                    color: Theme.of(context)
-                                        .scaffoldBackgroundColor,
-                                  ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      spreadRadius: 2,
-                                      blurRadius: 10,
-                                      color: Colors.black.withOpacity(0.1),
-                                      offset: Offset(0, 10),
-                                    )
-                                  ],
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: NetworkImage(x),
-                                          
-                                ))*/
-                                ),*/
-                            Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: Container(
-                                height: screenHeight / 6.5,
-                                width: screenWidth / 6.5,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    width: 4,
-                                    color: Theme.of(context)
-                                        .scaffoldBackgroundColor,
-                                  ),
-                                  color: Colors.deepPurple,
-                                ),
-                                child: IconButton(
-                                  icon: Icon(
-                                    Icons.edit,
-                                  ),
-                                  onPressed: () {
-                                    setState(() async {
-                                      imgRes = await d.upload();
-                                    });
-                                  },
-                                ),
-                              ),
-                            ),
-                          ]))
+                        ? UserImagePicker(
+                            pickImagefn: _pickedImage,
+                            list: lst,
+                          )
                         : Text(""),
                     describe == "Expert Profile"
                         ? Padding(
