@@ -46,7 +46,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
       setState(() {
         notificationList = resultant;
       });
-      
     }
   }
 
@@ -58,116 +57,120 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
   @override
   Widget build(BuildContext context) {
-    
     fetchDataBaseNotificationList();
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     return new Container(
-      constraints: BoxConstraints.expand(),
+        constraints: BoxConstraints.expand(),
         decoration: BoxDecoration(
-        
           image: DecorationImage(
             image: AssetImage("asset/images/mail.png"),
             fit: BoxFit.fill,
           ),
         ),
         child: Scaffold(
-          drawer: NavDrawer(type: "",),
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          elevation: 0.1,
-          backgroundColor: Color(0x66666),
-          title: Text("Notifications"),
-          leading: Icon(Icons.notifications),
-        ),
-        body: new Container(
-          child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: notificationList.length, //depends on firebase count;;
-              itemBuilder: (BuildContext context, int index) {
-                if (notificationList[index]['state2'] == "p") {
-                  return SizedBox(
-                      height: screenHeight / 7.5,
-                      child: Card(
-                        elevation: 8.0,
-                        margin: new EdgeInsets.symmetric(
-                            horizontal: 10.0, vertical: 6.0),
-                        child: Container(
-                            decoration: BoxDecoration(color: Colors.white38),
-                            child: ListTile(
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 20.0, vertical: 10.0),
-                              title: Text("Your appointemnt with ..." +
-                                  "has been accepted"),
-                              trailing: Container(
-                                  padding: EdgeInsets.only(right: 1.0),
-                                  child: IconButton(
+            drawer: NavDrawer(
+              type: "",
+            ),
+            backgroundColor: Colors.transparent,
+            appBar: AppBar(
+              elevation: 0.1,
+              backgroundColor: Color(0x66666),
+              title: Text("Notifications"),
+              leading: Icon(Icons.notifications),
+            ),
+            body: new Container(
+              child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount:
+                      notificationList.length, //depends on firebase count;;
+                  itemBuilder: (BuildContext context, int index) {
+                    if (notificationList[index]['state2'] == "p") {
+                      return SizedBox(
+                          height: screenHeight / 7.5,
+                          child: Card(
+                            elevation: 8.0,
+                            margin: new EdgeInsets.symmetric(
+                                horizontal: 10.0, vertical: 6.0),
+                            child: Container(
+                                decoration:
+                                    BoxDecoration(color: Colors.white38),
+                                child: ListTile(
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 20.0, vertical: 10.0),
+                                  title: Text("Your appointemnt with ..." +
+                                      "has been accepted"),
+                                  trailing: Container(
+                                      padding: EdgeInsets.only(right: 1.0),
+                                      child: IconButton(
+                                        icon: SvgPicture.asset(
+                                            "asset/images/icons8-checked.svg"),
+                                        color: Colors.green,
+                                        onPressed: () async {
+                                          await knowAcceptedAppt(
+                                              notificationList[index]['id']);
+                                        },
+                                      )),
+                                )),
+                          ));
+                    } else {
+                      return SizedBox(
+                          height: screenHeight / 6.5,
+                          child: Card(
+                            elevation: 8.0,
+                            margin: new EdgeInsets.symmetric(
+                                horizontal: 10.0, vertical: 6.0),
+                            child: Container(
+                                decoration:
+                                    BoxDecoration(color: Colors.white38),
+                                child: ListTile(
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 20.0, vertical: 10.0),
+                                  leading: Container(
+                                      padding: EdgeInsets.only(right: 12.0),
+                                      child: IconButton(
+                                        icon: SvgPicture.asset(
+                                            "asset/images/icons8-checked.svg"),
+                                        color: Colors.green,
+                                        onPressed: () {
+                                          showAlertDialog(
+                                            context,
+                                            notificationList[index]['id1'],
+                                            notificationList[index]['id'],
+                                            notificationList[index]['coll'],
+                                            notificationList[index]['id2'],
+                                          );
+                                        },
+                                      )),
+                                  title: Text("New Meeting at " +
+                                      notificationList[index]['start time']
+                                          .toDate()
+                                          .toString() +
+                                      "-" +
+                                      notificationList[index]['end time']
+                                          .toDate()
+                                          .toString()),
+                                  trailing: IconButton(
                                     icon: SvgPicture.asset(
-                                        "asset/images/icons8-checked.svg"),
+                                        "asset/images/cancel.svg"),
                                     color: Colors.green,
-                                    onPressed: ()async {
-                                      await knowAcceptedAppt(
-                                          notificationList[index]['id']);
-                                    },
-                                  )),
-                            )),
-                      ));
-                } else {
-                  return SizedBox(
-                      height: screenHeight / 6.5,
-                      child: Card(
-                        elevation: 8.0,
-                        margin: new EdgeInsets.symmetric(
-                            horizontal: 10.0, vertical: 6.0),
-                        child: Container(
-                            decoration: BoxDecoration(color: Colors.white38),
-                            child: ListTile(
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 20.0, vertical: 10.0),
-                              leading: Container(
-                                  padding: EdgeInsets.only(right: 12.0),
-                                  child: IconButton(
-                                    icon: SvgPicture.asset(
-                                        "asset/images/icons8-checked.svg"),
-                                    color: Colors.green,
+                                    iconSize: 3,
                                     onPressed: () {
-                                      showAlertDialog(
+                                      showAlertDialog2(
                                           context,
-                                          notificationList[index]['id1'],
+                                          notificationList[index]['id'],
                                           notificationList[index]['id'],
                                           notificationList[index]['coll'],
-                                           notificationList[index]['id2'],
-                                          );
+                                          notificationList[index]
+                                              ['start time']);
                                     },
-                                  )),
-                              title: Text("New Meeting at " +
-                                  notificationList[index]['start time']
-                                      .toDate()
-                                      .toString() +
-                                  "-" +
-                                  notificationList[index]['end time']
-                                      .toDate()
-                                      .toString()),
-                              trailing: IconButton(
-                                icon:
-                                    SvgPicture.asset("asset/images/cancel.svg"),
-                                color: Colors.green,
-                                iconSize: 3,
-                                onPressed: () {
-                                  showAlertDialog2(
-                                      context,
-                                      notificationList[index]['id'],
-                                      notificationList[index]['id'],
-                                      notificationList[index]['coll'],
-                                      notificationList[index]['start time']);
-                                },
-                              ),
-                            )),
-                      ));
-                }
-              }),
-        )));
+                                  ),
+                                )),
+                          ));
+                    }
+                  }),
+            )));
   }
 }
 
@@ -182,8 +185,8 @@ showAlertDialog(BuildContext context, id, uid, col, st) {
   );
   Widget continueButton = FlatButton(
     child: Text("Continue"),
-    onPressed: () {
-      acceptAppt(col, id, uid, st);
+    onPressed: () async {
+      await acceptAppt(col, id, uid, st);
       Navigator.of(context).pop();
     },
   );
@@ -242,71 +245,72 @@ showAlertDialog2(BuildContext context, id, uid, col, st) {
   );
 }
 
-
- Future<String> getName(String id) async {
-   
-    Databasers db = Databasers() ;
-    String name = "";
-    String collection = await db.docExistsIn(id);
-    Query colcollectionReference =
-        FirebaseFirestore.instance.collection(collection);
-    await colcollectionReference.get().then((QuerySnapshot) {
-      QuerySnapshot.docs.forEach((element) {
-        if (element.get('id') == id) {
-          name = element.get('first name') + " " + element.get('last name');
-        }
-      });
+Future<String> getName(String id) async {
+  Databasers db = Databasers();
+  String name = "";
+  String collection = await db.docExistsIn(id);
+  Query colcollectionReference =
+      FirebaseFirestore.instance.collection(collection);
+  await colcollectionReference.get().then((QuerySnapshot) {
+    QuerySnapshot.docs.forEach((element) {
+      if (element.get('id') == id) {
+        name = element.get('first name') + " " + element.get('last name');
+      }
     });
+  });
 
-    return name;
-  }
+  return name;
+}
 
-  Future<String> getImage(String id) async {
-   
-    Databasers db = Databasers() ;
-    String image = "";
-    String collection = await db.docExistsIn(id);
-    Query colcollectionReference =
-        FirebaseFirestore.instance.collection(collection);
-    await colcollectionReference.get().then((QuerySnapshot) {
-      QuerySnapshot.docs.forEach((element) {
-        if (element.get('id') == id) {
+Future<String> getImage(String id) async {
+  Databasers db = Databasers();
+  String image = "";
+  String collection = await db.docExistsIn(id);
+  Query colcollectionReference =
+      FirebaseFirestore.instance.collection(collection);
+  print(collection);
+  await colcollectionReference.get().then((QuerySnapshot) {
+    QuerySnapshot.docs.forEach((element) {
+      if (element.get('id') == id) {
+        try {
           image = element.get('image name');
+        } catch (e) {
+          image = "";
         }
-      });
+      }
     });
-    
-    var img = await Databasers().downloadLink(FirebaseStorage.instance
-        .ref()
-        .child('playground')
-        .child(image));
-
+  });
+  try {
+    var img = await Databasers().downloadLink(
+        FirebaseStorage.instance.ref().child('playground').child(image));
+    print("test");
     return img;
+  } catch (e) {
+    return ("");
   }
+}
 
 acceptAppt(col, id1, uid, id2) async {
-
   String name1 = await getName(id1);
   String name2 = await getName(id2);
   String image1 = await getImage(id1);
   String image2 = await getImage(id2);
+  print("before");
   await FirebaseFirestore.instance
       .collection('Appt')
       .doc(uid)
       .update({'state': "Accepted"});
-  await FirebaseFirestore.instance
-                              .collection("conversations")
-                              .doc(uid)
-                              .set({
-                            'id1': id1,
-                            'id2': id2,
-                            'id': uid,
-                            'name1': name1,
-                            'name2': name2,
-                            'image1': image1,
-                            'image2':image2,
-                            
-                          });
+  print("during");
+  await FirebaseFirestore.instance.collection("conversations").doc(uid).set({
+    'id1': id1,
+    'id2': id2,
+    'id': uid,
+    'name1': name1,
+    'name2': name2,
+    'image1': image1,
+    'image2': image2,
+  });
+  print("after");
 }
 
 denyAppt(col, id, uid, st) async {

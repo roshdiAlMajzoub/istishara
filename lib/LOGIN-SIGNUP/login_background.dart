@@ -27,8 +27,8 @@ class Login_background extends StatelessWidget {
             Positioned(
               child: Image.asset("asset/images/main_bottom.png"),
               bottom: 0,
-              right: 0,
-              width: size.width * 0.4,
+              left: 0,
+              width: size.width * 0.3,
             ),
             child,
           ],
