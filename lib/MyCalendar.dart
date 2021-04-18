@@ -1,9 +1,21 @@
+import 'dart:async';
+
+import 'package:ISTISHARA/Chat/ChatScreen.dart';
+import 'package:ISTISHARA/Chat/Conversations.dart';
 import 'package:ISTISHARA/Database.dart';
+import 'package:ISTISHARA/Databasers.dart';
+import 'package:ISTISHARA/Helper.dart';
+import 'package:ISTISHARA/ShowDialog.dart';
+import 'package:ISTISHARA/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:date_format/date_format.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:flutter/material.dart';
 import 'nav-drawer.dart';
+import 'package:ISTISHARA/Time.dart';
+import 'package:intl/intl.dart';
 
 class MainCalendar extends StatelessWidget {
   var id;
@@ -14,14 +26,16 @@ class MainCalendar extends StatelessWidget {
   }
   @override
   Widget build(BuildContext context) {
-    return MyCalendar(id,collection);
+    return MyCalendar(id, collection);
   }
 }
+
+Databasers databasers = Databasers();
 
 class MyCalendar extends StatefulWidget {
   var id;
   var collection;
-  MyCalendar(id,collection) {
+  MyCalendar(id, collection) {
     this.id = id;
     this.collection = collection;
   }
@@ -32,8 +46,9 @@ class MyCalendar extends StatefulWidget {
 class CalendarState extends State<MyCalendar> {
   var id;
   var collection;
+  bool _isLoading = false;
 
-  CalendarState(id,collection) {
+  CalendarState(id, collection) {
     this.id = id;
     this.collection = collection;
   }
@@ -42,7 +57,7 @@ class CalendarState extends State<MyCalendar> {
   List apptt = [];
   fetchDatabaseAppt() async {
     final User user = auth.currentUser;
-    dynamic resultant = await DatabaseAppt().getAppt(id,collection) as List;
+    dynamic resultant = await DatabaseAppt().getAppt(id, collection) as List;
     if (resultant == null) {
       print("unable to retrieve");
     } else {
@@ -52,31 +67,206 @@ class CalendarState extends State<MyCalendar> {
     }
   }
 
+  String getStartTimeFromCalendar(Meeting appointmentDetails) {
+    return DateFormat('HH:mm').format(appointmentDetails.from).toString();
+  }
+
+  String getEndTimeFromCalendar(Meeting appointmentDetails) {
+    return DateFormat('HH:mm').format(appointmentDetails.to).toString();
+  }
+
+  String getEndTimeFromFirebase(int i) {
+    return apptt[i]['end time'].toDate().toString().substring(11);
+  }
+
+  String getStartTimeFromFirebase(int i) {
+    return apptt[i]['start time'].toDate().toString().substring(11);
+  }
+
+  String getDateFromFireBase(int i) {
+    return apptt[i]['end time'].toDate().toString().substring(0, 10);
+  }
+
+  Future<String> getIDOfTheOther(int i) async {
+    String IDofTheOther;
+    String collectionOfTheOther;
+    String myID = FirebaseAuth.instance.currentUser.uid;
+    if (myID != apptt[i]['id2']) {
+      collectionOfTheOther = await databasers.docExistsIn(apptt[i]['id2']);
+      IDofTheOther = apptt[i]['id2'];
+    } else {
+      collectionOfTheOther = await databasers.docExistsIn(apptt[i]['id1']);
+      IDofTheOther = apptt[i]['id1'];
+    }
+    return IDofTheOther;
+  }
+
+  Future<String> getNameOfTheOther(int i) async {
+    String IDofTheOther;
+    String name = "";
+    String collectionOfTheOther;
+    String myID = FirebaseAuth.instance.currentUser.uid;
+    if (myID != apptt[i]['id2']) {
+      collectionOfTheOther = await databasers.docExistsIn(apptt[i]['id2']);
+      IDofTheOther = apptt[i]['id2'];
+    } else {
+      collectionOfTheOther = await databasers.docExistsIn(apptt[i]['id1']);
+      IDofTheOther = apptt[i]['id1'];
+    }
+    Query colcollectionReference =
+        FirebaseFirestore.instance.collection(collectionOfTheOther);
+    await colcollectionReference.get().then((QuerySnapshot) {
+      QuerySnapshot.docs.forEach((element) {
+        if (element.get('id') == IDofTheOther) {
+          name = element.get('first name') + " " + element.get('last name');
+        }
+      });
+    });
+
+    return name;
+  }
+
+  Future<String> getImageOfTheOther(int i) async {
+    String imageOfTheOther = "";
+    String myID = FirebaseAuth.instance.currentUser.uid;
+    String IDofTheOther;
+    String collectionOfTheOther;
+    if (myID != apptt[i]['id2']) {
+      collectionOfTheOther = await databasers.docExistsIn(apptt[i]['id2']);
+      IDofTheOther = apptt[i]['id2'];
+    } else {
+      collectionOfTheOther = await databasers.docExistsIn(apptt[i]['id1']);
+      IDofTheOther = apptt[i]['id1'];
+    }
+    Query colcollectionReference =
+        FirebaseFirestore.instance.collection(collectionOfTheOther);
+    await colcollectionReference.get().then((QuerySnapshot) {
+      QuerySnapshot.docs.forEach((element) {
+        String myId = FirebaseAuth.instance.currentUser.uid;
+        if (element.get('id') == IDofTheOther) {
+          imageOfTheOther = element.get('image name');
+        }
+      });
+    });
+
+    var img = await Databasers().downloadLink(FirebaseStorage.instance
+        .ref()
+        .child('playground')
+        .child(imageOfTheOther));
+
+    return img;
+  }
+
+  Future<String> getImageOfMe(int i) async {
+    String imageOfMe;
+    String myID = FirebaseAuth.instance.currentUser.uid;
+    Query colcollectionReference =
+        FirebaseFirestore.instance.collection(widget.collection);
+    await colcollectionReference.get().then((QuerySnapshot) {
+      QuerySnapshot.docs.forEach((element) {
+        if (element.get('id') == myID) {
+          imageOfMe = element.get('image name');
+        }
+      });
+    });
+
+    var img = await Databasers().downloadLink(
+        FirebaseStorage.instance.ref().child('playground').child(imageOfMe));
+
+    return img;
+  }
+
   /*book() {
     final User user = auth.currentUser;
     DatabaseBookAppt().bookAppt(user.uid, 'uid2', DateTime.now(),
         DateTime.now().add(Duration(hours: 2)));
   }*/
-
+  List<Meeting> meetings = <Meeting>[];
   @override
   Widget build(BuildContext context) {
+    _getData();
     return Scaffold(
-      drawer: NavDrawer(type: "hey",collection: collection,),
-      appBar: AppBar(
-          title: Text("Calendar"),
-          elevation: .1,
-          backgroundColor: Color(0xff5848CF)),
-      body: SfCalendar(
-        timeSlotViewSettings: TimeSlotViewSettings(
-            endHour: 24,
-            startHour: 8,
-            minimumAppointmentDuration: Duration(minutes: 15),
-            timeIntervalHeight: 80),
-        view: CalendarView.week,
-        firstDayOfWeek: 1,
-        dataSource: MeetingDataSource(_getData()),
-      ),
-    );
+        drawer: NavDrawer(
+          type: "hey",
+          collection: collection,
+        ),
+        appBar: AppBar(
+            title: Text("Calendar"),
+            elevation: .1,
+            backgroundColor: Color(0xff5848CF)),
+        body: Stack(children: [
+          if (_isLoading)
+            Align(
+              alignment: Alignment(0, 0),
+              child: CircularProgressIndicator(),
+            ),
+          if (!_isLoading)
+            SfCalendar(
+                timeSlotViewSettings: TimeSlotViewSettings(
+                    // endHour: 24,
+                    // startHour: 8,
+                    minimumAppointmentDuration: Duration(minutes: 15),
+                    timeIntervalHeight: 80),
+                view: CalendarView.week,
+                firstDayOfWeek: 1,
+                dataSource: MeetingDataSource(meetings),
+                onTap: (details) async {
+                  if (details.appointments != null) {
+                    if (details.targetElement == CalendarElement.appointment) {
+                      final Meeting appointmentDetails =
+                          details.appointments[0];
+                      String _startTimeText =
+                          getStartTimeFromCalendar(appointmentDetails);
+                      String date_from_calendar = appointmentDetails.date;
+                      String _endTimeText =
+                          getEndTimeFromCalendar(appointmentDetails);
+                      for (int i = 0; i < apptt.length; i++) {
+                        String startTimeFromFirebase =
+                            getStartTimeFromFirebase(i);
+                        String EndTimeFromFirebase = getEndTimeFromFirebase(i);
+                        String startTimeFromCalendar =
+                            _startTimeText + ":00.000";
+                        String EndTimeFromCalendar = _endTimeText + ":00.000";
+                        String date_from_Firebase = getDateFromFireBase(i);
+                        if (DateTime.now()
+                                .isAfter(apptt[i]['start time'].toDate()) ||
+                            DateTime.now().isAtSameMomentAs(
+                                apptt[i]['start time'].toDate())) {
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          String imageOfTheOther = await getImageOfTheOther(i);
+                          String nameOfTheOther = await getNameOfTheOther(i);
+                          String IDofTheOther = await getIDOfTheOther(i);
+                          String myImage = await getImageOfMe(i);
+                          String myName =
+                              FirebaseAuth.instance.currentUser.displayName;
+                          String id1 = FirebaseAuth.instance.currentUser.uid;
+                            _isLoading = false;
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return ChatScreen(id1: id1,image: imageOfTheOther, name: nameOfTheOther,id: apptt[i]['id']);
+                          }));
+                          break;
+                        } else if (startTimeFromFirebase ==
+                                startTimeFromCalendar &&
+                            EndTimeFromCalendar == EndTimeFromFirebase &&
+                            date_from_calendar == date_from_Firebase) {
+                          String name = await getNameOfTheOther(i);
+
+                          Show.showDialogMeetingDetails(
+                              context,
+                              "Meeting with " + name,
+                              apptt[i]['start time'].toDate().toString(),
+                              _endTimeText,
+                              date_from_Firebase);
+                          break;
+                        }
+                      }
+                    }
+                  }
+                }),
+        ]));
   }
 
   getConflictappt() async {
@@ -89,35 +279,19 @@ class CalendarState extends State<MyCalendar> {
     print(bool);
   }
 
-  List<Meeting> _getData() {
+  void _getData() async {
     final User user = auth.currentUser;
     //getConflictappt();
     //print(DateTime.now());
 
     fetchDatabaseAppt();
-    List meetings = <Meeting>[];
     for (var ap in apptt) {
       DateTime st = ap['start time'].toDate();
       DateTime et = ap['end time'].toDate();
+      String date = ap['end time'].toDate().toString().substring(0, 10);
 
-      meetings.add(Meeting('Appt', st, et, Color(0xFF0F8644), false));
+      meetings.add(Meeting('Appt', st, et, Color(0xFF0F8644), false, date));
     }
-    return meetings;
-  }
-
-  List<Meeting> _getDataSource() {
-    List meetings = <Meeting>[];
-    final DateTime today = DateTime.now();
-    final DateTime startTime =
-        DateTime(today.year, today.month, today.day, 9, 0, 0);
-    final DateTime endTime = startTime.add(const Duration(hours: 2));
-    meetings.add(Meeting(
-        'Conference', startTime, endTime, const Color(0xFF0F8644), false));
-    final DateTime st = DateTime(today.year, today.month, today.day, 13, 0, 0);
-    final DateTime et = st.add(const Duration(hours: 2));
-    Meeting met = Meeting('cmps', st, et, Color(0xFF0F8644), false);
-    meetings.add(met);
-    return meetings;
   }
 }
 
@@ -158,10 +332,13 @@ class MeetingDataSource extends CalendarDataSource {
 /// information about the event data which will be rendered in calendar.
 class Meeting {
   /// Creates a meeting class with required details.
-  Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay);
+  Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay,
+      this.date);
 
   /// Event name which is equivalent to subject property of [Appointment].
   String eventName;
+
+  String date;
 
   /// From which is equivalent to start time property of [Appointment].
   DateTime from;

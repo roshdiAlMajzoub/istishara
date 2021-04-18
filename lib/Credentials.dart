@@ -8,6 +8,7 @@ import './ExpertType.dart';
 import 'ExpertType.dart';
 import 'dart:ui';
 import 'Helper.dart';
+import 'LOGIN-SIGNUP/constants.dart';
 import 'ShowDialog.dart';
 import './Databasers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' as cloud;
@@ -84,6 +85,7 @@ class CredentialsState extends State<Credentials> {
     final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: kPrimaryColor,
             title: Text(barTitle,
                 style: TextStyle(
                   fontSize: 18,

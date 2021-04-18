@@ -29,6 +29,13 @@
             {
               "client_id": "735714909603-s8ndv60hr8cbj479arb9aq35vsiar572.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "735714909603-aoskdel9kob15ua226jtf14s8f0jcemc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.istisharaTest"
+              }
             }
           ]
         }

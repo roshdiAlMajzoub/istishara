@@ -74,15 +74,21 @@ class DataBaseList {
     List expertList = [];
     Query colcollectionReference = FirebaseFirestore.instance
         .collection('Appt')
-        .where('id2',isEqualTo: auth.currentUser.uid)
+        .where('id2', isEqualTo: auth.currentUser.uid)
         .where('state', isEqualTo: "pending");
-    /*Query colcollectionReference = FirebaseFirestore.instance
-        .collection(coll)
-        .doc(auth.currentUser.uid)
-        .collection('appt')
-        .where('state', isEqualTo: "pending");*/
+    
+    Query colcollectionReference2 = FirebaseFirestore.instance
+        .collection('Appt')
+        .where('id1', isEqualTo: auth.currentUser.uid)
+        .where('state2', isEqualTo: "p");
+    
     try {
       await colcollectionReference.get().then((QuerySnapshot) {
+        QuerySnapshot.docs.forEach((element) {
+          expertList.add(element.data());
+        });
+      });
+      await colcollectionReference2.get().then((QuerySnapshot) {
         QuerySnapshot.docs.forEach((element) {
           expertList.add(element.data());
         });
@@ -110,7 +116,10 @@ class DatabaseBookAppt {
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((element) {
-        if ((element.data()['start time'].toDate().isAfter(st)) || (element.data()['start time'].toDate()==(st)) || ((element.data()['start time'].toDate().isBefore(st))&&(element.data()['end time'].toDate().isAfter(st)) )) {
+        if ((element.data()['start time'].toDate().isAfter(st)) ||
+            (element.data()['start time'].toDate() == (st)) ||
+            ((element.data()['start time'].toDate().isBefore(st)) &&
+                (element.data()['end time'].toDate().isAfter(st)))) {
           ap.add(element.data());
         }
       });
@@ -123,7 +132,8 @@ class DatabaseBookAppt {
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((element) {
-        if ((element.data()['end time'].toDate().isAfter(st)) ||  (element.data()['end time'].toDate()==(st))){
+        if ((element.data()['end time'].toDate().isAfter(st)) ||
+            (element.data()['end time'].toDate() == (st))) {
           app.add(element.data());
         }
       });
@@ -192,7 +202,7 @@ class DatabaseBookAppt {
     }
   }
 
-  Future bookAppt(uid1, collection, uid2, field, st, et,token,token2) async {
+  Future bookAppt(uid1, collection, uid2, field, st, et, token, token2) async {
     List coll = [
       'Plumber',
       'Personal Trainer',
@@ -206,16 +216,20 @@ class DatabaseBookAppt {
     //print(check);
     // ignore: unrelated_type_equality_checks
     String x = st.toString() + et.toString();
-    await FirebaseFirestore.instance.collection('Appt').doc(auth.currentUser.uid+uid2+x).set({
+    await FirebaseFirestore.instance
+        .collection('Appt')
+        .doc(auth.currentUser.uid + uid2 + x)
+        .set({
       'start time': Timestamp.fromDate(st),
       'end time': Timestamp.fromDate(et),
       'state': 'pending',
       'coll': collection,
       'id1': auth.currentUser.uid,
       'id2': uid2,
-      'id': auth.currentUser.uid+uid2+x,
-      'token':token,
+      'id': auth.currentUser.uid + uid2 + x,
+      'token': token,
       'SecToken': token2
+      
     });
     /*await FirebaseFirestore.instance
         .collection(field)
@@ -340,19 +354,25 @@ class DatabaseAppt {
         .collection('Appt')
         .where('id1', isEqualTo: auth.currentUser.uid)
         .where('state', isEqualTo: "Accepted");
+    // .where('end time', isLessThan: Timestamp.fromDate(DateTime.now()));
     Query colcollectionReference2 = await FirebaseFirestore.instance
         .collection('Appt')
         .where('id2', isEqualTo: auth.currentUser.uid)
         .where('state', isEqualTo: "Accepted");
+    //.where('end time', isLessThan: Timestamp.fromDate(DateTime.now()));
     try {
       await colcollectionReference.get().then((QuerySnapshot) {
         QuerySnapshot.docs.forEach((element) {
-          appts.add(element.data());
+          if (element.data()['end time'].toDate().isAfter(DateTime.now())) {
+            appts.add(element.data());
+          }
         });
       });
       await colcollectionReference2.get().then((QuerySnapshot) {
         QuerySnapshot.docs.forEach((element) {
-          appts.add(element.data());
+          if (element.data()['end time'].toDate().isAfter(DateTime.now())) {
+            appts.add(element.data());
+          }
         });
       });
     } catch (e) {
@@ -420,84 +440,4 @@ class DataBaseService {
     }*/
     return profile;
   }
-/*         notification functionsss
-  String constructFCMPayload() {
-    final fcm.FirebaseMessaging f = fcm.FirebaseMessaging.instance;
-    return jsonEncode({
-      'notification': {
-        'title': 'Hello FlutterFire!',
-        'body': 'This notification () was created via FCM!',
-      },
-      'to':
-          "ds-tqusgTrWsBL5KBC5IgW:APA91bEgwHI-aJ2srZJFFFaS4OIIULOsd_tcJemVke4zgaCkFvz3nfk00nWiHC-QT6RzEsebOYh4Z3Zkc5tNcPYOdtqZUjQGbWDKLhIF6CPrtVj431alg3nG2HmLbWLMZ0M3JQ15ziQN",
-      // "fmClhZ2GTkW4CO8vyYpZ0h:APA91bF7lY7DsHfapW-MRAzo3jSBAzukuGsmZvuycXSACokke3KiwXYDbXI1FOb2pTSsgXDWXG5qVxGtaeXUnTnzG5m9vLwfj0rSchARVltSsim4oQrozewQnEXIO9nvo8ocS1fbGiM6",
-    });
-  }
-
-  var postUrl = "https://fcm.googleapis.com/fcm/send";
-  Future<void> sendNotification(receiver, msg) async {
-    var token = "fmClhZ2GTkW4CO8vyYpZ0h:APA91bF7lY7DsHfapW-MRAzo3jSBAzukuGsmZvuycXSACokke3KiwXYDbXI1FOb2pTSsgXDWXG5qVxGtaeXUnTnzG5m9vLwfj0rSchARVltSsim4oQrozewQnEXIO9nvo8ocS1fbGiM6";
-    final data = jsonEncode({
-      "notification": {
-        "body": "Accept Ride Request",
-        "title": "This is Ride Request"
-      },
-      "priority": "high",
-      "data": {
-        "click_action": "FLUTTER_NOTIFICATION_CLICK",
-        "id": "1",
-        "status": "done"
-      },
-      "to":
-          "fmClhZ2GTkW4CO8vyYpZ0h:APA91bF7lY7DsHfapW-MRAzo3jSBAzukuGsmZvuycXSACokke3KiwXYDbXI1FOb2pTSsgXDWXG5qVxGtaeXUnTnzG5m9vLwfj0rSchARVltSsim4oQrozewQnEXIO9nvo8ocS1fbGiM6",
-    });
-    /*final headers = {
-      'content-type': 'application/json',
-      'Authorization': 'key=AIzaSyCItpDq0vPOViSA5VsOL8vWFZ-hQKnWIok'
-    };
-    BaseOptions options = new BaseOptions(
-      connectTimeout: 5000,
-      receiveTimeout: 3000,
-      headers: headers,
-    );*/
-    try {
-      await http.post(
-        Uri.parse('https://api.rnfirebase.io/messaging/send'),
-        headers: <String, String>{
-          "Content-Type": 'application/json',
-          "Authorization": 'key=AIzaSyCItpDq0vPOViSA5VsOL8vWFZ-hQKnWIok'
-        },
-        body: jsonEncode({
-            "token": token,
-            "data": {
-              "via": 'FlutterFire Cloud Messaging!!!',
-              "count": '2',
-            },
-            "notification": {
-              "title": 'Hello FlutterFire!',
-              "body": 'This notification 4 was created via FCM!',
-            },
-      }),
-      );
-      print('FCM request for device sent!');
-    } catch (e) {
-      print(e);
-    }
-
-    /*try {
-          final response = await Dio(options).post("https://fcm.googleapis.com/fcm/send",
-              data: data);
-
-          if (response.statusCode == 200) {
-            Fluttertoast.showToast(msg: 'Request Sent To Driver');
-          } else {
-            print('notification sending failed');
-            // on failure do sth
-          }
-        }catch(e){
-          print(e.message);
-        }*/
-  }
-*/
-
 }

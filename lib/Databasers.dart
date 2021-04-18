@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'Database.dart';
 import 'package:flutter/foundation.dart';
-import 'Login.dart';
 import 'ShowDialog.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:cloud_firestore/cloud_firestore.dart' as cloud;
@@ -50,16 +49,14 @@ class Databasers {
     Show.showDialogEmailVerify("Account Verification",
         "An Email verification has been sent to: ", email, context);
     user = auth.currentUser;
-    user.sendEmailVerification();
     await user.reload();
+    user.sendEmailVerification();
       if (exp != "help_seekers") {
         uploadFile(CV, context);
       }
       await DataBaseServiceExperts(uid: userCredential.user.uid)
           .updateuserData(firstName, lastName, phoneNumber, email, exp, cvN);
       clearInfo();
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => LoginDemo()));
   }
 
   upload() async {
@@ -71,8 +68,8 @@ class Databasers {
       File file = File(result.files.single.path);
       CV = file;
       cvN = CV.path.split('/').last;
-
-      return CV;
+      return result;
+      //return result.names[0].toString();
     } else {
       print('not done');
       // User canceled the picker
@@ -154,9 +151,6 @@ class Databasers {
       await firebase_storage.FirebaseStorage.instance
           .ref('playground/Lecture28.4up.pdf')
           .writeToFile(downloadToFile);
-      print("hey");
-      print(appDocDir);
-      print(downloadToFile);
     } on firebase_core.FirebaseException catch (e) {
       print(e.message);
       // e.g, e.code == 'canceled'
@@ -181,12 +175,6 @@ class Databasers {
 
       checkEmailVerified(user, context, email, clearInfo, firstName, lastName,
           phoneNumber, email, exp, cvN, userCredential);
-      if (_error == null) {
-        timer = Timer.periodic(Duration(seconds: 3), (timer) {
-          checkEmailVerified(user, context, email, clearInfo, firstName,
-              lastName, phoneNumber, email, exp, cvN, userCredential);
-        });
-      }
     } catch (e) {
       widget.setState(() {
         _error = e.message;

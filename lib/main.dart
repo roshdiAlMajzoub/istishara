@@ -1,4 +1,7 @@
 import 'package:ISTISHARA/NotificationsPage.dart';
+import 'package:ISTISHARA/Chat/Conversations.dart';
+import 'package:ISTISHARA/LOGIN-SIGNUP/Log_in.dart';
+import 'package:ISTISHARA/LOGIN-SIGNUP/Welcome.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -6,12 +9,13 @@ import 'package:flutter/material.dart';
 import 'Credentials.dart';
 import 'DashBoard.dart';
 import 'Databasers.dart';
-import 'Login.dart';
 import 'dart:async';
 import 'package:loading_animations/loading_animations.dart';
 import 'dart:math';
 import './Start.dart';
 import 'package:connectivity/connectivity.dart';
+
+import 'Reset.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,16 +32,18 @@ class Display extends StatelessWidget {
       ),
       home: DisplayDemo(),
       routes: <String, WidgetBuilder>{
-        '/Display': (BuildContext context) => DisplayDemo(),
-        '/Start': (BuildContext context) => StartApp(),
+        '/Display': (BuildContext context)  => DisplayDemo(),
+        '/Start': (BuildContext context)    => StartApp(),
         '/ExpertSU': (BuildContext context) => Credentials(descirbe: "Expert", barTitle: "Expert Sign Up",isProfile:false),
-        '/UserSU': (BuildContext context) =>Credentials(descirbe: "User",barTitle: "Help-Seeker Sign Up",isProfile: false,),
-        '/UserMain': (BuildContext context) => Dashboard(type:"Help-Seeker"),
-        '/ExpertMain': (BuildContext context) => Dashboard(type: "Expert",),
-        '/Login': (BuildContext context) => MyApp(),
+        '/UserSU': (BuildContext context)   => Credentials(descirbe: "User",barTitle: "Help-Seeker Sign Up",isProfile: false,),
         '/EProfile': (BuildContext context) => Credentials(descirbe: "Expert Profile", barTitle: "Expert Profile", isProfile: true),
         '/UProfile': (BuildContext context) => Credentials(descirbe: "Help-Seeker Profile", barTitle: "Help-Seeker Profile", isProfile: true),
         '/Notifications':(BuildContext context)=> NotificationsPage(dynamic),
+        '/Welcome': (BuildContext context)  => WelcomeScreen(),
+        '/Login': (BuildContext context)    => Loginscreen(),
+        '/UserMain': (BuildContext context)    => Dashboard(type:"Help-Seeker"),
+        '/ExpertMain': (BuildContext context)    => Dashboard(type: "Expert"),
+  
       },
     );
   }
@@ -113,7 +119,7 @@ class _DisplayState extends State<DisplayDemo> {
               }
             } catch(e)
             {
-             Navigator.of(context).pushNamed('/Start');
+             Navigator.of(context).pushNamed('/Welcome');
             }
 
 

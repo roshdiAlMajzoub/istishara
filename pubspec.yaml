@@ -23,14 +23,16 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  flutter_countdown_timer: ^4.0.2
+  firebase_chat: ^0.0.4
+  cached_network_image: ^3.0.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   loading_animations: ^2.2.0
   connectivity: ^3.0.2
-  flutter_svg: ^0.19.2+1
+  flutter_svg: ^0.21.0+1
   #loading_animations: ^2.1.0
   #connectivity: ^2.0.2
   flutter_password_strength: ^0.1.6
@@ -53,6 +55,8 @@ dependencies:
   datetime_picker_formfield: ^2.0.0
   date_format: ^2.0.2
   
+
+  
   
 
 
@@ -62,6 +66,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.9.0"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -94,12 +99,19 @@ flutter:
       - asset/images/nb8.png
       - asset/images/nb9.png
       - asset/images/nb10.png
-      - asset/images/user.png
       - asset/images/menu.png
       - asset/images/head.jpg
       - asset/images/icons8-checked.svg
       - asset/images/cancel.svg
       - asset/images/mail.svg
+      - asset/images/main_top.png
+      - asset/images/main_bottom.png
+      - asset/icons/chat.svg
+      - asset/icons/signup.svg
+      - asset/icons/login.svg
+      - asset/icons/programming.svg
+      - asset/images/mail.png
+      - asset/images/menuu.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -126,3 +138,8 @@ flutter:
   #         weight: 700
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: asset/icons/launcher.png
