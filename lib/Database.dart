@@ -24,6 +24,7 @@ class DataBaseServiceHelp {
       'email': email,
       'phone number': pnumber,
       'id': uid,
+      'money': 50000,
     });
   }
 }
@@ -43,6 +44,7 @@ class DataBaseServiceExperts {
       'reputation': 0,
       'id': uid,
       'CV name': cvN,
+      'money': 50000,
     });
   }
 }
