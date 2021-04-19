@@ -69,7 +69,6 @@ class _ViewExpertState extends State<_ViewExpert> {
   String id;
   String cvName;
   String imgPath;
-  var imgName;
   var x;
   String collection;
   _ViewExpertState(
@@ -81,34 +80,8 @@ class _ViewExpertState extends State<_ViewExpert> {
       this.rep,
       this.collection});
 
-  viewImage() async {
-    var img = await Databasers().downloadLink(firebase_storage
-        .FirebaseStorage.instance
-        .ref()
-        .child('playground')
-        .child(imgPath));
+ 
 
-    x = img;
-
-    return img;
-    //print("rosh"+ x);
-  }
-
-  /*Future<Widget> _getImage(BuildContext context, String imageName) async {
-    Image image;
-    await Databasers()
-        .downloadLink(firebase_storage.FirebaseStorage.instance
-            .ref()
-            .child('playground')
-            .child(imageName))
-        .then((value) {
-      image = Image.network(
-        value.toString(),
-        fit: BoxFit.scaleDown,
-      );
-    });
-    return image;
-  }*/
 
   downloadCV() async {
     var a = await Databasers().downloadLink(firebase_storage
@@ -125,7 +98,6 @@ class _ViewExpertState extends State<_ViewExpert> {
   void initState() {
     super.initState();
     downloadCV();
-    // viewImage();
   }
 
   @override
@@ -156,42 +128,12 @@ class _ViewExpertState extends State<_ViewExpert> {
           Align(
               alignment: Alignment(0, -1),
               child: Column(children: [
-                /* Container(
+               Container(
                     width: screenWidth / 2.75,
                     height: screenHeight / 3,
                     padding: EdgeInsets.only(bottom: 0),
-                    child: FutureBuilder(
-                      future: viewImage(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          return Container(
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: NetworkImage(x))));
-                        }
-
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Container(
-                            child: CircularProgressIndicator(
-                              backgroundColor: Colors.white,
-                              strokeWidth: 15.5,
-                            ),
-                          );
-                        }
-                        return Container();
-                      },
-                    )),*/
-
-                /*Container(
-                        child: Image.network(x),
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: AssetImage('asset/images/head.jpg'))))*/
+                    child: CircleAvatar(
+                      backgroundImage:NetworkImage(imgPath),)),
 
                 Container(
                     padding: EdgeInsets.only(top: 0, bottom: 15),

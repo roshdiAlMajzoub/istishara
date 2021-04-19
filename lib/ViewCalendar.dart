@@ -232,11 +232,10 @@ class _ViewCalendarState extends State<ViewCalendar> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20)),
                             onPressed: () {
-                              hey();
                               if (dateKey.currentState.validate() &&
                                   stKey.currentState.validate() &&
                                   etKey.currentState.validate()) {
-                                print("yes");
+                                      hey();
                               }
                             },
                             elevation: 2,

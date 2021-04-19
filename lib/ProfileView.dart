@@ -112,6 +112,7 @@ File imgRes;
   updateData() async {
     CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(collection);
+        
     if (_firstName != null) {
       if (_formKeyFname.currentState.validate()) {
         collectionReference.doc(id).update({
@@ -153,7 +154,7 @@ File imgRes;
       collectionReference.doc(id).update({
         'image name': url
       });
-      profileName = null;
+
     }
     if (cvRes != null) {
       collectionReference.doc(id).update({

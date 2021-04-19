@@ -55,9 +55,7 @@ class UserImagePickerState extends State<UserImagePicker> {
           child: CircleAvatar(
             backgroundImage: pickedImage != null
                 ? FileImage(pickedImage)
-                : x != null
-                    ? NetworkImage(x)
-                    : null,
+                : NetworkImage(x),
             radius: 30,
           )),
       Positioned(

@@ -33,7 +33,6 @@ class _ListPageState extends State<ListPage> {
   void initState() {
     super.initState();
     fetchDataBaseList();
-    print(imName);
   }
 
   String t2;
@@ -42,19 +41,6 @@ class _ListPageState extends State<ListPage> {
   _ListPageState(type, collection) {
     this.type = type;
     this.collection = collection;
-  }
-  var imName;
-  viewImage(i) async {
-    var img = await Databasers().downloadLink(firebase_storage
-        .FirebaseStorage.instance
-        .ref()
-        .child('playground')
-        .child(expertProfileList[i]['image name']));
-    setState(() {
-      imName = img;
-    });
-    return img;
-    //print("rosh"+ x);
   }
 
   List expertProfileList = [];
@@ -148,6 +134,7 @@ class _ListPageState extends State<ListPage> {
                         trailing: Icon(Icons.keyboard_arrow_right,
                             color: Colors.white, size: 30.0),
                         onTap: () {
+                          print(collection);
                           Navigator.push(
                               context,
                               MaterialPageRoute(
