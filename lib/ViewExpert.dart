@@ -138,10 +138,9 @@ class _ViewExpertState extends State<_ViewExpert> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     downloadCV();
-    viewImage();
+    // viewImage();
   }
 
   @override
@@ -172,28 +171,11 @@ class _ViewExpertState extends State<_ViewExpert> {
           Align(
               alignment: Alignment(0, -1),
               child: Column(children: [
-                Container(
-                   width: screenWidth / 2.75,
+                /* Container(
+                    width: screenWidth / 2.75,
                     height: screenHeight / 3,
                     padding: EdgeInsets.only(bottom: 0),
-                  child: CircleAvatar(
-                    child:
-                  CachedNetworkImage(
-                      imageUrl: x,
-                      imageBuilder: (context, imageProvider) => Container(
-                        width: screenWidth / 2.75,
-                        height: screenHeight / 3,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: imageProvider, fit: BoxFit.cover),
-                        ),
-                      ),
-                      placeholder: (context, url) => CircularProgressIndicator(),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                    ),
-              ),),
-                    /*FutureBuilder(
+                    child: FutureBuilder(
                       future: viewImage(),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
@@ -290,6 +272,8 @@ class _ViewExpertState extends State<_ViewExpert> {
                     // ignore: deprecated_member_use
                     child: RaisedButton(
                       onPressed: () {
+                        print(collection);
+                        print(field);
                         Navigator.push(
                             context,
                             MaterialPageRoute(

@@ -10,7 +10,7 @@ import 'dart:ui';
 import 'Helper.dart';
 import 'LOGIN-SIGNUP/constants.dart';
 import 'ShowDialog.dart';
-import './Databasers.dart';
+import 'package:ISTISHARA/Databasers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' as cloud;
 
 class Credentials extends StatefulWidget {
@@ -85,7 +85,7 @@ class CredentialsState extends State<Credentials> {
     final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: kPrimaryColor,
+            backgroundColor: kPrimaryColor,
             title: Text(barTitle,
                 style: TextStyle(
                   fontSize: 18,
@@ -767,7 +767,7 @@ class CredentialsState extends State<Credentials> {
                                                 .validate() &&
                                             _formKeyConf.currentState
                                                 .validate()) {
-                                           d.signup(
+                                          d.signup(
                                               this,
                                               user,
                                               context,

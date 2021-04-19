@@ -1,4 +1,3 @@
-import 'package:ISTISHARA/NotificationsPage.dart';
 import 'package:ISTISHARA/Chat/Conversations.dart';
 import 'package:ISTISHARA/LOGIN-SIGNUP/Log_in.dart';
 import 'package:ISTISHARA/LOGIN-SIGNUP/Welcome.dart';
@@ -38,7 +37,6 @@ class Display extends StatelessWidget {
         '/UserSU': (BuildContext context)   => Credentials(descirbe: "User",barTitle: "Help-Seeker Sign Up",isProfile: false,),
         '/EProfile': (BuildContext context) => Credentials(descirbe: "Expert Profile", barTitle: "Expert Profile", isProfile: true),
         '/UProfile': (BuildContext context) => Credentials(descirbe: "Help-Seeker Profile", barTitle: "Help-Seeker Profile", isProfile: true),
-        '/Notifications':(BuildContext context)=> NotificationsPage(dynamic),
         '/Welcome': (BuildContext context)  => WelcomeScreen(),
         '/Login': (BuildContext context)    => Loginscreen(),
         '/UserMain': (BuildContext context)    => Dashboard(type:"Help-Seeker"),

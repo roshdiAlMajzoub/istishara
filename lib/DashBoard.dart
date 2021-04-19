@@ -84,12 +84,15 @@ class DashboardState extends State<Dashboard> {
     getToken();
     getMyMoney();
     return Scaffold(
-        backgroundColor: kPrimaryLightColor,
-        drawer: NavDrawer(type: type, collection: collection),
+        // backgroundColor: kPrimaryLightColor,
+        drawer: NavDrawer(
+          type: type,
+          collection: collection
+        ),
         appBar: AppBar(
           title: Text("Dashboard"),
           elevation: .1,
-          backgroundColor: kPrimaryColor,
+          // backgroundColor: kPrimaryColor,
         ),
         floatingActionButton: FloatingActionButton.extended(
           backgroundColor: Colors.green,
@@ -135,26 +138,28 @@ class DashboardState extends State<Dashboard> {
                   crossAxisCount: 2,
                   padding: EdgeInsets.all(3.0),
                   children: <Widget>[
-                    makeDashboardItem("Software Engineer", Icons.code),
-                    makeDashboardItem("Civil Engineer", Icons.build),
+                    makeDashboardItem("Software Engineer", Icons.code,Colors.red),
+                    makeDashboardItem("Civil Engineer", Icons.build,Colors.purple[300]),
                     makeDashboardItem(
-                        "Electrician", Icons.electrical_services_outlined),
-                    makeDashboardItem("Dietition", Icons.flaky_rounded),
+                        "Electrician", Icons.electrical_services_outlined,Colors.amber[400]),
+                    makeDashboardItem("Dietition", Icons.flaky_rounded,Colors.green),
                     makeDashboardItem(
-                        "Personal Trainer", Icons.sports_handball),
-                    makeDashboardItem("Plumber", Icons.plumbing),
+                        "Personal Trainer", Icons.sports_handball,Colors.pink),
+                    makeDashboardItem("Plumber", Icons.plumbing, Colors.purple),
                     makeDashboardItem(
                       "Business Analyst",
                       Icons.business,
+                      Colors.grey
                     ),
-                    makeDashboardItem("Architect", Icons.apartment_rounded),
-                    makeDashboardItem("Handyman", Icons.handyman_outlined),
-                    makeDashboardItem("Carpenter", Icons.carpenter_outlined),
-                    makeDashboardItem("Interior Designer", Icons.home_outlined),
-                    makeDashboardItem("BlackSmith", Icons.construction),
-                    makeDashboardItem("Industrial Engineer", Icons.work),
-                    makeDashboardItem("Data Scientist", Icons.data_usage),
-                    makeDashboardItem("IT Specialist", Icons.computer),
+                    makeDashboardItem("Architect", Icons.apartment_rounded,Colors.indigo),
+                    makeDashboardItem("Handyman", Icons.handyman_outlined,Colors.cyan),
+                    makeDashboardItem("Carpenter", Icons.carpenter_outlined,Colors.deepOrange),
+                    makeDashboardItem("Interior Designer", Icons.home_outlined,Colors.lightBlue),
+                    makeDashboardItem("BlackSmith", Icons.construction,Colors.tealAccent),
+                    makeDashboardItem("Industrial Engineer", Icons.work,Colors.blueAccent),
+                    makeDashboardItem("Data Scientist", Icons.data_usage,Colors.lightGreen),
+                    makeDashboardItem("IT Specialist", Icons.computer,Colors.brown),
+                    makeDashboardItem("Phone Electrician", Icons.phone_android,Colors.red[800]),
                   ],
                 ),
               ),
@@ -164,6 +169,7 @@ class DashboardState extends State<Dashboard> {
   Card makeDashboardItem(
     String title,
     IconData icon,
+    Color col,
   ) {
     return Card(
         shape:
@@ -172,7 +178,7 @@ class DashboardState extends State<Dashboard> {
         margin: new EdgeInsets.all(8.0),
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50.0), color: kPrimaryColor),
+              borderRadius: BorderRadius.circular(50.0), color: col),
           child: new InkWell(
             onTap: () {
               Navigator.push(

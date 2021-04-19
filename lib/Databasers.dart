@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:firebase_core/firebase_core.dart' as firebase_core;
 import 'dart:io' as io;
@@ -51,12 +52,12 @@ class Databasers {
     user = auth.currentUser;
     await user.reload();
     user.sendEmailVerification();
-      if (exp != "help_seekers") {
-        uploadFile(CV, context);
-      }
-      await DataBaseServiceExperts(uid: userCredential.user.uid)
-          .updateuserData(firstName, lastName, phoneNumber, email, exp, cvN);
-      clearInfo();
+    if (exp != "help_seekers") {
+      uploadFile(CV, context);
+    }
+    await DataBaseServiceExperts(uid: userCredential.user.uid)
+        .updateuserData(firstName, lastName, phoneNumber, email, exp, cvN);
+    clearInfo();
   }
 
   upload() async {
@@ -86,7 +87,7 @@ class Databasers {
     }
     firebase_storage.UploadTask uploadTask;
 
-    firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+    final ref = FirebaseStorage.instance
         .ref()
         .child('playground')
         .child('${file.path.split('/').last}');
@@ -98,10 +99,13 @@ class Databasers {
     if (kIsWeb) {
       uploadTask = ref.putData(await file.readAsBytes(), metadata);
     } else {
-      uploadTask = ref.putFile(File(file.path), metadata);
+      print("I am here in putFile");
+      print(file.path);
+      await ref.putFile(file, metadata);
+      final url = await ref.getDownloadURL();
+      print(url);
+      return url;
     }
-//////
-    return Future.value(uploadTask);
   }
 
   Future downloadLink(firebase_storage.Reference ref) async {
@@ -112,6 +116,8 @@ class Databasers {
         text: link,
       ));
 
+      print("link is:");
+      print(link);
       return link;
     } catch (e) {
       final l = await firebase_storage.FirebaseStorage.instance

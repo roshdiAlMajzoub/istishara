@@ -65,9 +65,6 @@ class _ViewCalendarState extends State<ViewCalendar> {
     DateTime startTime = DateTime.parse(x);
     DateTime endTime = DateTime.parse(y);
     var h = await getConflictappt(startTime, endTime);
-    print(h);
-
-    //print(check);
     if (h == false) {
       String token;
       String token2;
@@ -79,6 +76,8 @@ class _ViewCalendarState extends State<ViewCalendar> {
           .then((DocumentSnapshot d) {
         token = d.data()['token'];
       });
+      print("before");
+      print(collection);
       await FirebaseFirestore.instance
           .collection(collection)
           .doc(auth.currentUser.uid)
@@ -86,6 +85,7 @@ class _ViewCalendarState extends State<ViewCalendar> {
           .then((DocumentSnapshot d) {
         token2 = d.data()['token'];
       });
+      print("After");
       DatabaseBookAppt().bookAppt(
         auth.currentUser.uid,
         collection,
