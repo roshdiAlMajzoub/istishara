@@ -15,16 +15,17 @@ import 'package:countup/countup.dart';
 
 class Dashboard extends StatefulWidget {
   final String type;
-  Dashboard({@required this.type});
+  final String pass;
+  Dashboard({@required this.type, this.pass});
   @override
   DashboardState createState() => DashboardState(type: type);
 }
 
 class DashboardState extends State<Dashboard> {
   final String type;
-
+  final String pass;
   bool isExtended = false;
-  DashboardState({@required this.type});
+  DashboardState({@required this.type,this.pass});
 
   void _switchActionBar() {
     setState(() {
@@ -66,7 +67,7 @@ class DashboardState extends State<Dashboard> {
         .update({'token': t});
   }
 
-  var availableMoney ;
+  var availableMoney;
   getMyMoney() async {
     await getCollection();
     var docData = await FirebaseFirestore.instance
@@ -84,7 +85,7 @@ class DashboardState extends State<Dashboard> {
     getMyMoney();
     return Scaffold(
         // backgroundColor: kPrimaryLightColor,
-        drawer: NavDrawer(type: type, collection: collection),
+        drawer: NavDrawer(type: type, collection: collection,pass: pass),
         appBar: AppBar(
           title: Text("Dashboard"),
           elevation: .1,

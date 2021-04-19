@@ -57,13 +57,13 @@ class _Login_BodyState extends State<Login_Body> {
           showPassword = false;
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return Dashboard(
-              type: "Help-Seeker",
+              type: "Help-Seeker",pass: _password,
             );
           }));
         } else {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return Dashboard(
-              type: "Expert"
+              type: "Expert",pass: _password,
             );
           }));
           showPassword = false;

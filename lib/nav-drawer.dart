@@ -15,7 +15,8 @@ import 'package:ISTISHARA/Settings.dart' as settings;
 class NavDrawer extends StatefulWidget {
   final String type;
   final String collection;
-  NavDrawer({@required this.type, this.collection});
+  final String pass;
+  NavDrawer({@required this.type, this.collection,this.pass});
 
   @override
   _NavDrawerState createState() => _NavDrawerState();
@@ -39,7 +40,9 @@ class _NavDrawerState extends State<NavDrawer> {
           if ((element.get('id1') == id || element.get('id2') == id) &&
               element.get('start time').toDate().isBefore(DateTime.now())) {
             print("inside if");
-            conversations.add(element.data(),);
+            conversations.add(
+              element.data(),
+            );
           }
         });
       });
@@ -121,7 +124,7 @@ class _NavDrawerState extends State<NavDrawer> {
     }
   }
 
-  getNumberOfRecords( id) async {
+  getNumberOfRecords(id) async {
     List nbOfRecord = [];
     Query collectionRef = FirebaseFirestore.instance
         .collection("Appt")
@@ -178,7 +181,7 @@ class _NavDrawerState extends State<NavDrawer> {
                 title: Text('Profile'),
                 onTap: () async {
                   String nbOFRec = await getNumberOfRecords(
-                       FirebaseAuth.instance.currentUser.uid);
+                      FirebaseAuth.instance.currentUser.uid);
                   if (widget.type == "Expert") {
                     await getData();
                     Navigator.push(
@@ -203,6 +206,7 @@ class _NavDrawerState extends State<NavDrawer> {
                                   isProfile: true,
                                   lst: proff,
                                   collection: widget.collection,
+                                  pass: widget.pass,
                                 )));
                   }
                 }),

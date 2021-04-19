@@ -28,13 +28,14 @@ class Profile extends StatefulWidget {
   List lst;
   String collection;
   String nbOfRec;
+  final String pass;
   Profile(
       {@required this.descirbe,
       @required this.barTitle,
       @required this.isProfile,
       this.lst,
       this.collection,
-      this.nbOfRec});
+      this.nbOfRec,this.pass});
   @override
   ProfileState createState() => ProfileState(
         describe: descirbe,
@@ -79,9 +80,10 @@ FilePickerResult cvRes;
 
 class ProfileState extends State<Profile> {
   void _pickedImage(File image) {
-    imgRes = image ;
+    imgRes = image;
   }
-File imgRes;
+
+  File imgRes;
   String _email,
       _password,
       _firstName,
@@ -107,7 +109,8 @@ File imgRes;
       @required this.barTitle,
       @required this.isProfile,
       this.lst,
-      this.collection,this.nbOfRec});
+      this.collection,
+      this.nbOfRec});
   var x;
   bool flag = false;
   bool toPop = false;
@@ -116,7 +119,9 @@ File imgRes;
   updateData() async {
     CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(collection);
-        
+    CollectionReference collectionReference2 =
+        FirebaseFirestore.instance.collection('conversations');
+
     if (_firstName != null) {
       if (_formKeyFname.currentState.validate()) {
         collectionReference.doc(id).update({
@@ -136,7 +141,7 @@ File imgRes;
         collectionReference.doc(id).update({
           'email': _email,
         });
-        await changeEmail();
+        changeEmail();
       }
     }
 
@@ -154,18 +159,35 @@ File imgRes;
     }
 
     if (imgRes != null) {
-       final url = await d.uploadFile(imgRes, context);
-      collectionReference.doc(id).update({
-        'image name': url
-      });
+      final url = await d.uploadFile(imgRes, context);
+      collectionReference.doc(id).update({'image name': url});
+      Query collRef = FirebaseFirestore.instance
+          .collection('conversations')
+          .where('id1', isEqualTo: FirebaseAuth.instance.currentUser.uid);
 
+      Query collRef2 = FirebaseFirestore.instance
+          .collection('conversations')
+          .where('id2', isEqualTo: FirebaseAuth.instance.currentUser.uid);
+      collRef.get().then((QuerySnapshot) {
+        QuerySnapshot.docs.forEach((element) {
+          var docid = element.data()['id'];
+          collectionReference2.doc(docid).update({'image1': url});
+        });
+      });
+      collRef2.get().then((QuerySnapshot) {
+        QuerySnapshot.docs.forEach((element) {
+          var docid = element.data()['id'];
+          collectionReference2.doc(docid).update({'image2': url});
+        });
+      });
+      imgRes = null;
     }
     if (cvRes != null) {
+      d.uploadFile(File(cvRes.files.single.path), context);
       collectionReference.doc(id).update({
         'CV name': cvRes.names[0].toString(),
       });
-      cvName = null;
-      d.uploadFile(File(cvRes.files.single.path), context);
+      cvRes = null;
     }
     if (_password != null) {
       if (_formKeyPass.currentState.validate() &&
@@ -178,8 +200,10 @@ File imgRes;
   }
 
   void changePass() async {
-    User user = await FirebaseAuth.instance.currentUser;
-    user.updatePassword(_password).then((_) {
+    await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: FirebaseAuth.instance.currentUser.email, password: lst[0]['pass']);
+    User user1 =  FirebaseAuth.instance.currentUser;
+    user1.updatePassword(_password).then((_) {
       print("Successfully changed password");
     }).catchError((error) {
       print("password can't be changed" + error.toString());
@@ -187,8 +211,9 @@ File imgRes;
   }
 
   void changeEmail() async {
-    User user = await FirebaseAuth.instance.currentUser;
-    user.updateEmail(_email).then((_) {
+    await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: FirebaseAuth.instance.currentUser.email, password: lst[0]['pass']);
+    FirebaseAuth.instance.currentUser.updateEmail(_email).then((_) {
       print("Successfully changed email");
     }).catchError((error) {
       print("email can't be changed" + error.toString());
@@ -213,7 +238,6 @@ File imgRes;
     // TODO: implement initState
     super.initState();
     d.cvN;
-   
   }
 
   @override
