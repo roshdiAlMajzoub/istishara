@@ -274,22 +274,12 @@ Future<String> getImage(String id) async {
   await colcollectionReference.get().then((QuerySnapshot) {
     QuerySnapshot.docs.forEach((element) {
       if (element.get('id') == id) {
-        try {
           image = element.get('image name');
-        } catch (e) {
-          image = "";
-        }
       }
     });
   });
-  try {
-    var img = await Databasers().downloadLink(
-        FirebaseStorage.instance.ref().child('playground').child(image));
-    print("test");
-    return img;
-  } catch (e) {
-    return ("");
-  }
+  
+ 
 }
 
 acceptAppt(col, id1, uid, id2,st) async {

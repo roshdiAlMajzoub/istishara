@@ -43,18 +43,17 @@ class DashboardState extends State<Dashboard> {
 
   @override
   void initState() {
+    getCollection();
+    getToken();
     super.initState();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification notification = message.notification;
       AndroidNotification android = message.notification?.android;
-     });
+    });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       print('A new onMessageOpenedApp event was published!');
       Navigator.pushNamed(context, '/Notifications');
-     });
-    getCollection();
-    getToken();
-    getMyMoney();
+    });
   }
 
   String token;
@@ -85,10 +84,7 @@ class DashboardState extends State<Dashboard> {
     getMyMoney();
     return Scaffold(
         // backgroundColor: kPrimaryLightColor,
-        drawer: NavDrawer(
-          type: type,
-          collection: collection
-        ),
+        drawer: NavDrawer(type: type, collection: collection),
         appBar: AppBar(
           title: Text("Dashboard"),
           elevation: .1,
@@ -138,28 +134,37 @@ class DashboardState extends State<Dashboard> {
                   crossAxisCount: 2,
                   padding: EdgeInsets.all(3.0),
                   children: <Widget>[
-                    makeDashboardItem("Software Engineer", Icons.code,Colors.red),
-                    makeDashboardItem("Civil Engineer", Icons.build,Colors.purple[300]),
                     makeDashboardItem(
-                        "Electrician", Icons.electrical_services_outlined,Colors.amber[400]),
-                    makeDashboardItem("Dietition", Icons.flaky_rounded,Colors.green),
+                        "Software Engineer", Icons.code, Colors.red),
                     makeDashboardItem(
-                        "Personal Trainer", Icons.sports_handball,Colors.pink),
+                        "Civil Engineer", Icons.build, Colors.purple[300]),
+                    makeDashboardItem("Electrician",
+                        Icons.electrical_services_outlined, Colors.amber[400]),
+                    makeDashboardItem(
+                        "Dietition", Icons.flaky_rounded, Colors.green),
+                    makeDashboardItem(
+                        "Personal Trainer", Icons.sports_handball, Colors.pink),
                     makeDashboardItem("Plumber", Icons.plumbing, Colors.purple),
                     makeDashboardItem(
-                      "Business Analyst",
-                      Icons.business,
-                      Colors.grey
-                    ),
-                    makeDashboardItem("Architect", Icons.apartment_rounded,Colors.indigo),
-                    makeDashboardItem("Handyman", Icons.handyman_outlined,Colors.cyan),
-                    makeDashboardItem("Carpenter", Icons.carpenter_outlined,Colors.deepOrange),
-                    makeDashboardItem("Interior Designer", Icons.home_outlined,Colors.lightBlue),
-                    makeDashboardItem("BlackSmith", Icons.construction,Colors.tealAccent),
-                    makeDashboardItem("Industrial Engineer", Icons.work,Colors.blueAccent),
-                    makeDashboardItem("Data Scientist", Icons.data_usage,Colors.lightGreen),
-                    makeDashboardItem("IT Specialist", Icons.computer,Colors.brown),
-                    makeDashboardItem("Phone Electrician", Icons.phone_android,Colors.red[800]),
+                        "Business Analyst", Icons.business, Colors.grey),
+                    makeDashboardItem(
+                        "Architect", Icons.apartment_rounded, Colors.indigo),
+                    makeDashboardItem(
+                        "Handyman", Icons.handyman_outlined, Colors.cyan),
+                    makeDashboardItem("Carpenter", Icons.carpenter_outlined,
+                        Colors.deepOrange),
+                    makeDashboardItem("Interior Designer", Icons.home_outlined,
+                        Colors.lightBlue),
+                    makeDashboardItem(
+                        "BlackSmith", Icons.construction, Colors.tealAccent),
+                    makeDashboardItem(
+                        "Industrial Engineer", Icons.work, Colors.blueAccent),
+                    makeDashboardItem(
+                        "Data Scientist", Icons.data_usage, Colors.lightGreen),
+                    makeDashboardItem(
+                        "IT Specialist", Icons.computer, Colors.brown),
+                    makeDashboardItem("Phone Electrician", Icons.phone_android,
+                        Colors.red[800]),
                   ],
                 ),
               ),
@@ -181,6 +186,8 @@ class DashboardState extends State<Dashboard> {
               borderRadius: BorderRadius.circular(50.0), color: col),
           child: new InkWell(
             onTap: () {
+              print(title);
+              print(collection);
               Navigator.push(
                   context,
                   MaterialPageRoute(

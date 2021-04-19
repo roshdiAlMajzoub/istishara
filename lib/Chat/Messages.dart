@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'MessageBubble.dart';
+import 'ImageCard.dart';
 
 class Messages extends StatelessWidget {
   String id1;
@@ -32,8 +33,20 @@ class Messages extends StatelessWidget {
                 itemBuilder: (ctxt, index) {
                   print(chatSnapShot.data.docs[index]['userID']);
                   print(id1);
+                   var  message = chatSnapShot.data.docs[index]['text'];
+                    if(message== "")
+                    {
+                      return ImageBubble(
+                      message: chatSnapShot.data.docs[index]['image'],
+                      isMe: chatSnapShot.data.docs[index]['userID'] ==
+                          FirebaseAuth.instance.currentUser.uid,
+                      key: ValueKey(chatSnapShot.data.docs[index].id),
+                      time: getTime(chatSnapShot.data.docs[index]['CreatedAt']
+                          .toDate()
+                          .toString()));
+                    }
                   return MessageBubble(
-                      message: chatSnapShot.data.docs[index]['text'],
+                      message: message,
                       isMe: chatSnapShot.data.docs[index]['userID'] ==
                           FirebaseAuth.instance.currentUser.uid,
                       key: ValueKey(chatSnapShot.data.docs[index].id),

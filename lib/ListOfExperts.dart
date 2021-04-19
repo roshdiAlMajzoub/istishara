@@ -35,7 +35,6 @@ class _ListPageState extends State<ListPage> {
   void initState() {
     super.initState();
     fetchDataBaseList();
-    print(imName);
   }
 
   String t2;

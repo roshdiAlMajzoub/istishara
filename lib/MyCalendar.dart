@@ -220,6 +220,7 @@ class CalendarState extends State<MyCalendar> {
                       String date_from_calendar = appointmentDetails.date;
                       String _endTimeText =
                           getEndTimeFromCalendar(appointmentDetails);
+                      print(appointmentDetails.from.toString());
                       for (int i = 0; i < apptt.length; i++) {
                         String startTimeFromFirebase =
                             getStartTimeFromFirebase(i);
@@ -228,13 +229,15 @@ class CalendarState extends State<MyCalendar> {
                             _startTimeText + ":00.000";
                         String EndTimeFromCalendar = _endTimeText + ":00.000";
                         String date_from_Firebase = getDateFromFireBase(i);
-                        if (DateTime.now()
+
+                        if ((DateTime.now()
                                 .isAfter(apptt[i]['start time'].toDate()) ||
                             DateTime.now().isAtSameMomentAs(
-                                apptt[i]['start time'].toDate())) {
+                                apptt[i]['start time'].toDate()))&&(apptt[i]['start time'].toDate() == appointmentDetails.from)) {
                           setState(() {
                             _isLoading = true;
                           });
+                          print("I am in if");
                           String imageOfTheOther = await getImageOfTheOther(i);
                           String nameOfTheOther = await getNameOfTheOther(i);
                           String IDofTheOther = await getIDOfTheOther(i);
@@ -242,10 +245,14 @@ class CalendarState extends State<MyCalendar> {
                           String myName =
                               FirebaseAuth.instance.currentUser.displayName;
                           String id1 = FirebaseAuth.instance.currentUser.uid;
-                            _isLoading = false;
+                          _isLoading = false;
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
-                            return ChatScreen(id1: id1,image: imageOfTheOther, name: nameOfTheOther,id: apptt[i]['id']);
+                            return ChatScreen(
+                                id1: id1,
+                                image: imageOfTheOther,
+                                name: nameOfTheOther,
+                                id: apptt[i]['id']);
                           }));
                           break;
                         } else if (startTimeFromFirebase ==
@@ -289,8 +296,9 @@ class CalendarState extends State<MyCalendar> {
       DateTime st = ap['start time'].toDate();
       DateTime et = ap['end time'].toDate();
       String date = ap['end time'].toDate().toString().substring(0, 10);
+      String id = ap['id'];
 
-      meetings.add(Meeting('Appt', st, et, Color(0xFF0F8644), false, date));
+      meetings.add(Meeting('Appt', st, et, Color(0xFF0F8644), false, date, id));
     }
   }
 }
@@ -310,6 +318,11 @@ class MeetingDataSource extends CalendarDataSource {
   @override
   DateTime getEndTime(int index) {
     return appointments[index].to;
+  }
+
+  @override
+  DateTime getID(int index) {
+    return appointments[index].id;
   }
 
   @override
@@ -333,12 +346,14 @@ class MeetingDataSource extends CalendarDataSource {
 class Meeting {
   /// Creates a meeting class with required details.
   Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay,
-      this.date);
+      this.date, this.id);
 
   /// Event name which is equivalent to subject property of [Appointment].
   String eventName;
 
   String date;
+
+  String id;
 
   /// From which is equivalent to start time property of [Appointment].
   DateTime from;
