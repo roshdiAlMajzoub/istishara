@@ -13,12 +13,14 @@ class ChatScreen extends StatefulWidget {
   String id;
   var endtime;
   var messages;
+  bool isConversation;
   ChatScreen({
     @required String id1,
     @required this.image,
     @required this.name,
     @required this.id,
     this.endtime,
+    this.isConversation
   });
   @override
   _ChatScreenState createState() => _ChatScreenState(id1: id1);
@@ -47,7 +49,10 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     int endTimeint = DateTime.now().millisecondsSinceEpoch +
         1000 *
-            ((DateTime.now().difference(DateTime.parse(widget.endtime.toDate().toString())).inSeconds)
+            ((DateTime.now()
+                    .difference(
+                        DateTime.parse(widget.endtime.toDate().toString()))
+                    .inSeconds)
                 .abs());
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
@@ -91,13 +96,14 @@ class _ChatScreenState extends State<ChatScreen> {
                               fontWeight: FontWeight.w600,
                               color: Colors.white),
                         ),
-                        CountdownTimer(
-                          textStyle: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.w900),
-                          endTime: endTimeint,
-                          onEnd: () {
-                            Navigator.of(context).pop();
-                          },
+                        if(!widget.isConversation)
+                              CountdownTimer(
+                               textStyle: TextStyle(
+                               color: Colors.black, fontWeight: FontWeight.w900),
+                                endTime: endTimeint,
+                                onEnd: () {
+                               Navigator.of(context).pop();
+                             },
                         ),
                       ],
                     ),
@@ -113,7 +119,8 @@ class _ChatScreenState extends State<ChatScreen> {
             child: Messages(
                 id1: widget.id1, id: widget.id, messages: widget.messages),
           ),
-          SendTextField(id: widget.id)
+          if(!widget.isConversation)
+              SendTextField(id: widget.id)
         ])));
   }
 }

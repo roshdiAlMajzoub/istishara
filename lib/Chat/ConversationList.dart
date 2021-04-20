@@ -12,9 +12,11 @@ class ConversationList extends StatefulWidget {
   String name;
   String imageUrl;
   String id;
-  var endtime;
-  ConversationList(
-      {@required this.name, @required this.imageUrl, @required this.id, this.endtime});
+  ConversationList({
+    @required this.name,
+    @required this.imageUrl,
+    @required this.id,
+  });
   @override
   _ConversationListState createState() => _ConversationListState();
 }
@@ -33,7 +35,7 @@ class _ConversationListState extends State<ConversationList> {
                 image: widget.imageUrl,
                 name: widget.name,
                 id: widget.id,
-                endtime: widget.endtime);
+                isConversation: true,);
           }));
         },
         child: Column(children: [

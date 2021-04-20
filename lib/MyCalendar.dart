@@ -252,7 +252,9 @@ class CalendarState extends State<MyCalendar> {
                                 id1: id1,
                                 image: imageOfTheOther,
                                 name: nameOfTheOther,
-                                id: apptt[i]['id']);
+                                id: apptt[i]['id'],
+                                endtime: apptt[i]['end time'],
+                                isConversation: false,);
                           }));
                           break;
                         } else if (startTimeFromFirebase ==

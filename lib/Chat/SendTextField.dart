@@ -120,7 +120,9 @@ class SendTextFieldState extends State<SendTextField> {
           .add({
         'text': msgTextField.value.text,
         'CreatedAt': Timestamp.now(),
-        'userID': FirebaseAuth.instance.currentUser.uid
+        'userID': FirebaseAuth.instance.currentUser.uid,
+        'image':"",
+        'video':""
       });
       msgTextField.clear();
     } else if (url != null && urlVideo==null) {
@@ -131,6 +133,7 @@ class SendTextFieldState extends State<SendTextField> {
           .add({
         'text': "",
         'image': url,
+        'video':"",
         'CreatedAt': Timestamp.now(),
         'userID': FirebaseAuth.instance.currentUser.uid
       });
