@@ -67,7 +67,23 @@ class SendTextFieldState extends State<SendTextField> {
                           }),
                       Text("Camera", style: TextStyle(color: Colors.deepPurple))
                     ]),
-                  )
+                  ),
+                    SizedBox(
+                    width: 30,
+                  ),
+                  Container(
+                    height: 100,
+                    child: Column(children: [
+                      IconButton(
+                          icon: Icon(Icons.video_collection_sharp),
+                          onPressed: () {
+                            pickVideo("Gallery");
+                          }),
+                      Text("Video", style: TextStyle(color: Colors.deepPurple))
+                    ]),
+                  ),
+                  
+                  
                 ],
               ));
         });
@@ -75,12 +91,23 @@ class SendTextFieldState extends State<SendTextField> {
 
   File pickedImage;
   String url;
+  File pickedVideo;
+  String urlVideo;
   void pickImage(String source) async {
     final ImagePicker _picker = ImagePicker();
     final pickedImageFile = await _picker.getImage(
         source: source == "Gallery" ? ImageSource.gallery : ImageSource.camera,);
     pickedImage = File(pickedImageFile.path);
     url = await Databasers().uploadFile(pickedImage, context);
+    _sendMessage();
+  }
+
+  void pickVideo(String source) async {
+    final ImagePicker _picker = ImagePicker();
+    final pickedImageFile = await _picker.getVideo(
+        source: source == "Gallery" ? ImageSource.gallery : ImageSource.camera,);
+    pickedVideo = File(pickedImageFile.path);
+    urlVideo = await Databasers().uploadFile(pickedVideo, context);
     _sendMessage();
   }
 
@@ -96,7 +123,7 @@ class SendTextFieldState extends State<SendTextField> {
         'userID': FirebaseAuth.instance.currentUser.uid
       });
       msgTextField.clear();
-    } else if (url != null) {
+    } else if (url != null && urlVideo==null) {
       FirebaseFirestore.instance
           .collection("conversations")
           .doc(widget.id)
@@ -110,6 +137,22 @@ class SendTextFieldState extends State<SendTextField> {
       setState(() {
         url = null;
         pickedImage = null;
+      });
+    }else if(url == null && urlVideo!=null) {
+      FirebaseFirestore.instance
+          .collection("conversations")
+          .doc(widget.id)
+          .collection("messages")
+          .add({
+        'text': "",
+        'image': "",
+        'video':urlVideo,
+        'CreatedAt': Timestamp.now(),
+        'userID': FirebaseAuth.instance.currentUser.uid
+      });
+      setState(() {
+        urlVideo = null;
+        pickedVideo = null;
       });
     }
   }

@@ -34,7 +34,19 @@ class Messages extends StatelessWidget {
                   print(chatSnapShot.data.docs[index]['userID']);
                   print(id1);
                    var  message = chatSnapShot.data.docs[index]['text'];
-                    if(message== "")
+                   var  image = chatSnapShot.data.docs[index]['image'];
+                    if(message== "" && image == "")
+                    {
+                      return ImageBubble(
+                      message: chatSnapShot.data.docs[index]['video'],
+                      isMe: chatSnapShot.data.docs[index]['userID'] ==
+                          FirebaseAuth.instance.currentUser.uid,
+                      key: ValueKey(chatSnapShot.data.docs[index].id),
+                      time: getTime(chatSnapShot.data.docs[index]['CreatedAt']
+                          .toDate()
+                          .toString()));
+                    }
+                    else if(message== "")
                     {
                       return ImageBubble(
                       message: chatSnapShot.data.docs[index]['image'],

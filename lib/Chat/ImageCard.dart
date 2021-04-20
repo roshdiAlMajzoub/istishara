@@ -30,10 +30,9 @@ class ImageBubble extends StatelessWidget {
                 bottomRight: isMe ? Radius.circular(0) : Radius.circular(12),
               ),
             ),
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 4),
-            margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+            margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
             child:
-                Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+                Stack( children: [
                    Container(
                       child: FlatButton(
                         child: Material(
@@ -44,7 +43,6 @@ class ImageBubble extends StatelessWidget {
                               ),
                               width: screenWidth/2,
                               height: screenHeight/3.5,
-                              padding: EdgeInsets.all(70.0),
                               decoration: BoxDecoration(
                                 color: Colors.grey,
                                 borderRadius: BorderRadius.all(
@@ -66,7 +64,7 @@ class ImageBubble extends StatelessWidget {
                             ),
                             imageUrl: message,
                             width: screenWidth/1.5,
-                            height: screenHeight/3.5,
+                            height: screenHeight/3.8,
                             fit: BoxFit.cover,
                           ),
                           borderRadius: BorderRadius.all(Radius.circular(8.0)),
@@ -78,20 +76,22 @@ class ImageBubble extends StatelessWidget {
                         },
                         padding: EdgeInsets.all(0),
                       ),
-                      margin: EdgeInsets.only(bottom:  20.0  , right: 10.0),
+                     margin: EdgeInsets.only(bottom:  4.0  , right: 4.0,top: 4.0,left: 4.0),
                     ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Text(
+             Positioned(
+        bottom: 0,
+        right: 0,
+                child: Row(children:[Text(
                   time,
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 12,
                     fontWeight: FontWeight.w500,
-                    color: isMe
-                        ? Colors.black
-                        : Theme.of(context).accentTextTheme.headline1.color,
+                    color: 
+                        Colors.grey[100]
                   ),
                 ),
+                Text("   ")
+                ,])
               )
             ]),
           ),
