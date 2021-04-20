@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:video_player/video_player.dart';
 
 class SendTextField extends StatefulWidget {
   final String id;
@@ -19,8 +20,7 @@ class SendTextField extends StatefulWidget {
 class SendTextFieldState extends State<SendTextField> {
   final msgTextField = TextEditingController();
 
-  Future<AlertDialog> showDialogEmailVerify(
-      String title, String content, String email, BuildContext context1) {
+  Future<AlertDialog> CameraSource(BuildContext context1) {
     final double screenWidth = MediaQuery.of(context1).size.width;
     final double screenHeight = MediaQuery.of(context1).size.height;
     return showDialog<AlertDialog>(
@@ -39,21 +39,21 @@ class SendTextFieldState extends State<SendTextField> {
               ),
               content: Row(
                 children: [
-                  SizedBox(
-                    width: screenWidth / 7,
-                  ),
                   Container(
-                      height: 100,
-                      child: Column(children: [
-                        IconButton(
-                            icon: Icon(Icons.image),
-                            onPressed: () {
-                              pickImage("Gallery");
-                              Navigator.of(context).pop();
-                            }),
-                        Text("Gallery",
-                            style: TextStyle(color: Colors.deepPurple))
-                      ])),
+                    height: 100,
+                    child: Column(children: [
+                      IconButton(
+                          icon: Icon(Icons.image),
+                          onPressed: () {
+                            pickImage("Take a Photo");
+                            Navigator.of(context).pop();
+                          }),
+                      Text("Take a Photo",
+                          style: TextStyle(
+                              color: Colors.deepPurple,
+                              fontWeight: FontWeight.bold))
+                    ]),
+                  ),
                   SizedBox(
                     width: 30,
                   ),
@@ -61,14 +61,57 @@ class SendTextFieldState extends State<SendTextField> {
                     height: 100,
                     child: Column(children: [
                       IconButton(
-                          icon: Icon(Icons.camera_alt),
+                          icon: Icon(Icons.video_collection_sharp),
                           onPressed: () {
-                            pickImage("Camera");
+                            pickVideo("Record a Video");
+                            Navigator.of(context).pop();
                           }),
-                      Text("Camera", style: TextStyle(color: Colors.deepPurple))
+                      Text("Record a Video",
+                          style: TextStyle(
+                              color: Colors.deepPurple,
+                              fontWeight: FontWeight.bold))
                     ]),
                   ),
-                    SizedBox(
+                ],
+              ));
+        });
+  }
+
+  Future<AlertDialog> GallerySource(BuildContext context1) {
+    final double screenWidth = MediaQuery.of(context1).size.width;
+    final double screenHeight = MediaQuery.of(context1).size.height;
+    return showDialog<AlertDialog>(
+        context: context1,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              insetPadding: EdgeInsets.symmetric(
+                horizontal: 5.0,
+              ),
+              title: Center(
+                child: Text(
+                  "Choose Source",
+                  style: TextStyle(
+                      color: Colors.deepPurple, fontWeight: FontWeight.w900),
+                ),
+              ),
+              content: Row(
+                children: [
+                  Container(
+                    height: 100,
+                    child: Column(children: [
+                      IconButton(
+                          icon: Icon(Icons.image),
+                          onPressed: () {
+                            pickImage("Gallery");
+                            Navigator.of(context).pop();
+                          }),
+                      Text("Choose an image",
+                          style: TextStyle(
+                              color: Colors.deepPurple,
+                              fontWeight: FontWeight.bold))
+                    ]),
+                  ),
+                  SizedBox(
                     width: 30,
                   ),
                   Container(
@@ -78,12 +121,14 @@ class SendTextFieldState extends State<SendTextField> {
                           icon: Icon(Icons.video_collection_sharp),
                           onPressed: () {
                             pickVideo("Gallery");
+                            Navigator.of(context).pop();
                           }),
-                      Text("Video", style: TextStyle(color: Colors.deepPurple))
+                      Text("Choose Video",
+                          style: TextStyle(
+                              color: Colors.deepPurple,
+                              fontWeight: FontWeight.bold))
                     ]),
                   ),
-                  
-                  
                 ],
               ));
         });
@@ -93,10 +138,12 @@ class SendTextFieldState extends State<SendTextField> {
   String url;
   File pickedVideo;
   String urlVideo;
+
   void pickImage(String source) async {
     final ImagePicker _picker = ImagePicker();
     final pickedImageFile = await _picker.getImage(
-        source: source == "Gallery" ? ImageSource.gallery : ImageSource.camera,);
+      source: source == "Gallery" ? ImageSource.gallery : ImageSource.camera,
+    );
     pickedImage = File(pickedImageFile.path);
     url = await Databasers().uploadFile(pickedImage, context);
     _sendMessage();
@@ -105,14 +152,15 @@ class SendTextFieldState extends State<SendTextField> {
   void pickVideo(String source) async {
     final ImagePicker _picker = ImagePicker();
     final pickedImageFile = await _picker.getVideo(
-        source: source == "Gallery" ? ImageSource.gallery : ImageSource.camera,);
+      source: source == "Gallery" ? ImageSource.gallery : ImageSource.camera,
+    );
     pickedVideo = File(pickedImageFile.path);
     urlVideo = await Databasers().uploadFile(pickedVideo, context);
     _sendMessage();
   }
 
   void _sendMessage() async {
-    if (msgTextField.value.text.length > 0 && url == null) {
+    if (msgTextField.value.text.length > 0 && url == null && urlVideo == null) {
       FirebaseFirestore.instance
           .collection("conversations")
           .doc(widget.id)
@@ -121,11 +169,11 @@ class SendTextFieldState extends State<SendTextField> {
         'text': msgTextField.value.text,
         'CreatedAt': Timestamp.now(),
         'userID': FirebaseAuth.instance.currentUser.uid,
-        'image':"",
-        'video':""
+        'image': "",
+        'video': ""
       });
       msgTextField.clear();
-    } else if (url != null && urlVideo==null) {
+    } else if (url != null && urlVideo == null) {
       FirebaseFirestore.instance
           .collection("conversations")
           .doc(widget.id)
@@ -133,7 +181,7 @@ class SendTextFieldState extends State<SendTextField> {
           .add({
         'text': "",
         'image': url,
-        'video':"",
+        'video': "",
         'CreatedAt': Timestamp.now(),
         'userID': FirebaseAuth.instance.currentUser.uid
       });
@@ -141,7 +189,7 @@ class SendTextFieldState extends State<SendTextField> {
         url = null;
         pickedImage = null;
       });
-    }else if(url == null && urlVideo!=null) {
+    } else if (url == null && urlVideo != null) {
       FirebaseFirestore.instance
           .collection("conversations")
           .doc(widget.id)
@@ -149,7 +197,7 @@ class SendTextFieldState extends State<SendTextField> {
           .add({
         'text': "",
         'image': "",
-        'video':urlVideo,
+        'video': urlVideo,
         'CreatedAt': Timestamp.now(),
         'userID': FirebaseAuth.instance.currentUser.uid
       });
@@ -196,12 +244,14 @@ class SendTextFieldState extends State<SendTextField> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
-                            icon: Icon(Icons.attach_file), onPressed: () {}),
+                            icon: Icon(Icons.attach_file),
+                            onPressed: () {
+                              GallerySource(context);
+                            }),
                         IconButton(
                             icon: Icon(Icons.camera_alt),
                             onPressed: () {
-                              showDialogEmailVerify(
-                                  "title", "content", "email", context);
+                              CameraSource(context);
                             })
                       ],
                     )),

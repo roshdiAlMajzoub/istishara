@@ -14,14 +14,14 @@ class ChatScreen extends StatefulWidget {
   var endtime;
   var messages;
   bool isConversation;
-  ChatScreen({
-    @required String id1,
-    @required this.image,
-    @required this.name,
-    @required this.id,
-    this.endtime,
-    this.isConversation
-  });
+  bool isEnd = false;
+  ChatScreen(
+      {@required String id1,
+      @required this.image,
+      @required this.name,
+      @required this.id,
+      this.endtime,
+      this.isConversation});
   @override
   _ChatScreenState createState() => _ChatScreenState(id1: id1);
 }
@@ -47,13 +47,16 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    int endTimeint = DateTime.now().millisecondsSinceEpoch +
-        1000 *
-            ((DateTime.now()
-                    .difference(
-                        DateTime.parse(widget.endtime.toDate().toString()))
-                    .inSeconds)
-                .abs());
+    int endTimeint;
+    if (!widget.isConversation) {
+      endTimeint = DateTime.now().millisecondsSinceEpoch +
+          1000 *
+              ((DateTime.now()
+                      .difference(
+                          DateTime.parse(widget.endtime.toDate().toString()))
+                      .inSeconds)
+                  .abs());
+    }
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -96,18 +99,48 @@ class _ChatScreenState extends State<ChatScreen> {
                               fontWeight: FontWeight.w600,
                               color: Colors.white),
                         ),
-                        if(!widget.isConversation)
-                              CountdownTimer(
-                               textStyle: TextStyle(
-                               color: Colors.black, fontWeight: FontWeight.w900),
-                                endTime: endTimeint,
-                                onEnd: () {
-                               Navigator.of(context).pop();
-                             },
-                        ),
                       ],
                     ),
                   ),
+                  if (!widget.isConversation)
+                    if (!widget.isEnd)
+                      Container(
+                          height: 45,
+                          decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(15)),
+                          padding: EdgeInsets.only(left: 5, right: 5),
+                          child: Center(
+                            child: CountdownTimer(
+                                textStyle: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.w900),
+                                endTime: endTimeint,
+                                onEnd: () {
+                                  setState(() {
+                                    widget.isEnd = true;
+                                  });
+                                }),
+                          )),
+                  if (widget.isEnd)
+                    Container(
+                        height: 45,
+                        decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Center(
+                          child: FlatButton(
+                            child: Text(
+                              "Leave",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w900,),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        )),
                 ],
               ),
             ),
@@ -119,8 +152,7 @@ class _ChatScreenState extends State<ChatScreen> {
             child: Messages(
                 id1: widget.id1, id: widget.id, messages: widget.messages),
           ),
-          if(!widget.isConversation)
-              SendTextField(id: widget.id)
+          if (!widget.isConversation) SendTextField(id: widget.id)
         ])));
   }
 }

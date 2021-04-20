@@ -45,6 +45,7 @@ class ConversationsState extends State<Conversations> {
                       name: widget.conversations[index]['name1'],
                       imageUrl: widget.conversations[index]['image1'],
                       id: widget.conversations[index]['id'],
+                      
                     );
                   }
                 }));

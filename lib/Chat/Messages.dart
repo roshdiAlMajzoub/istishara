@@ -1,3 +1,4 @@
+import 'package:ISTISHARA/Chat/VideoMessage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'MessageBubble.dart';
 import 'ImageCard.dart';
+
 
 class Messages extends StatelessWidget {
   String id1;
@@ -37,7 +39,7 @@ class Messages extends StatelessWidget {
                    var  image = chatSnapShot.data.docs[index]['image'];
                     if(message== "" && image == "")
                     {
-                      return ImageBubble(
+                      return VideoMessage(
                       message: chatSnapShot.data.docs[index]['video'],
                       isMe: chatSnapShot.data.docs[index]['userID'] ==
                           FirebaseAuth.instance.currentUser.uid,

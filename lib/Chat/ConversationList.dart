@@ -35,7 +35,8 @@ class _ConversationListState extends State<ConversationList> {
                 image: widget.imageUrl,
                 name: widget.name,
                 id: widget.id,
-                isConversation: true,);
+                isConversation: true,
+                );
           }));
         },
         child: Column(children: [
