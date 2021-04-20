@@ -12,8 +12,9 @@ class ConversationList extends StatefulWidget {
   String name;
   String imageUrl;
   String id;
+  var endtime;
   ConversationList(
-      {@required this.name, @required this.imageUrl, @required this.id});
+      {@required this.name, @required this.imageUrl, @required this.id, this.endtime});
   @override
   _ConversationListState createState() => _ConversationListState();
 }
@@ -31,7 +32,8 @@ class _ConversationListState extends State<ConversationList> {
                 id1: FirebaseAuth.instance.currentUser.uid,
                 image: widget.imageUrl,
                 name: widget.name,
-                id: widget.id);
+                id: widget.id,
+                endtime: widget.endtime);
           }));
         },
         child: Column(children: [

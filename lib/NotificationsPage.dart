@@ -140,7 +140,11 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                             notificationList[index]['id'],
                                             notificationList[index]['coll'],
                                             notificationList[index]['id2'],
-                                            notificationList[index]['start time'],
+                                            notificationList[index]
+                                                ['start time'],
+                                            notificationList[index]['end time'],
+                                            notificationList[index]['token'],
+                                            notificationList[index]['SecToken'],
                                           );
                                         },
                                       )),
@@ -159,13 +163,13 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                     iconSize: 3,
                                     onPressed: () {
                                       showAlertDialog2(
-                                          context,
-                                          notificationList[index]['id1'],
-                                          notificationList[index]['id'],
-                                          notificationList[index]['coll'],
-                                           notificationList[index]['id2'],
-                                           notificationList[index]['start time'],
-                                          );
+                                        context,
+                                        notificationList[index]['id1'],
+                                        notificationList[index]['id'],
+                                        notificationList[index]['coll'],
+                                        notificationList[index]['id2'],
+                                        notificationList[index]['start time'],
+                                      );
                                     },
                                   ),
                                 )),
@@ -177,7 +181,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
 }
 
 // flutter defined function
-showAlertDialog(BuildContext context, id1, uid, col, id2,st) {
+showAlertDialog(
+    BuildContext context, id1, uid, col, id2, st, et, token1, token2) {
   // set up the buttons
   Widget cancelButton = FlatButton(
     child: Text("Cancel"),
@@ -188,7 +193,7 @@ showAlertDialog(BuildContext context, id1, uid, col, id2,st) {
   Widget continueButton = FlatButton(
     child: Text("Continue"),
     onPressed: () {
-      acceptAppt(col, id1, uid, id2,st);
+      acceptAppt(col, id1, uid, id2, st, et, token1, token2);
       Navigator.of(context).pop();
     },
   );
@@ -212,7 +217,7 @@ showAlertDialog(BuildContext context, id1, uid, col, id2,st) {
   );
 }
 
-showAlertDialog2(BuildContext context, id1, uid, col,id2, st) {
+showAlertDialog2(BuildContext context, id1, uid, col, id2, st) {
   // set up the buttons
   Widget cancelButton = FlatButton(
     child: Text("Cancel"),
@@ -223,7 +228,7 @@ showAlertDialog2(BuildContext context, id1, uid, col,id2, st) {
   Widget continueButton = FlatButton(
     child: Text("Continue"),
     onPressed: () {
-      denyAppt(col, id1, uid,id2, st);
+      denyAppt(col, id1, uid, id2, st);
       Navigator.of(context).pop();
     },
   );
@@ -274,39 +279,42 @@ Future<String> getImage(String id) async {
   await colcollectionReference.get().then((QuerySnapshot) {
     QuerySnapshot.docs.forEach((element) {
       if (element.get('id') == id) {
-          image = element.get('image name');
+        image = element.get('image name');
       }
     });
   });
-  
- 
+  return image;
 }
 
-acceptAppt(col, id1, uid, id2,st) async {
+acceptAppt(col, id1, uid, id2, st, et, token1, token2) async {
   await FirebaseFirestore.instance
       .collection('Appt')
       .doc(uid)
       .update({'state': "Accepted"});
+  await FirebaseFirestore.instance
+      .collection('Appt')
+      .doc(uid)
+      .update({'state2': "p"});
   String name1 = await getName(id1);
   String name2 = await getName(id2);
   String image1 = await getImage(id1);
   String image2 = await getImage(id2);
-  await FirebaseFirestore.instance
-                              .collection("conversations")
-                              .doc(uid)
-                              .set({
-                            'id1': id1,
-                            'id2': id2,
-                            'id': uid,
-                            'name1': name1,
-                            'name2': name2,
-                            'image1': image1,
-                            'image2':image2,
-                            'start time': st,
-                          });
+  await FirebaseFirestore.instance.collection("conversations").doc(uid).set({
+    'id1': id1,
+    'id2': id2,
+    'id': uid,
+    'name1': name1,
+    'name2': name2,
+    'image1': image1,
+    'image2': image2,
+    'start time': st,
+    'end time': et,
+    'token1': token1,
+    'token2': token2,
+  });
 }
 
-denyAppt(col, id1, uid,id2, st) async {
+denyAppt(col, id1, uid, id2, st) async {
   await FirebaseFirestore.instance.collection('Appt').doc(uid).delete();
 }
 

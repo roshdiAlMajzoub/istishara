@@ -4,18 +4,21 @@ import 'package:ISTISHARA/Chat/SendTextField.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 
 class ChatScreen extends StatefulWidget {
   String id1;
   String image;
   String name;
   String id;
+  var endtime;
   var messages;
   ChatScreen({
     @required String id1,
     @required this.image,
     @required this.name,
     @required this.id,
+    this.endtime,
   });
   @override
   _ChatScreenState createState() => _ChatScreenState(id1: id1);
@@ -42,6 +45,10 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    int endTimeint = DateTime.now().millisecondsSinceEpoch +
+        1000 *
+            ((DateTime.now().difference(DateTime.parse(widget.endtime.toDate().toString())).inSeconds)
+                .abs());
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -83,6 +90,14 @@ class _ChatScreenState extends State<ChatScreen> {
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                               color: Colors.white),
+                        ),
+                        CountdownTimer(
+                          textStyle: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.w900),
+                          endTime: endTimeint,
+                          onEnd: () {
+                            Navigator.of(context).pop();
+                          },
                         ),
                       ],
                     ),
