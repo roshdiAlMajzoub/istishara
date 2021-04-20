@@ -37,36 +37,44 @@ class FullVideoScreenState extends State<FullVideoScreen> {
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
-    return 
-    Center(child:Container(height: screenHeight/2, child: SizedBox(child:
-    FlatButton(
-        child:
-         Container(
-            child: Stack(children: [
-          VideoPlayer(url),
-          if (isPressed)
-            Center(
-                child: FloatingActionButton(
-              backgroundColor: Colors.grey[400],
-              onPressed: () {
-                setState(() {
-                  if (url.value.isPlaying) {
-                    url.pause();
-                  } else {
-                    url.play();
-                  }
-                });
-              },
-              // Display the correct icon depending on the state of the player.
-              child: Icon(
-                url.value.isPlaying ? Icons.pause : Icons.play_arrow,
-              ),
-            ))
-        ])),
-        onPressed: () {
-          setState(() {
-            isPressed = !isPressed;
-          });
-        }))));
+    return WillPopScope(
+        onWillPop: () async {
+          url.pause();
+          Navigator.of(context).pop();
+          return false;
+        },
+        child: Center(
+            child: Container(
+                height: screenHeight / 2,
+                            child: InkWell(
+                              child:
+                            Stack(children: [
+                          VideoPlayer(url),
+                          if (isPressed)
+                            Center(
+                                child: FloatingActionButton(
+                              backgroundColor: Colors.grey[400],
+                              onPressed: () {
+                                setState(() {
+                                  if (url.value.isPlaying) {
+                                    url.pause();
+                                  } else {
+                                    url.play();
+                                  }
+                                });
+                              },
+                              // Display the correct icon depending on the state of the player.
+                              child: Icon(
+                                url.value.isPlaying
+                                    ? Icons.pause
+                                    : Icons.play_arrow,
+                              ),
+                            ))
+                        ]),
+                        onTap: () {
+                          setState(() {
+                            isPressed = !isPressed;
+                          });
+                        }))));
   }
 }

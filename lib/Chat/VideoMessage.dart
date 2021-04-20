@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:ISTISHARA/Chat/FullVideo.dart';
-import 'package:ISTISHARA/Chat/Full_Screen_Image.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
+import 'package:chewie/chewie.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class VideoMessage extends StatefulWidget {
   final String message;
@@ -21,36 +24,52 @@ class VideoMessage extends StatefulWidget {
 
 class VideoMessageState extends State<VideoMessage> {
   String message;
+  File file;
+  bool fetchVideoFromOnline = true;
   VideoMessageState(String message) {
     this.message = message;
   }
+  ChewieController chewieController;
   VideoPlayerController _controller;
-  Future<void> _initializeVideoPlayerFuture;
+   Future<void> _initializeVideoPlayerFuture;
 
-  @override
-  void initState() {
-    // Create and store the VideoPlayerController. The VideoPlayerController
-    // offers several different constructors to play videos from assets, files,
-    // or the internet.
-    _controller = VideoPlayerController.network(
-      widget.message,
-    );
+  void initPlatformState() async {
+    FileInfo fileInfo =
+        await DefaultCacheManager().getFileFromCache(widget.message);
+    print("here1");
 
-    // Initialize the controller and store the Future for later use.
-    _initializeVideoPlayerFuture = _controller.initialize();
+    if (fileInfo.file == null) {
+      print('cache ln: caching now ');
 
-    // Use the controller to loop the video.
-    _controller.setLooping(true);
+      setState(() {
+        fetchVideoFromOnline = true;
+      });
 
-    super.initState();
+      file = await DefaultCacheManager().getSingleFile(widget.message);
+    } else {
+      print('cache ln: ${fileInfo.validTill}');
+      setState(() {
+        fetchVideoFromOnline = false;
+        file = fileInfo.file;
+      });
+    }
+  }
+
+  getMediaWidget() {
+    _controller = fetchVideoFromOnline
+        ? VideoPlayerController.network(widget.message)
+        : VideoPlayerController.file(file);
+    _initializeVideoPlayerFuture =  _controller.initialize();
+  
+    /* return Chewie(
+        controller: ChewieController(videoPlayerController: _controller,allowMuting: false,autoInitialize: true,allowPlaybackSpeedChanging: false,));*/
+    return _controller;
   }
 
   @override
-  void dispose() {
-    // Ensure disposing of the VideoPlayerController to free up resources.
-    _controller.dispose();
-
-    super.dispose();
+  void initState() {
+    initPlatformState();
+    super.initState();
   }
 
   @override
@@ -61,24 +80,24 @@ class VideoMessageState extends State<VideoMessage> {
         mainAxisAlignment:
             widget.isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
-          FlatButton(
-            child: Container(
-              decoration: BoxDecoration(
-                color: widget.isMe
-                    ? Colors.grey[300]
-                    : Theme.of(context).accentColor,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  topRight: Radius.circular(12),
-                  bottomLeft:
-                      widget.isMe ? Radius.circular(12) : Radius.circular(0),
-                  bottomRight:
-                      widget.isMe ? Radius.circular(0) : Radius.circular(12),
-                ),
+          Container(
+            decoration: BoxDecoration(
+              color: widget.isMe
+                  ? Colors.grey[300]
+                  : Theme.of(context).accentColor,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+                bottomLeft:
+                    widget.isMe ? Radius.circular(12) : Radius.circular(0),
+                bottomRight:
+                    widget.isMe ? Radius.circular(0) : Radius.circular(12),
               ),
-              margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+            ),
+            margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+            child: FlatButton(
               child: Stack(children: [
-                VideoPlayer(_controller),
+                VideoPlayer(getMediaWidget()),
                 Positioned(
                     bottom: 0,
                     right: 0,
@@ -88,20 +107,21 @@ class VideoMessageState extends State<VideoMessage> {
                         style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
-                            color: Colors.grey[100]),
+                            color: Colors.black),
                       ),
                       Text("   "),
                     ]))
               ]),
-              height: screenHeight / 3,
-              width: screenWidth / 1.5,
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return FullVideo(
+                    url: getMediaWidget(),
+                  );
+                }));
+              },
             ),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => FullVideo(url: _controller)));
-            },
+            height: screenHeight / 3,
+            width: screenWidth / 1.5,
           )
         ]);
   }

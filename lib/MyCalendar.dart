@@ -149,12 +149,7 @@ class CalendarState extends State<MyCalendar> {
       });
     });
 
-    var img = await Databasers().downloadLink(FirebaseStorage.instance
-        .ref()
-        .child('playground')
-        .child(imageOfTheOther));
-
-    return img;
+    return imageOfTheOther.toString();
   }
 
   Future<String> getImageOfMe(int i) async {
@@ -170,10 +165,7 @@ class CalendarState extends State<MyCalendar> {
       });
     });
 
-    var img = await Databasers().downloadLink(
-        FirebaseStorage.instance.ref().child('playground').child(imageOfMe));
-
-    return img;
+     return imageOfMe.toString();
   }
 
   /*book() {
@@ -231,17 +223,23 @@ class CalendarState extends State<MyCalendar> {
                         String date_from_Firebase = getDateFromFireBase(i);
 
                         if ((DateTime.now()
-                                .isAfter(apptt[i]['start time'].toDate()) ||
-                            DateTime.now().isAtSameMomentAs(
-                                apptt[i]['start time'].toDate()))&&(apptt[i]['start time'].toDate() == appointmentDetails.from)) {
+                                    .isAfter(apptt[i]['start time'].toDate()) ||
+                                DateTime.now().isAtSameMomentAs(
+                                    apptt[i]['start time'].toDate())) &&
+                            (apptt[i]['start time'].toDate() ==
+                                appointmentDetails.from)) {
                           setState(() {
                             _isLoading = true;
                           });
                           print("I am in if");
                           String imageOfTheOther = await getImageOfTheOther(i);
+                          print("one");
                           String nameOfTheOther = await getNameOfTheOther(i);
+                          print("two");
                           String IDofTheOther = await getIDOfTheOther(i);
+                          print("three");
                           String myImage = await getImageOfMe(i);
+                          print("four");
                           String myName =
                               FirebaseAuth.instance.currentUser.displayName;
                           String id1 = FirebaseAuth.instance.currentUser.uid;
@@ -249,12 +247,13 @@ class CalendarState extends State<MyCalendar> {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
                             return ChatScreen(
-                                id1: id1,
-                                image: imageOfTheOther,
-                                name: nameOfTheOther,
-                                id: apptt[i]['id'],
-                                endtime: apptt[i]['end time'],
-                                isConversation: false,);
+                              id1: id1,
+                              image: imageOfTheOther,
+                              name: nameOfTheOther,
+                              id: apptt[i]['id'],
+                              endtime: apptt[i]['end time'],
+                              isConversation: false,
+                            );
                           }));
                           break;
                         } else if (startTimeFromFirebase ==
