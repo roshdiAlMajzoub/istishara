@@ -59,6 +59,7 @@ dependencies:
   flutter_blurhash: ^0.6.0
   record: ^2.1.0+1
   audioplayer: ^0.8.1
+  audioplayers: ^0.18.3
 
   
 

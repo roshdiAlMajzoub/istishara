@@ -1,13 +1,13 @@
-import 'package:audioplayer/audioplayer.dart';
+
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class VoiceMessage extends StatelessWidget {
   final String message;
   bool isMe;
   final Key key;
   String time;
-  AudioPlayer audioPlayer = AudioPlayer();
   VoiceMessage(
       {@required this.message,
       @required this.isMe,
@@ -43,14 +43,15 @@ class VoiceMessage extends StatelessWidget {
                       icon: Icon(Icons.play_arrow),
                       onPressed: () {
                         //b.onAudioPositionChanged;
+                        AudioPlayer audioPlayer = AudioPlayer();
                         print("play");
-                        audioPlayer.play(message, isLocal: true);
+                        audioPlayer.play(message, isLocal: false);
                       }),
                   IconButton(
                       tooltip: "press to stop audio",
                       icon: Icon(Icons.pause),
                       onPressed: () {
-                        
+                        AudioPlayer audioPlayer = AudioPlayer();
                         audioPlayer.pause();
                       }),
                   IconButton(
