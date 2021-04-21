@@ -50,6 +50,7 @@ class Messages extends StatelessWidget {
                       time: getTime(chatSnapShot.data.docs[index]['CreatedAt']
                           .toDate()
                           .toString()));
+                      
                     }
                    else if(message== "" && image == "")
                     {

@@ -1,18 +1,51 @@
-
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:audioplayers/audioplayers.dart';
 
-class VoiceMessage extends StatelessWidget {
-  final String message;
-  bool isMe;
-  final Key key;
-  String time;
+class VoiceMessage extends StatefulWidget {
   VoiceMessage(
       {@required this.message,
       @required this.isMe,
       @required this.key,
       @required this.time});
+  final String message;
+  bool isMe;
+  final Key key;
+  String time;
+  @override
+  State<VoiceMessage> createState() =>
+      VoiceMessageState(message: message, isMe: isMe, key: key, time: time);
+}
+
+class VoiceMessageState extends State<VoiceMessage> {
+  final String message;
+  bool isMe;
+  final Key key;
+  String time;
+  bool isPlaying = false;
+  VoiceMessageState(
+      {@required this.message,
+      @required this.isMe,
+      @required this.key,
+      @required this.time});
+  AudioPlayer audioPlayer = AudioPlayer();
+  String currentTime = "0:00";
+  String completeTime = "0:00";
+  @override
+  void initState() {
+    audioPlayer.onAudioPositionChanged.listen((Duration duration) {
+      setState(() {
+        currentTime = duration.toString().split(".")[0].substring(3);
+      });
+    });
+
+    audioPlayer.onDurationChanged.listen((Duration duration) {
+      setState(() {
+        completeTime = duration.toString().split(".")[0].substring(3);
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -22,38 +55,67 @@ class VoiceMessage extends StatelessWidget {
             isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: <Widget>[
           Container(
-              decoration: BoxDecoration(
-                color: isMe ? Colors.grey[300] : Theme.of(context).accentColor,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  topRight: Radius.circular(12),
-                  bottomLeft: isMe ? Radius.circular(12) : Radius.circular(0),
-                  bottomRight: isMe ? Radius.circular(0) : Radius.circular(12),
-                ),
+            height: screenHeight / 11,
+            decoration: BoxDecoration(
+              color: isMe ? Colors.grey[300] : Theme.of(context).accentColor,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+                bottomLeft: isMe ? Radius.circular(12) : Radius.circular(0),
+                bottomRight: isMe ? Radius.circular(0) : Radius.circular(12),
               ),
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 4),
-              margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-              child: Column(children: [
-                Row(children: [
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 2),
+            margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+            child: Stack(children: [
+              Align(
+                alignment: Alignment(0, 0),
+                child: Row(children: [
                   CircleAvatar(
                       backgroundImage: NetworkImage(
                           "https://firebasestorage.googleapis.com/v0/b/whatsup-5827e.appspot.com/o/music.jpg?alt=media&token=aa1c7377-6879-4236-856e-d41b167e4842")),
-                  IconButton(
-                      tooltip: "press to play audio",
-                      icon: Icon(Icons.play_arrow),
-                      onPressed: () {
-                        //b.onAudioPositionChanged;
-                        AudioPlayer audioPlayer = AudioPlayer();
-                        print("play");
-                        audioPlayer.play(message, isLocal: false);
-                      }),
-                  IconButton(
-                      tooltip: "press to stop audio",
-                      icon: Icon(Icons.pause),
-                      onPressed: () {
-                        AudioPlayer audioPlayer = AudioPlayer();
-                        audioPlayer.pause();
-                      }),
+                  if (!isPlaying)
+                    IconButton(
+                        tooltip: "press to play audio",
+                        icon: Icon(Icons.play_arrow),
+                        onPressed: () async {
+                          setState(() {
+                            isPlaying = true;
+                          });
+                          print("play");
+                          await audioPlayer.play(message, isLocal: false);
+                        }),
+                  if (isPlaying)
+                    IconButton(
+                        tooltip: "press to stop audio",
+                        icon: Icon(Icons.pause),
+                        onPressed: () async {
+                          setState(() {
+                              print("current time:");
+                              print(currentTime);
+                            isPlaying = false;
+                          });
+
+                          await audioPlayer.pause();
+                        }),
+                  Text(
+                    currentTime,
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                  Text(" | "),
+                  Text(
+                    completeTime,
+                    style: TextStyle(fontWeight: FontWeight.w300),
+                  ),
+                  /* IconButton(
+                    tooltip: "press to stop audio",
+                    icon: Icon(Icons.pause),
+                    onPressed: () async {
+                      print("pause");
+                      int i = await audioPlayer.pause();
+                      print(i);
+                      print("pause");
+                    }),*/
                   IconButton(
                       icon: Icon(Icons.file_download),
                       onPressed: () async {
@@ -63,8 +125,24 @@ class VoiceMessage extends StatelessWidget {
                           throw 'Could not launch docPath';
                         }
                       }),
-                ])
-              ]))
+                ]),
+              ),
+              Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: Row(children: [
+                    Text(
+                      widget.time,
+                      style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black),
+                    ),
+                    Text("   "),
+                  ]))
+            ]),
+            width: screenWidth / 1.6,
+          )
         ]);
   }
 }
