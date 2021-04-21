@@ -57,6 +57,9 @@ dependencies:
   chewie: ^1.0.0
   flutter_cache_manager: ^3.0.1
   flutter_blurhash: ^0.6.0
+  record: ^2.1.0+1
+  audioplayer: ^0.8.1
+
   
 
   

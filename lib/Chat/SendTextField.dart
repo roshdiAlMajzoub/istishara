@@ -4,10 +4,13 @@ import 'dart:math';
 import 'package:ISTISHARA/Databasers.dart';
 import 'package:ISTISHARA/ShowDialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
+import 'package:record/record.dart';
 
 class SendTextField extends StatefulWidget {
   final String id;
@@ -105,7 +108,7 @@ class SendTextFieldState extends State<SendTextField> {
                             pickImage("Gallery");
                             Navigator.of(context).pop();
                           }),
-                      Text("Choose an image",
+                      Text("Image",
                           style: TextStyle(
                               color: Colors.deepPurple,
                               fontWeight: FontWeight.bold))
@@ -123,10 +126,28 @@ class SendTextFieldState extends State<SendTextField> {
                             pickVideo("Gallery");
                             Navigator.of(context).pop();
                           }),
-                      Text("Choose Video",
+                      Text("Video",
                           style: TextStyle(
                               color: Colors.deepPurple,
-                              fontWeight: FontWeight.bold))
+                              fontWeight: FontWeight.bold)),
+                    ]),
+                  ),
+                  SizedBox(
+                    width: 30,
+                  ),
+                  Container(
+                    height: 100,
+                    child: Column(children: [
+                      IconButton(
+                          icon: Icon(Icons.video_collection_sharp),
+                          onPressed: () {
+                            pickAudio("Gallery");
+                            Navigator.of(context).pop();
+                          }),
+                      Text("Audio",
+                          style: TextStyle(
+                              color: Colors.deepPurple,
+                              fontWeight: FontWeight.bold)),
                     ]),
                   ),
                 ],
@@ -138,6 +159,20 @@ class SendTextFieldState extends State<SendTextField> {
   String url;
   File pickedVideo;
   String urlVideo;
+  String urlAudio;
+
+  void pickAudio(String source) async {
+    try {
+      FilePickerResult result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['mp3', 'm4a', 'flac', 'wav', 'mp4'],
+      );
+      urlAudio = await Databasers().uploadFile(File(result.paths[0]), context);
+      _sendMessage();
+    } on PlatformException catch (e) {
+      print("Unsupported operation" + e.toString());
+    }
+  }
 
   void pickImage(String source) async {
     final ImagePicker _picker = ImagePicker();
@@ -170,7 +205,8 @@ class SendTextFieldState extends State<SendTextField> {
         'CreatedAt': Timestamp.now(),
         'userID': FirebaseAuth.instance.currentUser.uid,
         'image': "",
-        'video': ""
+        'video': "",
+        'audio':"",
       });
       msgTextField.clear();
     } else if (url != null && urlVideo == null) {
@@ -182,6 +218,7 @@ class SendTextFieldState extends State<SendTextField> {
         'text': "",
         'image': url,
         'video': "",
+        'audio':"",
         'CreatedAt': Timestamp.now(),
         'userID': FirebaseAuth.instance.currentUser.uid
       });
@@ -204,6 +241,23 @@ class SendTextFieldState extends State<SendTextField> {
       setState(() {
         urlVideo = null;
         pickedVideo = null;
+      });
+    }
+    else if (url == null && urlVideo == null && urlAudio!=null) {
+      FirebaseFirestore.instance
+          .collection("conversations")
+          .doc(widget.id)
+          .collection("messages")
+          .add({
+        'text': "",
+        'image': "",
+        'video': "",
+        'audio':urlAudio,
+        'CreatedAt': Timestamp.now(),
+        'userID': FirebaseAuth.instance.currentUser.uid
+      });
+      setState(() {
+        urlAudio = null;
       });
     }
   }
