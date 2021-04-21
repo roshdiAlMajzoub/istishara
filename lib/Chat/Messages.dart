@@ -1,4 +1,5 @@
 import 'package:ISTISHARA/Chat/VideoMessage.dart';
+import 'package:ISTISHARA/Chat/VoiceMessage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -37,7 +38,20 @@ class Messages extends StatelessWidget {
                   print(id1);
                    var  message = chatSnapShot.data.docs[index]['text'];
                    var  image = chatSnapShot.data.docs[index]['image'];
-                    if(message== "" && image == "")
+                   var video = chatSnapShot.data.docs[index]['video'];
+
+                    if(message == "" && image=="" && video=="")
+                    {
+                      return VoiceMessage(
+                      message: chatSnapShot.data.docs[index]['audio'],
+                      isMe: chatSnapShot.data.docs[index]['userID'] ==
+                          FirebaseAuth.instance.currentUser.uid,
+                      key: ValueKey(chatSnapShot.data.docs[index].id),
+                      time: getTime(chatSnapShot.data.docs[index]['CreatedAt']
+                          .toDate()
+                          .toString()));
+                    }
+                   else if(message== "" && image == "")
                     {
                       return VideoMessage(
                       message: chatSnapShot.data.docs[index]['video'],
