@@ -202,7 +202,7 @@ class ProfileState extends State<Profile> {
   void changePass() async {
     await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: FirebaseAuth.instance.currentUser.email, password: lst[0]['pass']);
-    User user1 =  FirebaseAuth.instance.currentUser;
+    User user1 = await FirebaseAuth.instance.currentUser;
     user1.updatePassword(_password).then((_) {
       print("Successfully changed password");
     }).catchError((error) {

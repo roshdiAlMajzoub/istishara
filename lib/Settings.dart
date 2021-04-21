@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class MainSettings extends StatelessWidget {
 class Settings extends StatefulWidget {
   var collection;
   var lst;
-  Settings(collection,lst) {
+  Settings(collection, lst) {
     this.collection = collection;
     this.lst = lst;
   }
@@ -26,10 +27,30 @@ class Settings extends StatefulWidget {
 class SettingsState extends State<Settings> {
   var collection;
   var lst;
-  SettingsState(collection,lst) {
+  SettingsState(collection, lst) {
     this.collection = collection;
     this.lst = lst;
   }
+  bool availabe = true;
+  getAvailability() async {
+    await FirebaseFirestore.instance
+        .collection(collection)
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      setState(() {
+        availabe = documentSnapshot.data()['available'];
+      });
+    });
+  }
+
+  updateAvailability() async {
+    await FirebaseFirestore.instance
+        .collection(collection)
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .update({'available': !availabe});
+  }
+
   bool temp;
   delteAcc() async {
     try {
@@ -41,12 +62,23 @@ class SettingsState extends State<Settings> {
             'The user must reauthenticate before this operation can be executed.');
       }
     }
+    FirebaseFirestore.instance
+        .collection(collection)
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .delete();
   }
 
   deactivateAcc() {}
 
   @override
+  void initState() {
+    super.initState();
+    getAvailability();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    getAvailability();
     return Scaffold(
         drawer: NavDrawer(
           type: "Expert",
@@ -83,9 +115,9 @@ class SettingsState extends State<Settings> {
                 SettingsTile.switchTile(
                   title: 'Available',
                   leading: Icon(Icons.event_available_outlined),
-                  switchValue: true,
-                  onToggle: (bool value) {
-                    value = false;
+                  switchValue: availabe,
+                  onToggle: (value) {
+                    updateAvailability();
                   },
                   switchActiveColor: Colors.orange[800],
                 ),
