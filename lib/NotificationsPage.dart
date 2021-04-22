@@ -269,6 +269,23 @@ Future<String> getName(String id) async {
   return name;
 }
 
+Future getPriceRange(String id) async {
+  Databasers db = Databasers();
+  var price;
+  String collection = await db.docExistsIn(id);
+  Query colcollectionReference =
+      FirebaseFirestore.instance.collection(collection);
+  await colcollectionReference.get().then((QuerySnapshot) {
+    QuerySnapshot.docs.forEach((element) {
+      if (element.get('id') == id) {
+        price = element.get('price range');
+      }
+    });
+  });
+
+  return price;
+}
+
 Future<String> getImage(String id) async {
   Databasers db = Databasers();
   String image = "";
@@ -287,6 +304,7 @@ Future<String> getImage(String id) async {
 }
 
 acceptAppt(col, id1, uid, id2, st, et, token1, token2) async {
+  Databasers db = Databasers();
   await FirebaseFirestore.instance
       .collection('Appt')
       .doc(uid)
@@ -299,6 +317,10 @@ acceptAppt(col, id1, uid, id2, st, et, token1, token2) async {
   String name2 = await getName(id2);
   String image1 = await getImage(id1);
   String image2 = await getImage(id2);
+  var collection = await db.docExistsIn(id2);
+  print("after collec");
+  var priceRange = await getPriceRange(id2);
+  print("after price");
   await FirebaseFirestore.instance.collection("conversations").doc(uid).set({
     'id1': id1,
     'id2': id2,
@@ -311,7 +333,10 @@ acceptAppt(col, id1, uid, id2, st, et, token1, token2) async {
     'end time': et,
     'token1': token1,
     'token2': token2,
+    'collection': collection,
+    'price range': priceRange,
   });
+  print("after final");
 }
 
 denyAppt(col, id1, uid, id2, st) async {

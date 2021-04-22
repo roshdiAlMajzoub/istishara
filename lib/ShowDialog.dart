@@ -1,5 +1,5 @@
-
-
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:rating_dialog/rating_dialog.dart';
 import 'package:ISTISHARA/LOGIN-SIGNUP/Log_in.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
@@ -74,8 +74,8 @@ class Show {
         });
   }
 
-  static Future<AlertDialog> showDialogMeetingDetails(
-      BuildContext context1, String title, String startTime, String endTime,String date) {
+  static Future<AlertDialog> showDialogMeetingDetails(BuildContext context1,
+      String title, String startTime, String endTime, String date) {
     return showDialog<AlertDialog>(
         context: context1,
         builder: (BuildContext context) {
@@ -108,86 +108,110 @@ class Show {
                 width: screenWidth,
                 // height: screenHeight / 1.7,
                 child: Column(children: [
-                  Align(alignment: Alignment.topLeft,child: Row(children: [
-                      Text( 
-                         "Date: ",
-                          style: TextStyle(
-                              color: Colors.deepPurple,
-                              fontWeight: FontWeight.w900),),
-                            Text(
-                                date,
-                                style: TextStyle(color: Colors.black,fontWeight: FontWeight.w900))]),),
-                                SizedBox(height: 20,),
-                      
-                      Align(alignment: Alignment.topLeft,child: Row(children: [
-                      Text( 
-                         "Start Time: ",
-                          style: TextStyle(
-                              color: Colors.deepPurple,
-                              fontWeight: FontWeight.w900),),
-                            Text(
-                                startTime.substring(11, 16),
-                                style: TextStyle(color: Colors.black,fontWeight: FontWeight.w900))]),),
-                                SizedBox(height: 20,),
-                            Align(alignment: Alignment.topLeft,child:
-                             Row(children: [
-                            Text(
-                               "End Time: ",
-                                style: TextStyle(
-                                    color: Colors.deepPurple,
-                                    fontWeight: FontWeight.w900)),
-                            Text(
-                                 endTime,
-                                style: TextStyle(color: Colors.black,fontWeight: FontWeight.w900))]))
-                      ,
-                  SizedBox(
-                    height: screenHeight / 20,
-                  ),
-                   Divider(endIndent: 10, indent: 10, thickness: 2,),
-                     SizedBox(
-                    height: screenHeight / 20,
-                  ),
-                  Center(child:                  Row(
-                    children: [
-
-                      Container(
-                          child: Text(
-                        "Time Left: ",
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Row(children: [
+                      Text(
+                        "Date: ",
                         style: TextStyle(
                             color: Colors.deepPurple,
                             fontWeight: FontWeight.w900),
-                      )),
-                      SizedBox(
-                        width: 20,
                       ),
-                      CountdownTimer(
-                        textStyle:TextStyle(color: Colors.black,fontWeight: FontWeight.w900) ,
-                 endTime: endTimeint,
-                        onEnd: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
+                      Text(date,
+                          style: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.w900))
+                    ]),
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Row(children: [
+                      Text(
+                        "Start Time: ",
+                        style: TextStyle(
+                            color: Colors.deepPurple,
+                            fontWeight: FontWeight.w900),
+                      ),
+                      Text(startTime.substring(11, 16),
+                          style: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.w900))
+                    ]),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Align(
+                      alignment: Alignment.topLeft,
+                      child: Row(children: [
+                        Text("End Time: ",
+                            style: TextStyle(
+                                color: Colors.deepPurple,
+                                fontWeight: FontWeight.w900)),
+                        Text(endTime,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w900))
+                      ])),
+                  SizedBox(
+                    height: screenHeight / 20,
+                  ),
+                  Divider(
+                    endIndent: 10,
+                    indent: 10,
+                    thickness: 2,
+                  ),
+                  SizedBox(
+                    height: screenHeight / 20,
+                  ),
+                  Center(
+                    child: Row(
+                      children: [
+                        Container(
+                            child: Text(
+                          "Time Left: ",
+                          style: TextStyle(
+                              color: Colors.deepPurple,
+                              fontWeight: FontWeight.w900),
+                        )),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        CountdownTimer(
+                          textStyle: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.w900),
+                          endTime: endTimeint,
+                          onEnd: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(
                     height: 30,
                   ),
-                  Align(alignment: Alignment.bottomRight,child: 
-                  Container(
-                      child: FlatButton(onPressed: Navigator.of(context).pop, child:
-                      Text(
-                    "OK",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        color: Colors.deepPurple, fontWeight: FontWeight.w900),
-                  )))),
+                  Align(
+                      alignment: Alignment.bottomRight,
+                      child: Container(
+                          child: FlatButton(
+                              onPressed: Navigator.of(context).pop,
+                              child: Text(
+                                "OK",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    color: Colors.deepPurple,
+                                    fontWeight: FontWeight.w900),
+                              )))),
                 ]),
               ));
             }),
           );
         });
   }
+
+  
 
   static Widget showAlert(String error, State widget) {
     if (error != null) {

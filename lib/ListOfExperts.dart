@@ -153,9 +153,10 @@ class _ListPageState extends State<ListPage> {
                                   child: LinearProgressIndicator(
                                       backgroundColor:
                                           Color.fromRGBO(209, 224, 224, 0.2),
-                                      value: expertProfileList[index]
-                                              ['reputation']
-                                          .toDouble(),
+                                      value: (expertProfileList[index]
+                                              ['reputation'].reduce(( a,  b) => a + b) / expertProfileList[index]
+                                              ['reputation'].length)
+                                          .toDouble()/5,
                                       //0.5, //this should be expert.reputation where it will be brought from the expert's database@roshdiAlMajzoub
                                       valueColor:
                                           AlwaysStoppedAnimation(Colors.green)),
@@ -192,9 +193,11 @@ class _ListPageState extends State<ListPage> {
                                         imgPath: expertProfileList[index]
                                             ['image name'],
                                         collection: collection,
-                                        reputation: expertProfileList[index]
-                                                ['reputation']
-                                            .toString(),
+                                        reputation: ((expertProfileList[index]
+                                              ['reputation'].reduce(( a,  b) => a + b) / expertProfileList[index]
+                                              ['reputation'].length)
+                                          .toDouble()/5).toString().substring(0,4),
+                                            
                                         nbOfRecords: nbOfRec,
                                       ))));
                         },
