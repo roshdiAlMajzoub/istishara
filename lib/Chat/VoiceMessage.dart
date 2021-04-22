@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -23,6 +26,10 @@ class VoiceMessageState extends State<VoiceMessage> {
   final Key key;
   String time;
   bool isPlaying = false;
+  File file;
+  String url;
+  bool fetchVideoFromOnline = true;
+  bool isLoading = false;
   VoiceMessageState(
       {@required this.message,
       @required this.isMe,
@@ -32,7 +39,29 @@ class VoiceMessageState extends State<VoiceMessage> {
   String currentTime = "0:00";
   String completeTime = "0:00";
   @override
+  void initPlatformState() async {
+    FileInfo fileInfo = await DefaultCacheManager().getFileFromCache(message);
+    print("here1");
+
+    if (fileInfo == null) {
+      print('cache ln: caching now ');
+
+      setState(() {
+        fetchVideoFromOnline = true;
+      });
+
+      file = await DefaultCacheManager().getSingleFile(widget.message);
+    } else {
+      print('cache ln: ${fileInfo.validTill}');
+      setState(() {
+        fetchVideoFromOnline = false;
+        file = fileInfo.file;
+      });
+    }
+  }
+
   void initState() {
+    initPlatformState();
     audioPlayer.onAudioPositionChanged.listen((Duration duration) {
       setState(() {
         currentTime = duration.toString().split(".")[0].substring(3);
@@ -74,7 +103,11 @@ class VoiceMessageState extends State<VoiceMessage> {
                   CircleAvatar(
                       backgroundImage: NetworkImage(
                           "https://firebasestorage.googleapis.com/v0/b/whatsup-5827e.appspot.com/o/music.jpg?alt=media&token=aa1c7377-6879-4236-856e-d41b167e4842")),
-                  if (!isPlaying)
+
+                  if(isLoading)
+                     CircularProgressIndicator(),
+                  if ((!isPlaying ||
+                      audioPlayer.state == AudioPlayerState.COMPLETED ) && !isLoading)
                     IconButton(
                         tooltip: "press to play audio",
                         icon: Icon(Icons.play_arrow),
@@ -83,7 +116,26 @@ class VoiceMessageState extends State<VoiceMessage> {
                             isPlaying = true;
                           });
                           print("play");
-                          await audioPlayer.play(message, isLocal: false);
+                          if (fetchVideoFromOnline) {
+                            setState(() {
+                              isLoading = true;
+                            });
+                            await audioPlayer.play(message, isLocal: false);
+                            setState(() {
+                              isLoading = false;
+                            });
+                          } else {
+                            print("here in caching, good job");
+                            if (fetchVideoFromOnline) {
+                              setState(() {
+                                isLoading = true;
+                              });
+                              await audioPlayer.play(message, isLocal: true);
+                              setState(() {
+                                isLoading = false;
+                              });
+                            }
+                          }
                         }),
                   if (isPlaying)
                     IconButton(
@@ -91,11 +143,10 @@ class VoiceMessageState extends State<VoiceMessage> {
                         icon: Icon(Icons.pause),
                         onPressed: () async {
                           setState(() {
-                              print("current time:");
-                              print(currentTime);
+                            print("current time:");
+                            print(currentTime);
                             isPlaying = false;
                           });
-
                           await audioPlayer.pause();
                         }),
                   Text(

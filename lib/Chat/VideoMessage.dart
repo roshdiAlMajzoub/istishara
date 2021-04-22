@@ -31,14 +31,13 @@ class VideoMessageState extends State<VideoMessage> {
   }
   ChewieController chewieController;
   VideoPlayerController _controller;
-   Future<void> _initializeVideoPlayerFuture;
+  Future<void> _initializeVideoPlayerFuture;
 
   void initPlatformState() async {
     FileInfo fileInfo =
         await DefaultCacheManager().getFileFromCache(widget.message);
-    print("here1");
 
-    if (fileInfo.file == null) {
+    if (fileInfo == null) {
       print('cache ln: caching now ');
 
       setState(() {
@@ -59,8 +58,12 @@ class VideoMessageState extends State<VideoMessage> {
     _controller = fetchVideoFromOnline
         ? VideoPlayerController.network(widget.message)
         : VideoPlayerController.file(file);
-    _initializeVideoPlayerFuture =  _controller.initialize();
-  
+    _initializeVideoPlayerFuture = _controller.initialize();
+
+    if (file != null) {
+     
+    }
+
     /* return Chewie(
         controller: ChewieController(videoPlayerController: _controller,allowMuting: false,autoInitialize: true,allowPlaybackSpeedChanging: false,));*/
     return _controller;

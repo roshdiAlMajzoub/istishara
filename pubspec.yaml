@@ -60,6 +60,7 @@ dependencies:
   record: ^2.1.0+1
   audioplayer: ^0.8.1
   audioplayers: ^0.18.3
+  cache_audio_player: ^1.0.0
 
   
 
@@ -119,6 +120,7 @@ flutter:
       - asset/icons/programming.svg
       - asset/images/mail.png
       - asset/images/menuu.png
+      - asset/images/alexander-shatov-qt7S2QuAhJI-unsplash.jpg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
