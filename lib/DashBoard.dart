@@ -25,7 +25,7 @@ class DashboardState extends State<Dashboard> {
   final String type;
   final String pass;
   bool isExtended = false;
-  DashboardState({@required this.type,this.pass});
+  DashboardState({@required this.type, this.pass});
 
   void _switchActionBar() {
     setState(() {
@@ -85,7 +85,7 @@ class DashboardState extends State<Dashboard> {
     getMyMoney();
     return Scaffold(
         // backgroundColor: kPrimaryLightColor,
-        drawer: NavDrawer(type: type, collection: collection,pass: pass),
+        drawer: NavDrawer(type: type, collection: collection, pass: pass),
         appBar: AppBar(
           title: Text("Dashboard"),
           elevation: .1,

@@ -25,6 +25,8 @@ class DataBaseServiceHelp {
       'phone number': pnumber,
       'id': uid,
       'money': 50000,
+      'image name':"https://firebasestorage.googleapis.com/v0/b/istisharaa.appspot.com/o/playground%2Fprofile1.jpg?alt=media&token=0d539f85-b3b7-462d-83b8-97383993efea",
+      'available': true,
     });
   }
 }
@@ -45,7 +47,8 @@ class DataBaseServiceExperts {
       'id': uid,
       'CV name': cvN,
       'money': 50000,
-      'image name':"https://firebasestorage.googleapis.com/v0/b/istisharaa.appspot.com/o/playground%2Fprofile1.jpg?alt=media&token=0d539f85-b3b7-462d-83b8-97383993efea"
+      'image name':"https://firebasestorage.googleapis.com/v0/b/istisharaa.appspot.com/o/playground%2Fprofile1.jpg?alt=media&token=0d539f85-b3b7-462d-83b8-97383993efea",
+      'available': true,
     });
   }
 }

@@ -60,7 +60,8 @@ dependencies:
   record: ^2.1.0+1
   audioplayer: ^0.8.1
   audioplayers: ^0.18.3
-  cache_audio_player: ^1.0.0
+  rating_dialog: ^2.0.0
+  flutter_rating_bar: ^4.0.0
 
   
 

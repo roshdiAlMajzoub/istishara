@@ -50,13 +50,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
-  cache_audio_player:
-    dependency: "direct main"
-    description:
-      name: cache_audio_player
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
   cached_network_image:
     dependency: "direct main"
     description:
@@ -391,6 +384,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
+  flutter_rating_bar:
+    dependency: "direct main"
+    description:
+      name: flutter_rating_bar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.0"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -625,6 +625,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.0"
+  rating_dialog:
+    dependency: "direct main"
+    description:
+      name: rating_dialog
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   record:
     dependency: "direct main"
     description:

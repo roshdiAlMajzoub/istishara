@@ -152,6 +152,23 @@ class CalendarState extends State<MyCalendar> {
     return imageOfTheOther.toString();
   }
 
+  Future getPriceRange(String id) async {
+    Databasers db = Databasers();
+    var price;
+    String collection = await db.docExistsIn(id);
+    Query colcollectionReference =
+        FirebaseFirestore.instance.collection(collection);
+    await colcollectionReference.get().then((QuerySnapshot) {
+      QuerySnapshot.docs.forEach((element) {
+        if (element.get('id') == id) {
+          price = element.get('price range');
+        }
+      });
+    });
+
+    return price;
+  }
+
   Future<String> getImageOfMe(int i) async {
     String imageOfMe;
     String myID = FirebaseAuth.instance.currentUser.uid;
@@ -165,7 +182,7 @@ class CalendarState extends State<MyCalendar> {
       });
     });
 
-     return imageOfMe.toString();
+    return imageOfMe.toString();
   }
 
   /*book() {
@@ -240,6 +257,11 @@ class CalendarState extends State<MyCalendar> {
                           print("three");
                           String myImage = await getImageOfMe(i);
                           print("four");
+                          String collection =
+                              await Databasers().docExistsIn(apptt[i]['id2']);
+                          print("five");
+                          var priceRange = await getPriceRange(apptt[i]['id2']);
+                          print("six");
                           String myName =
                               FirebaseAuth.instance.currentUser.displayName;
                           String id1 = FirebaseAuth.instance.currentUser.uid;
@@ -253,6 +275,10 @@ class CalendarState extends State<MyCalendar> {
                               id: apptt[i]['id'],
                               endtime: apptt[i]['end time'],
                               isConversation: false,
+                              collection: collection,
+                              id2: apptt[i]['id2'],
+                              priceRange: priceRange,
+                              
                             );
                           }));
                           break;

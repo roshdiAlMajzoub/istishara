@@ -39,12 +39,18 @@ class ConversationsState extends State<Conversations> {
                       name: widget.conversations[index]['name2'],
                       imageUrl: widget.conversations[index]['image2'],
                       id: widget.conversations[index]['id'],
+                      collection: widget.conversations[index]['collection'],
+                      id2: widget.conversations[index]['id2'],
+                      priceRange: widget.conversations[index]['price range'],
                     );
                   } else {
                     return ConversationList(
                       name: widget.conversations[index]['name1'],
                       imageUrl: widget.conversations[index]['image1'],
                       id: widget.conversations[index]['id'],
+                      collection: widget.conversations[index]['collection'],
+                      id2: widget.conversations[index]['id2'],
+                      priceRange: widget.conversations[index]['price range'],
                       
                     );
                   }
