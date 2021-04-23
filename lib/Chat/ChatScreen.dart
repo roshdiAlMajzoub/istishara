@@ -18,29 +18,32 @@ class ChatScreen extends StatefulWidget {
   String id;
   var endtime;
   var messages;
-  String collection;
+  String collection2;
+  String collection1;
   bool isConversation;
   bool isEnd = false;
   var priceRange;
+  String secId1;
   ChatScreen({
-    @required String id1,
+    @required this.id1,
     @required this.image,
     @required this.name,
     @required this.id,
     this.endtime,
     this.isConversation,
-    this.collection,
+    this.collection2,
     this.id2,
     this.priceRange,
+    this.collection1,
+    this.secId1,
   });
   @override
-  _ChatScreenState createState() => _ChatScreenState(id1: id1);
+  _ChatScreenState createState() => _ChatScreenState();
 }
 
 TextEditingController msgTextField = TextEditingController();
 
 class _ChatScreenState extends State<ChatScreen> {
-  _ChatScreenState({@required String id1});
   bool sendButton = false;
   void initState() {
     super.initState();
@@ -58,7 +61,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   updateRating() async {
     var updt = await FirebaseFirestore.instance
-        .collection(widget.collection)
+        .collection(widget.collection2)
         .doc(widget.id2);
     List repList;
     await updt.get().then((DocumentSnapshot doc) {
@@ -66,43 +69,48 @@ class _ChatScreenState extends State<ChatScreen> {
         repList = doc.data()['reputation'];
       });
     });
-    repList.add(rating);
+    if (rating == null) {
+      repList.add(1);
+    } else {
+      repList.add(rating);
+    }
 
-    var avg = repList.reduce((a, b) => a + b) / repList.length;
-    print("average is: ");
-    print(avg);
     updt.update({'reputation': repList});
 
     Navigator.pop(context);
   }
 
   pay() async {
-    String coll =
-        await Databasers().docExistsIn(FirebaseAuth.instance.currentUser.uid);
-    var updt = await FirebaseFirestore.instance
-        .collection(widget.collection)
+    var updtExpertMoney = await FirebaseFirestore.instance
+        .collection(widget.collection2)
         .doc(widget.id2);
-    var updtMyMoney = await FirebaseFirestore.instance
-        .collection(coll)
-        .doc(FirebaseAuth.instance.currentUser.uid);
-    var money;
-    var myMoney;
-    await updt.get().then((DocumentSnapshot doc) {
+    print(1);
+    var updtHelpSeekMoney = await FirebaseFirestore.instance
+        .collection(widget.collection1)
+        .doc(widget.secId1);
+
+    var expMoney;
+    var helpSeekMoney;
+    await updtExpertMoney.get().then((DocumentSnapshot doc) {
       setState(() {
-        money = doc.data()['money'];
+        expMoney = doc.data()['money'];
       });
     });
-    await updtMyMoney.get().then((DocumentSnapshot doc) {
+    await updtHelpSeekMoney.get().then((DocumentSnapshot doc) {
       setState(() {
-        myMoney = doc.data()['money'];
+        helpSeekMoney = doc.data()['money'];
       });
     });
-    myMoney = myMoney - widget.priceRange;
-    money = money + widget.priceRange;
-    print(money);
-    print(myMoney);
-    await updt.update({'money': money});
-    await updtMyMoney.update({'money': myMoney});
+
+    helpSeekMoney = helpSeekMoney - widget.priceRange;
+    expMoney = expMoney + widget.priceRange;
+    print(helpSeekMoney);
+    await updtExpertMoney.update({'money': expMoney});
+    await updtHelpSeekMoney.update({'money': helpSeekMoney});
+    FirebaseFirestore.instance
+        .collection("conversations")
+        .doc(widget.id)
+        .update({'status': "paid"});
   }
 
   double rating;
@@ -149,6 +157,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         color: Colors.amber,
                       ),
                       onRatingUpdate: (rate) {
+                        print(rate);
                         setState(() {
                           rating = rate;
                         });
@@ -174,6 +183,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: ElevatedButton(
                     onPressed: () {
                       updateRating();
+                      Navigator.pop(context);
                     },
                     child: Text("Submit"),
                   ),
