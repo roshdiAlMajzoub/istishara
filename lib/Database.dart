@@ -27,6 +27,7 @@ class DataBaseServiceHelp {
       'money': 50000,
       'image name':"https://firebasestorage.googleapis.com/v0/b/istisharaa.appspot.com/o/playground%2Fprofile1.jpg?alt=media&token=0d539f85-b3b7-462d-83b8-97383993efea",
       'available': true,
+      'price range': 0,
     });
   }
 }

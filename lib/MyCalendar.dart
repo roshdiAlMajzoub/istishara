@@ -257,9 +257,11 @@ class CalendarState extends State<MyCalendar> {
                           print("three");
                          
                           print("four");
-                          String collection =
+                          String collection2 =
                               await Databasers().docExistsIn(apptt[i]['id2']);
                           print("five");
+                          String collection1 =
+                              await Databasers().docExistsIn(apptt[i]['id1']);
                           var priceRange = await getPriceRange(apptt[i]['id2']);
                           print("six");
                           String myName =
@@ -275,9 +277,11 @@ class CalendarState extends State<MyCalendar> {
                               id: apptt[i]['id'],
                               endtime: apptt[i]['end time'],
                               isConversation: false,
-                              collection: collection,
+                              collection1: collection1,
                               id2: apptt[i]['id2'],
                               priceRange: priceRange,
+                              collection2: collection2,
+                              secId1: apptt[i]['id1'],
                               
                             );
                           }));

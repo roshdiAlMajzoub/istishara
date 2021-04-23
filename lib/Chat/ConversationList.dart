@@ -40,7 +40,7 @@ class _ConversationListState extends State<ConversationList> {
               name: widget.name,
               id: widget.id,
               isConversation: true,
-              collection: widget.collection, id2: widget.id2, priceRange: widget.priceRange,
+              collection1: widget.collection, id2: widget.id2, priceRange: widget.priceRange,
             );
           }));
         },

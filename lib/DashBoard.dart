@@ -46,6 +46,7 @@ class DashboardState extends State<Dashboard> {
   void initState() {
     getCollection();
     getToken();
+    fetchDataBaseList();
     super.initState();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification notification = message.notification;
@@ -77,6 +78,90 @@ class DashboardState extends State<Dashboard> {
     setState(() {
       availableMoney = docData.get('money');
     });
+  }
+
+  Future getUsersList(String id) async {
+    List conversations = [];
+    Query colcollectionReference = FirebaseFirestore.instance
+        .collection("conversations")
+        .where('status', isEqualTo: "not-paid");
+    try {
+      await colcollectionReference.get().then((QuerySnapshot) {
+        QuerySnapshot.docs.forEach((element) {
+          if ((element.get('id1') == id || element.get('id2') == id) &&
+              element.get('end time').toDate().isBefore(DateTime.now())) {
+            print("inside if");
+            conversations.add(
+              element.data(),
+            );
+          }
+        });
+      });
+      return conversations;
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  List conversationsList = [];
+  pay(collection1, collection2, id1, id2, priceRange, id) async {
+    var updtExpertMoney =
+        await FirebaseFirestore.instance.collection(collection2).doc(id2);
+    print(1);
+    var updtHelpSeekMoney =
+        await FirebaseFirestore.instance.collection(collection1).doc(id1);
+
+    var expMoney;
+    var helpSeekMoney;
+    await updtExpertMoney.get().then((DocumentSnapshot doc) {
+      setState(() {
+        expMoney = doc.data()['money'];
+      });
+    });
+    await updtHelpSeekMoney.get().then((DocumentSnapshot doc) {
+      setState(() {
+        helpSeekMoney = doc.data()['money'];
+      });
+    });
+
+    helpSeekMoney = helpSeekMoney - priceRange;
+    expMoney = expMoney + priceRange;
+    print(helpSeekMoney);
+    await updtExpertMoney.update({'money': expMoney});
+    await updtHelpSeekMoney.update({'money': helpSeekMoney});
+    FirebaseFirestore.instance
+        .collection("conversations")
+        .doc(id)
+        .update({'status': "paid"});
+  }
+
+  fetchDataBaseList() async {
+    dynamic resultant =
+        await getUsersList(FirebaseAuth.instance.currentUser.uid);
+
+    if (resultant == null) {
+      print("unable to retrieve");
+    } else {
+      setState(() {
+        conversationsList = resultant;
+      });
+      print("hey");
+      print(conversationsList);
+      for (int i = 0; i < conversationsList.length; i++) {
+        print("mesh han");
+        String coll1 =
+            await Databasers().docExistsIn(conversationsList[i]['id1']);
+        String coll2 =
+            await Databasers().docExistsIn(conversationsList[i]['id2']);
+        var priceRange = conversationsList[i]['price range'];
+        print(coll1);
+        print(coll2);
+        print(priceRange);
+        pay(coll1, coll2, conversationsList[i]['id1'],
+            conversationsList[i]['id2'], priceRange,conversationsList[i]['id']);
+      }
+      print(conversationsList.length);
+    }
   }
 
   @override
