@@ -139,12 +139,30 @@ class SendTextFieldState extends State<SendTextField> {
                     height: 100,
                     child: Column(children: [
                       IconButton(
-                          icon: Icon(Icons.video_collection_sharp),
+                          icon: Icon(Icons.keyboard_voice),
                           onPressed: () {
                             pickAudio("Gallery");
                             Navigator.of(context).pop();
                           }),
                       Text("Audio",
+                          style: TextStyle(
+                              color: Colors.deepPurple,
+                              fontWeight: FontWeight.bold)),
+                    ]),
+                  ),
+                  SizedBox(
+                    width: 30,
+                  ),
+                  Container(
+                    height: 100,
+                    child: Column(children: [
+                      IconButton(
+                          icon: Icon(Icons.file_copy_sharp),
+                          onPressed: () {
+                            pickDocument("Gallery");
+                            Navigator.of(context).pop();
+                          }),
+                      Text("Doc",
                           style: TextStyle(
                               color: Colors.deepPurple,
                               fontWeight: FontWeight.bold)),
@@ -160,6 +178,7 @@ class SendTextFieldState extends State<SendTextField> {
   File pickedVideo;
   String urlVideo;
   String urlAudio;
+  String urlDoc;
 
   void pickAudio(String source) async {
     try {
@@ -168,6 +187,19 @@ class SendTextFieldState extends State<SendTextField> {
         allowedExtensions: ['mp3', 'm4a', 'flac', 'wav', 'mp4'],
       );
       urlAudio = await Databasers().uploadFile(File(result.paths[0]), context);
+      _sendMessage();
+    } on PlatformException catch (e) {
+      print("Unsupported operation" + e.toString());
+    }
+  }
+
+  void pickDocument(String source) async {
+    try {
+      FilePickerResult result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ["docx","doc","xlsx","xls","pptx","ppt","pdf","txt"],
+      );
+      urlDoc = await Databasers().uploadFile(File(result.paths[0]), context);
       _sendMessage();
     } on PlatformException catch (e) {
       print("Unsupported operation" + e.toString());
@@ -206,7 +238,7 @@ class SendTextFieldState extends State<SendTextField> {
         'userID': FirebaseAuth.instance.currentUser.uid,
         'image': "",
         'video': "",
-        'audio':"",
+        'audio': "",
       });
       msgTextField.clear();
     } else if (url != null && urlVideo == null) {
@@ -218,7 +250,7 @@ class SendTextFieldState extends State<SendTextField> {
         'text': "",
         'image': url,
         'video': "",
-        'audio':"",
+        'audio': "",
         'CreatedAt': Timestamp.now(),
         'userID': FirebaseAuth.instance.currentUser.uid
       });
@@ -242,8 +274,7 @@ class SendTextFieldState extends State<SendTextField> {
         urlVideo = null;
         pickedVideo = null;
       });
-    }
-    else if (url == null && urlVideo == null && urlAudio!=null) {
+    } else if (url == null && urlVideo == null && urlAudio != null) {
       FirebaseFirestore.instance
           .collection("conversations")
           .doc(widget.id)
@@ -252,12 +283,30 @@ class SendTextFieldState extends State<SendTextField> {
         'text': "",
         'image': "",
         'video': "",
-        'audio':urlAudio,
+        'audio': urlAudio,
         'CreatedAt': Timestamp.now(),
         'userID': FirebaseAuth.instance.currentUser.uid
       });
       setState(() {
         urlAudio = null;
+      });
+    }
+    else if (url == null && urlVideo == null && urlAudio == null && urlDoc!=null) {
+      FirebaseFirestore.instance
+          .collection("conversations")
+          .doc(widget.id)
+          .collection("messages")
+          .add({
+        'text': "",
+        'image': "",
+        'video': "",
+        'audio': "",
+        'doc': urlDoc,
+        'CreatedAt': Timestamp.now(),
+        'userID': FirebaseAuth.instance.currentUser.uid
+      });
+      setState(() {
+        urlDoc = null;
       });
     }
   }
