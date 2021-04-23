@@ -255,7 +255,7 @@ class CalendarState extends State<MyCalendar> {
                           print("two");
                           String IDofTheOther = await getIDOfTheOther(i);
                           print("three");
-                          String myImage = await getImageOfMe(i);
+                         
                           print("four");
                           String collection =
                               await Databasers().docExistsIn(apptt[i]['id2']);

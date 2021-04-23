@@ -43,7 +43,7 @@ class DataBaseServiceExperts {
       'last name': lname,
       'email': email,
       'phone number': pnumber,
-      'reputation': 0,
+      'reputation': [0],
       'id': uid,
       'CV name': cvN,
       'money': 50000,

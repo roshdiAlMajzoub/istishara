@@ -182,6 +182,17 @@ class _ListPageState extends State<ListPage> {
                               type, expertProfileList[index]['id']);
                           print(collection);
                           print(type);
+                          String reputation = ((expertProfileList[index]
+                                                  ['reputation']
+                                              .reduce((a, b) => a + b) /
+                                          expertProfileList[index]['reputation']
+                                              .length)
+                                      .toDouble() /
+                                  5)
+                              .toString();
+                          if (reputation.length > 4) {
+                            reputation = reputation.substring(0, 4);
+                          }
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -198,17 +209,7 @@ class _ListPageState extends State<ListPage> {
                                         imgPath: expertProfileList[index]
                                             ['image name'],
                                         collection: collection,
-                                        reputation: ((expertProfileList[index]
-                                                                ['reputation']
-                                                            .reduce((a, b) =>
-                                                                a + b) /
-                                                        expertProfileList[index]
-                                                                ['reputation']
-                                                            .length)
-                                                    .toDouble() /
-                                                5)
-                                            .toString()
-                                            .substring(0, 4),
+                                        reputation: reputation,
                                         nbOfRecords: nbOfRec,
                                       ))));
                         },
