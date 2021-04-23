@@ -169,13 +169,13 @@ class VoiceMessageState extends State<VoiceMessage> {
                     }),*/
                   IconButton(
                       icon: Icon(Icons.file_download),
-                      onPressed: () async {
-                        if (await canLaunch(message)) {
-                          await launch(message);
-                        } else {
-                          throw 'Could not launch docPath';
-                        }
-                      }),
+                        onPressed: () async {
+                          if (await canLaunch(message)) {
+                            await launch(message);
+                          } else {
+                            throw 'Could not launch docPath';
+                          }
+                        }),
                 ]),
               ),
               Positioned(

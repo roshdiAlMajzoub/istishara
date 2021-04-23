@@ -62,6 +62,11 @@ dependencies:
   audioplayers: ^0.18.3
   rating_dialog: ^2.0.0
   flutter_rating_bar: ^4.0.0
+  flutter_filereader: ^2.2.0
+  pdftron_flutter:
+    git:
+      url: git://github.com/PDFTron/pdftron-flutter.git
+
 
   
 
@@ -122,6 +127,11 @@ flutter:
       - asset/images/mail.png
       - asset/images/menuu.png
       - asset/images/alexander-shatov-qt7S2QuAhJI-unsplash.jpg
+      - asset/icons/word.svg
+      - asset/icons/powerpoint.svg
+      - asset/icons/excel.svg
+      - asset/icons/txt-file.svg
+      - asset/icons/pdf.svg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

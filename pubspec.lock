@@ -356,6 +356,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.2"
+  flutter_filereader:
+    dependency: "direct main"
+    description:
+      name: flutter_filereader
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.0"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -569,6 +576,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
+  pdftron_flutter:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: acea9a98c07c395f28775ddacbfb32b01e572426
+      url: "git://github.com/PDFTron/pdftron-flutter.git"
+    source: git
+    version: "0.0.35"
   pedantic:
     dependency: transitive
     description:

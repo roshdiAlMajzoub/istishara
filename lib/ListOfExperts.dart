@@ -45,7 +45,7 @@ class _ListPageState extends State<ListPage> {
     this.collection = collection;
   }
   getNumberOfRecords(type, id) async {
-    List nbOfRecord=[];
+    List nbOfRecord = [];
     Query collectionRef = FirebaseFirestore.instance
         .collection("Appt")
         .where('id1', isEqualTo: id)
@@ -54,7 +54,7 @@ class _ListPageState extends State<ListPage> {
         .collection("Appt")
         .where('id2', isEqualTo: id)
         .where('state', isEqualTo: "Accepted");
-    
+
     await collectionRef.get().then((QuerySnapshot) {
       QuerySnapshot.docs.forEach((element) {
         nbOfRecord.add(element.data());
@@ -154,9 +154,13 @@ class _ListPageState extends State<ListPage> {
                                       backgroundColor:
                                           Color.fromRGBO(209, 224, 224, 0.2),
                                       value: (expertProfileList[index]
-                                              ['reputation'].reduce(( a,  b) => a + b) / expertProfileList[index]
-                                              ['reputation'].length)
-                                          .toDouble()/5,
+                                                          ['reputation']
+                                                      .reduce((a, b) => a + b) /
+                                                  expertProfileList[index]
+                                                          ['reputation']
+                                                      .length)
+                                              .toDouble() /
+                                          5,
                                       //0.5, //this should be expert.reputation where it will be brought from the expert's database@roshdiAlMajzoub
                                       valueColor:
                                           AlwaysStoppedAnimation(Colors.green)),
@@ -176,7 +180,8 @@ class _ListPageState extends State<ListPage> {
                         onTap: () async {
                           String nbOfRec = await getNumberOfRecords(
                               type, expertProfileList[index]['id']);
-                          print("waynnnnn" + nbOfRec);
+                          print(collection);
+                          print(type);
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -194,10 +199,16 @@ class _ListPageState extends State<ListPage> {
                                             ['image name'],
                                         collection: collection,
                                         reputation: ((expertProfileList[index]
-                                              ['reputation'].reduce(( a,  b) => a + b) / expertProfileList[index]
-                                              ['reputation'].length)
-                                          .toDouble()/5).toString().substring(0,4),
-                                            
+                                                                ['reputation']
+                                                            .reduce((a, b) =>
+                                                                a + b) /
+                                                        expertProfileList[index]
+                                                                ['reputation']
+                                                            .length)
+                                                    .toDouble() /
+                                                5)
+                                            .toString()
+                                            .substring(0, 4),
                                         nbOfRecords: nbOfRec,
                                       ))));
                         },
