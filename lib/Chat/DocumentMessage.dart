@@ -36,33 +36,21 @@ class DocumentMessageState extends State<DocumentMessage> {
       @required this.time});
   String icon;
   void getType() {
-    String type = message.split("?")[0].split(".")[1];
-    switch (type) {
-      case "pptx":
-        icon = "asset/icons/powerpoint.svg";
-        break;
-      case "ppt":
-        icon = "asset/icons/powerpoint.svg";
-        break;
-      case "doc":
-        icon = "asset/icons/word.svg";
-        break;
-      case "docx":
-        icon = "asset/icons/word.svg";
-        break;
-       case "txt":
-        icon = "asset/icons/txt-file.svg";
-        break;
-      case "pdf":
-        icon = "asset/icons/pdf.svg";
-        break;
-      case "xls":
-        icon = "asset/icons/excel.svg";
-        break;
-       case "xlsx":
-        icon = "asset/icons/excel.svg";
-        break;
-      default:
+    String type = message.split("?")[0];
+    if (type.contains("pdf")) {
+      icon = "asset/icons/pdf.svg";
+    }
+    if (type.contains("pptx")|| type.contains("ppt")) {
+      icon = "asset/icons/powerpoint.svg";
+    }
+    if (type.contains("doc")||type.contains("docx")) {
+      icon = "asset/icons/word.svg";
+    }
+    if (type.contains("xls")||type.contains("xlsx")) {
+      icon= "asset/icons/excel.svg";
+    }
+    if (type.contains("txt")) {
+       icon = "asset/icons/txt-file.svg";
     }
   }
 
@@ -97,8 +85,10 @@ class DocumentMessageState extends State<DocumentMessage> {
               Align(
                 alignment: Alignment(0, 0),
                 child: Row(children: [
-                   IconButton(icon: SvgPicture.asset(icon), onPressed: null),
-                 
+                  IconButton(
+                      icon: SvgPicture.asset(icon),
+                      iconSize: 1,
+                      onPressed: null),
                   IconButton(
                       icon: Icon(Icons.download_sharp),
                       onPressed: () async {

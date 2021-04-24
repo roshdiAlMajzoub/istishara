@@ -71,8 +71,8 @@ class VideoMessageState extends State<VideoMessage> {
 
   @override
   void initState() {
-    initPlatformState();
     super.initState();
+    initPlatformState();
   }
 
   @override
@@ -100,7 +100,7 @@ class VideoMessageState extends State<VideoMessage> {
             margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
             child: FlatButton(
               child: Stack(children: [
-                VideoPlayer(getMediaWidget()),
+                // VideoPlayer(getMediaWidget()),
                 Positioned(
                     bottom: 0,
                     right: 0,

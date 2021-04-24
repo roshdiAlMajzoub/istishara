@@ -239,6 +239,7 @@ class SendTextFieldState extends State<SendTextField> {
         'image': "",
         'video': "",
         'audio': "",
+        'doc':"",
       });
       msgTextField.clear();
     } else if (url != null && urlVideo == null) {
@@ -251,6 +252,7 @@ class SendTextFieldState extends State<SendTextField> {
         'image': url,
         'video': "",
         'audio': "",
+        'doc':"",
         'CreatedAt': Timestamp.now(),
         'userID': FirebaseAuth.instance.currentUser.uid
       });
@@ -267,6 +269,7 @@ class SendTextFieldState extends State<SendTextField> {
         'text': "",
         'image': "",
         'video': urlVideo,
+        'doc':"",
         'CreatedAt': Timestamp.now(),
         'userID': FirebaseAuth.instance.currentUser.uid
       });
@@ -284,6 +287,7 @@ class SendTextFieldState extends State<SendTextField> {
         'image': "",
         'video': "",
         'audio': urlAudio,
+        'doc':"",
         'CreatedAt': Timestamp.now(),
         'userID': FirebaseAuth.instance.currentUser.uid
       });
