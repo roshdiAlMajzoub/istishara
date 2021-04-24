@@ -63,6 +63,8 @@ dependencies:
   flutter_rating_bar: ^4.0.0
   flutter_filereader: ^2.2.0
   better_player: ^0.0.64
+  agora_rtc_engine: ^3.3.3
+  permission_handler: ^7.0.0
   pdftron_flutter:
     git:
       url: git://github.com/PDFTron/pdftron-flutter.git

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:ISTISHARA/LOGIN-SIGNUP/constants.dart';
 import 'package:ISTISHARA/MyCalendar.dart';
 import 'package:ISTISHARA/NotificationsPage.dart';
+import 'package:ISTISHARA/VideoCall/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -61,12 +62,10 @@ class _NavDrawerState extends State<NavDrawer> {
     if (resultant == null) {
       print("unable to retrieve");
     } else {
-
-        setState(() {
-          conversationsList = resultant;
-        });
-        print(conversationsList.length);
-      
+      setState(() {
+        conversationsList = resultant;
+      });
+      print(conversationsList.length);
     }
   }
 
@@ -186,17 +185,17 @@ class _NavDrawerState extends State<NavDrawer> {
                       FirebaseAuth.instance.currentUser.uid);
                   if (widget.type == "Expert") {
                     await getData();
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Profile(
-                                  descirbe: "Expert Profile",
-                                  barTitle: "Expert's Profile",
-                                  isProfile: true,
-                                  lst: proff,
-                                  collection: widget.collection,
-                                  nbOfRec: nbOFRec,
-                                )));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomePage()));
+                    // MaterialPageRoute(
+                    //     builder: (context) => Profile(
+                    //           descirbe: "Expert Profile",
+                    //           barTitle: "Expert's Profile",
+                    //           isProfile: true,
+                    //           lst: proff,
+                    //           collection: widget.collection,
+                    //           nbOfRec: nbOFRec,
+                    //         )));
                   } else {
                     await getData();
                     Navigator.push(
