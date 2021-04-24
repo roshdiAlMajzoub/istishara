@@ -69,6 +69,7 @@ class CredentialsState extends State<Credentials> {
   final _formKeyPhone = GlobalKey<FormState>();
   final _formKeyPass = GlobalKey<FormState>();
   final _formKeyConf = GlobalKey<FormState>();
+  bool choosingCv = false;
   final String describe;
   final String barTitle;
   final bool isProfile;
@@ -634,8 +635,14 @@ class CredentialsState extends State<Credentials> {
                                 bottom: screenHeight / 30,
                               ),
                               child: OutlinedButton(
-                                  onPressed: () {
-                                    d.upload();
+                                  onPressed: ()async {
+                                    setState(()  {
+                                      choosingCv = true;
+                                    });
+                                   await d.upload();
+                                     setState(() {
+                                      choosingCv = false;
+                                    });
                                   },
                                   child: Text("Upload CV",
                                       style: TextStyle(
@@ -649,7 +656,10 @@ class CredentialsState extends State<Credentials> {
                                       borderRadius: BorderRadius.circular(32.0),
                                     ),
                                   ))),
-                          d.cvName(),
+                          if(choosingCv)
+                              CircularProgressIndicator(),
+                          if(!choosingCv)
+                              d.cvName(),
                           Container(height: screenHeight / 20),
                           isProfile == false
                               ? Container(

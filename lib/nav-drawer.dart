@@ -88,6 +88,8 @@ class _NavDrawerState extends State<NavDrawer> {
   List proff = [];
 
   getData() async {
+    print(widget.collection);
+    print(auth.currentUser.uid);
     dynamic prof = await DataBaseService()
         .getCurrentUSerData(auth.currentUser.uid, widget.collection);
     proff = prof;
@@ -146,7 +148,11 @@ class _NavDrawerState extends State<NavDrawer> {
         nbOfRecord.add(element.data());
       });
     });
-    return nbOfRecord.length.toString();
+    if (nbOfRecord == null) {
+      return "0";
+    } else {
+      return nbOfRecord.length.toString();
+    }
   }
 
   @override
@@ -181,22 +187,26 @@ class _NavDrawerState extends State<NavDrawer> {
                 ),
                 title: Text('Profile'),
                 onTap: () async {
+                  print("onttap");
                   String nbOFRec = await getNumberOfRecords(
                       FirebaseAuth.instance.currentUser.uid);
                   if (widget.type == "Expert") {
                     await getData();
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomePage()));
-                    // MaterialPageRoute(
-                    //     builder: (context) => Profile(
-                    //           descirbe: "Expert Profile",
-                    //           barTitle: "Expert's Profile",
-                    //           isProfile: true,
-                    //           lst: proff,
-                    //           collection: widget.collection,
-                    //           nbOfRec: nbOFRec,
-                    //         )));
+                    print("getdata");
+                    /*   Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomePage()));*/
+                  Navigator.push(context,   MaterialPageRoute(
+                        builder: (context) => Profile(
+                              descirbe: "Expert Profile",
+                              barTitle: "Expert's Profile",
+                              isProfile: true,
+                              lst: proff,
+                              collection: widget.collection,
+                              nbOfRec: nbOFRec,
+                            )));
                   } else {
+                    /* Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomePage()));*/
                     await getData();
                     Navigator.push(
                         context,
