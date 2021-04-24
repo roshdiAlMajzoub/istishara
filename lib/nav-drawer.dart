@@ -16,7 +16,7 @@ class NavDrawer extends StatefulWidget {
   final String type;
   final String collection;
   final String pass;
-  NavDrawer({@required this.type, this.collection,this.pass});
+  NavDrawer({@required this.type, this.collection, this.pass});
 
   @override
   _NavDrawerState createState() => _NavDrawerState();
@@ -61,10 +61,12 @@ class _NavDrawerState extends State<NavDrawer> {
     if (resultant == null) {
       print("unable to retrieve");
     } else {
-      setState(() {
-        conversationsList = resultant;
-      });
-      print(conversationsList.length);
+
+        setState(() {
+          conversationsList = resultant;
+        });
+        print(conversationsList.length);
+      
     }
   }
 

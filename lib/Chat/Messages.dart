@@ -38,15 +38,19 @@ class Messages extends StatelessWidget {
                   print(chatSnapShot.data.docs[index]['userID']);
                   print(id1);
                   var message = chatSnapShot.data.docs[index]['text'];
+                  print(message);
                   var image = chatSnapShot.data.docs[index]['image'];
+                  print(image);
                   var video = chatSnapShot.data.docs[index]['video'];
+                  print("before");
+                  print(video);
+                   print("after");
                   var audio = chatSnapShot.data.docs[index]['audio'];
+                  print(audio);
                   var document = chatSnapShot.data.docs[index]['doc'];
+                  print(document);
 
-                  if (message == "" &&
-                      image == "" &&
-                      video == "" &&
-                      audio == "") {
+                  if (document != "") {
                     return DocumentMessage(
                         message: chatSnapShot.data.docs[index]['doc'],
                         isMe: chatSnapShot.data.docs[index]['userID'] ==
@@ -55,7 +59,7 @@ class Messages extends StatelessWidget {
                         time: getTime(chatSnapShot.data.docs[index]['CreatedAt']
                             .toDate()
                             .toString()));
-                  } else if (message == "" && image == "" && video == "") {
+                  } else if (audio != "") {
                     return VoiceMessage(
                         message: chatSnapShot.data.docs[index]['audio'],
                         isMe: chatSnapShot.data.docs[index]['userID'] ==
@@ -64,8 +68,9 @@ class Messages extends StatelessWidget {
                         time: getTime(chatSnapShot.data.docs[index]['CreatedAt']
                             .toDate()
                             .toString()));
-                  } else if (message == "" && image == "" && audio=="" && document=="") {
+                  } else if (video != "") {
                     print("I AM SENDING VIDEOOOO!!!!");
+                    print(message);
                     return VideoMessage(
                         message: chatSnapShot.data.docs[index]['video'],
                         isMe: chatSnapShot.data.docs[index]['userID'] ==
@@ -74,7 +79,7 @@ class Messages extends StatelessWidget {
                         time: getTime(chatSnapShot.data.docs[index]['CreatedAt']
                             .toDate()
                             .toString()));
-                  } else if (message == "") {
+                  } else if (image != "") {
                     return ImageBubble(
                         message: chatSnapShot.data.docs[index]['image'],
                         isMe: chatSnapShot.data.docs[index]['userID'] ==

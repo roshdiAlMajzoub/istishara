@@ -197,7 +197,16 @@ class SendTextFieldState extends State<SendTextField> {
     try {
       FilePickerResult result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ["docx","doc","xlsx","xls","pptx","ppt","pdf","txt"],
+        allowedExtensions: [
+          "docx",
+          "doc",
+          "xlsx",
+          "xls",
+          "pptx",
+          "ppt",
+          "pdf",
+          "txt"
+        ],
       );
       urlDoc = await Databasers().uploadFile(File(result.paths[0]), context);
       _sendMessage();
@@ -227,7 +236,11 @@ class SendTextFieldState extends State<SendTextField> {
   }
 
   void _sendMessage() async {
-    if (msgTextField.value.text.length > 0 && url == null && urlVideo == null) {
+    if (msgTextField.value.text.length > 0 &&
+        url == null &&
+        urlVideo == null &&
+        urlDoc == null &&
+        urlAudio == null) {
       FirebaseFirestore.instance
           .collection("conversations")
           .doc(widget.id)
@@ -239,10 +252,13 @@ class SendTextFieldState extends State<SendTextField> {
         'image': "",
         'video': "",
         'audio': "",
-        'doc':"",
+        'doc': "",
       });
       msgTextField.clear();
-    } else if (url != null && urlVideo == null) {
+    } else if (url != null &&
+        urlVideo == null &&
+        urlDoc == null &&
+        urlAudio == null) {
       FirebaseFirestore.instance
           .collection("conversations")
           .doc(widget.id)
@@ -252,7 +268,7 @@ class SendTextFieldState extends State<SendTextField> {
         'image': url,
         'video': "",
         'audio': "",
-        'doc':"",
+        'doc': "",
         'CreatedAt': Timestamp.now(),
         'userID': FirebaseAuth.instance.currentUser.uid
       });
@@ -260,7 +276,11 @@ class SendTextFieldState extends State<SendTextField> {
         url = null;
         pickedImage = null;
       });
-    } else if (url == null && urlVideo != null) {
+    } else if (url == null &&
+        urlVideo != null &&
+        urlDoc == null &&
+        urlAudio == null) {
+      print("I am in the lese if of sending video");
       FirebaseFirestore.instance
           .collection("conversations")
           .doc(widget.id)
@@ -269,15 +289,19 @@ class SendTextFieldState extends State<SendTextField> {
         'text': "",
         'image': "",
         'video': urlVideo,
-        'doc':"",
+        'doc': "",
         'CreatedAt': Timestamp.now(),
         'userID': FirebaseAuth.instance.currentUser.uid
       });
+      print("After putting in firebase");
       setState(() {
         urlVideo = null;
         pickedVideo = null;
       });
-    } else if (url == null && urlVideo == null && urlAudio != null) {
+    } else if (url == null &&
+        urlVideo == null &&
+        urlAudio != null &&
+        urlDoc == null) {
       FirebaseFirestore.instance
           .collection("conversations")
           .doc(widget.id)
@@ -287,15 +311,17 @@ class SendTextFieldState extends State<SendTextField> {
         'image': "",
         'video': "",
         'audio': urlAudio,
-        'doc':"",
+        'doc': "",
         'CreatedAt': Timestamp.now(),
         'userID': FirebaseAuth.instance.currentUser.uid
       });
       setState(() {
         urlAudio = null;
       });
-    }
-    else if (url == null && urlVideo == null && urlAudio == null && urlDoc!=null) {
+    } else if (url == null &&
+        urlVideo == null &&
+        urlAudio == null &&
+        urlDoc != null) {
       FirebaseFirestore.instance
           .collection("conversations")
           .doc(widget.id)
