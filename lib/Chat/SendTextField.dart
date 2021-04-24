@@ -289,6 +289,7 @@ class SendTextFieldState extends State<SendTextField> {
         'text': "",
         'image': "",
         'video': urlVideo,
+        'audio':"",
         'doc': "",
         'CreatedAt': Timestamp.now(),
         'userID': FirebaseAuth.instance.currentUser.uid

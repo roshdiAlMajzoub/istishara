@@ -54,7 +54,6 @@ dependencies:
   date_format: ^2.0.2
   photo_view: ^0.11.1
   video_player: ^2.1.1
-  chewie: ^1.0.0
   flutter_cache_manager: ^3.0.1
   flutter_blurhash: ^0.6.0
   record: ^2.1.0+1
@@ -63,6 +62,7 @@ dependencies:
   rating_dialog: ^2.0.0
   flutter_rating_bar: ^4.0.0
   flutter_filereader: ^2.2.0
+  better_player: ^0.0.64
   pdftron_flutter:
     git:
       url: git://github.com/PDFTron/pdftron-flutter.git

@@ -4,7 +4,7 @@ import 'package:ISTISHARA/Chat/FullVideo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
-import 'package:chewie/chewie.dart';
+import 'package:better_player/better_player.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class VideoMessage extends StatefulWidget {
@@ -29,7 +29,6 @@ class VideoMessageState extends State<VideoMessage> {
   VideoMessageState(String message) {
     this.message = message;
   }
-  ChewieController chewieController;
   VideoPlayerController _controller;
   Future<void> _initializeVideoPlayerFuture;
 
@@ -59,13 +58,12 @@ class VideoMessageState extends State<VideoMessage> {
         ? VideoPlayerController.network(widget.message)
         : VideoPlayerController.file(file);
     _initializeVideoPlayerFuture = _controller.initialize();
-
-    if (file != null) {
-     
+    if (fetchVideoFromOnline) {
+      setState(() {
+        fetchVideoFromOnline = false;
+      });
     }
 
-    /* return Chewie(
-        controller: ChewieController(videoPlayerController: _controller,allowMuting: false,autoInitialize: true,allowPlaybackSpeedChanging: false,));*/
     return _controller;
   }
 
@@ -100,7 +98,7 @@ class VideoMessageState extends State<VideoMessage> {
             margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
             child: FlatButton(
               child: Stack(children: [
-                // VideoPlayer(getMediaWidget()),
+                VideoPlayer(getMediaWidget()),
                 Positioned(
                     bottom: 0,
                     right: 0,
