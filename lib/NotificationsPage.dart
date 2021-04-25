@@ -100,7 +100,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: 20.0, vertical: 10.0),
                                   title: Text("Your appointemnt with "
-                                      "has been accepted"),
+                                      "has been accepted",style:TextStyle(fontSize: 15)),
                                   trailing: Container(
                                       padding: EdgeInsets.only(right: 1.0),
                                       child: IconButton(
@@ -148,14 +148,14 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                           );
                                         },
                                       )),
-                                  title: Text("New Meeting at " +
+                                  title: Text("New Meeting at " + 
                                       notificationList[index]['start time']
                                           .toDate()
                                           .toString() +
                                       "-" +
                                       notificationList[index]['end time']
                                           .toDate()
-                                          .toString()),
+                                          .toString(),style: TextStyle(fontSize: 15),),
                                   trailing: IconButton(
                                     icon: SvgPicture.asset(
                                         "asset/images/cancel.svg"),
