@@ -140,7 +140,7 @@ class ProfileState extends State<Profile> {
       });
       changeEmail();
     }
-    if(_repValue != 0){
+    if (_repValue != 0) {
       collectionReference.doc(id).update({
         'price range': _repValue,
       });
@@ -190,14 +190,11 @@ class ProfileState extends State<Profile> {
       });
       cvRes = null;
     }
-    if (_password != null) {
-      if (_formKeyPass.currentState.validate() &&
-          _formKeyConf.currentState.validate()) {
-        collectionReference.doc(id).update({
+    if (_password != null && _password!="")  {
+       await collectionReference.doc(id).update({
           'passwoard': _password,
         });
-        await changePass();
-      }
+       changePass();
     }
 
     Navigator.of(context).pop();
@@ -902,7 +899,7 @@ class ProfileState extends State<Profile> {
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             20)),
-                                                onPressed: () {
+                                                onPressed: () async {
                                                   setState(() {
                                                     editableFN = false;
                                                     editableEmail = false;
@@ -910,9 +907,19 @@ class ProfileState extends State<Profile> {
                                                     editablePass = false;
                                                     editableConf = false;
                                                     flag = true;
-                                                    updateData();
-                                                    h.clearInfo(l);
+                                                    
                                                   });
+                                                   if (_formKeyConf.currentState.validate() &&
+                                                _formKeyEmail.currentState
+                                                    .validate() &&
+                                                _formKeyLname.currentState
+                                                    .validate() &&
+                                                _formKeyPass.currentState
+                                                    .validate() &&
+                                                _formKeyPhone.currentState
+                                                    .validate() && _formKeyFname.currentState.validate()) 
+                                                   await  updateData();
+                                                    h.clearInfo(l);
                                                 },
                                                 elevation: 2,
                                                 color: Colors.deepPurple,
@@ -944,17 +951,16 @@ class ProfileState extends State<Profile> {
                                             fontWeight: FontWeight.w900),
                                       ),
                                       onPressed: () {
-                                        if (_formKeyFname.currentState.validate() &&
-                                            _formKeyLname.currentState
-                                                .validate() &&
-                                            _formKeyEmail.currentState
-                                                .validate() &&
-                                            _formKeyPhone.currentState
-                                                .validate() &&
-                                            _formKeyPass.currentState
-                                                .validate() &&
-                                            _formKeyConf.currentState
-                                                .validate()) {}
+                                         if (_formKeyConf.currentState.validate() &&
+                                                _formKeyEmail.currentState
+                                                    .validate() &&
+                                                _formKeyLname.currentState
+                                                    .validate() &&
+                                                _formKeyPass.currentState
+                                                    .validate() &&
+                                                _formKeyPhone.currentState
+                                                    .validate() && _formKeyFname.currentState.validate()) updateData();
+                                            h.clearInfo(l);
                                       }))
                             ]))
                           : describe == "Help-Seeker Profile"
@@ -993,7 +999,7 @@ class ProfileState extends State<Profile> {
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(20)),
-                                        onPressed: () {
+                                        onPressed: () async {
                                           setState(() {
                                             editableFN = false;
                                             editableEmail = false;
@@ -1001,9 +1007,19 @@ class ProfileState extends State<Profile> {
                                             editablePass = false;
                                             editableConf = false;
                                             flag = true;
-                                            updateData();
-                                            h.clearInfo(l);
-                                          });
+                                            });
+                                            if (_formKeyConf.currentState.validate() &&
+                                                _formKeyEmail.currentState
+                                                    .validate() &&
+                                                _formKeyLname.currentState
+                                                    .validate() &&
+                                                _formKeyPass.currentState
+                                                    .validate() &&
+                                                _formKeyPhone.currentState
+                                                    .validate() && _formKeyFname.currentState.validate())
+                                                     await updateData();
+                                                     h.clearInfo(l);
+                                          
                                         },
                                         elevation: 2,
                                         color: Colors.deepPurple,
