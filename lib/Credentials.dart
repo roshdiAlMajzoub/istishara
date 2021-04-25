@@ -615,16 +615,17 @@ class CredentialsState extends State<Credentials> {
                                       fontSize: 18,
                                       fontWeight: FontWeight.w900)),
                             ),
+                           
                             Container(
                               child: Experts(),
                             ),
                             SizedBox(
-                              height: 30,
+                              height: 50,
                             ),
                             Container(
                                 height: screenHeight / 10,
                                 padding: EdgeInsets.only(
-                                  bottom: screenHeight / 30,
+                                 bottom: screenHeight / 30,
                                 ),
                                 child: OutlinedButton(
                                     onPressed: () async {
@@ -650,17 +651,16 @@ class CredentialsState extends State<Credentials> {
                                       ),
                                     ))),
                             if (choosingCv) CircularProgressIndicator(),
-                            if (!choosingCv) d.cvName(),
-                            Container(height: screenHeight / 20),
+                            if (!choosingCv) d.cvName(),                        
                             isProfile == false
                                 ? Container(
                                     height: screenHeight / 10,
                                     padding: EdgeInsets.only(
-                                      bottom: screenHeight / 30,
+                                      bottom: screenHeight / 160,
                                     ),
                                   )
                                 : Container(
-                                    height: screenHeight / 10,
+                                    height: screenHeight / 20,
                                     padding: EdgeInsets.only(
                                       bottom: screenHeight / 30,
                                     ),
@@ -689,7 +689,7 @@ class CredentialsState extends State<Credentials> {
                               padding: EdgeInsets.only(
                                 left: screenWidth / 25,
                                 right: screenWidth / 25,
-                                bottom: screenHeight / 60,
+                                bottom: screenHeight / 100,
                               ),
                               child: Text("3. Select Price:",
                                   style: TextStyle(

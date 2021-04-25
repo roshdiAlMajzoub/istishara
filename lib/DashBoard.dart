@@ -136,19 +136,19 @@ class DashboardState extends State<Dashboard> {
                   padding: EdgeInsets.all(3.0),
                   children: <Widget>[
                      makeDashboardItem(
-                        "Lawyer", Icons.account_balance, Colors.blue[500]),
+                        "Lawyer", Icons.account_balance, Colors.orange[600]),
                      makeDashboardItem(
                         "Chemist", Icons.sanitizer, Colors.blue[500]),
                      makeDashboardItem(
-                        "Biologist", Icons.biotech, Colors.red),
+                        "Biologist", Icons.biotech, Colors.indigoAccent[700]),
                       makeDashboardItem(
                         "Physicist", Icons.lightbulb, Colors.pink),
                       makeDashboardItem(
-                        "Physician", Icons.medical_services, Colors.brown),
+                        "Physician", Icons.medical_services, Colors.lime[600]),
                     makeDashboardItem(
                         "Developer", Icons.code, Colors.red),
                      makeDashboardItem(
-                        "Psychologist", Icons.psychology, Colors.red),
+                        "Psychologist", Icons.psychology, Colors.amber[900]),
                     makeDashboardItem(
                         "Civil Engineer", Icons.build, Colors.purple[300]),
                     makeDashboardItem("Electrician",
@@ -163,19 +163,19 @@ class DashboardState extends State<Dashboard> {
                     makeDashboardItem(
                         "Architect", Icons.apartment_rounded, Colors.indigo),
                     makeDashboardItem(
-                        "Handyman", Icons.handyman_outlined, Colors.cyan),
+                        "Handyman", Icons.handyman_outlined, Colors.cyan[900]),
                     makeDashboardItem("Carpenter", Icons.carpenter_outlined,
                         Colors.deepOrange),
                     makeDashboardItem("Interior Designer", Icons.home_outlined,
                         Colors.lightBlue),
                     makeDashboardItem(
-                        "BlackSmith", Icons.construction, Colors.tealAccent),
+                        "BlackSmith", Icons.construction, Colors.pink),
                     makeDashboardItem(
                         "Industrial Engineer", Icons.work, Colors.blueAccent),
                     makeDashboardItem(
                         "Data Scientist", Icons.data_usage, Colors.lightGreen),
                     makeDashboardItem(
-                        "IT Specialist", Icons.computer, Colors.brown),
+                        "IT Specialist", Icons.computer, Colors.black),
                     makeDashboardItem("Phone Electrician", Icons.phone_android,
                         Colors.red[800]),
                   ],
@@ -183,7 +183,7 @@ class DashboardState extends State<Dashboard> {
               ),
             )));
   }
-
+  
   Card makeDashboardItem(
     String title,
     IconData icon,

@@ -148,20 +148,26 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                           );
                                         },
                                       )),
-                                  title: Text("New Meeting at " +
+                                  title: Text(
+                                   
+                                    "New Requested Meeting " + "\n"+ "Date:   " +
                                       notificationList[index]['start time']
                                           .toDate()
-                                          .toString() +
-                                      "-" +
+                                          .toString().substring(0,10)+"\nFrom: "+  notificationList[index]['start time']
+                                          .toDate()
+                                          .toString().substring(11,16)+
+                                      "\nto:       " +
                                       notificationList[index]['end time']
                                           .toDate()
-                                          .toString()),
+                                          .toString().substring(11,16),
+                                           style: TextStyle(fontSize: 15 )
+                                          ),
                                   trailing: IconButton(
                                     icon: SvgPicture.asset(
                                         "asset/images/cancel.svg"),
                                     color: Colors.green,
                                     iconSize: 3,
-                                    onPressed: () {
+                                    onPressed: () { 
                                       showAlertDialog2(
                                         context,
                                         notificationList[index]['id1'],
