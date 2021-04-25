@@ -140,7 +140,7 @@ class ProfileState extends State<Profile> {
       });
       changeEmail();
     }
-    if(_repValue != null){
+    if(_repValue != 0){
       collectionReference.doc(id).update({
         'price range': _repValue,
       });

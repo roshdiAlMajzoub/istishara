@@ -122,17 +122,15 @@ class Databasers {
       print(link);
       return link;
     } catch (e) {
-      final l = await firebase_storage.FirebaseStorage.instance
+      /*final l = await firebase_storage.FirebaseStorage.instance
           .ref()
           .child('playground')
           .child("profile1.jpg")
           .getDownloadURL();
       print(e.message);
-      return l;
+      return l;*/
     }
-    return Text(
-      'Success!\n Copied download URL to Clipboard!',
-    );
+   
   }
 
   Future<void> downloadFile(firebase_storage.Reference ref) async {

@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:pdftron_flutter/pdftron_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ViewExpert extends StatelessWidget {
@@ -55,17 +56,16 @@ class _ViewExpert extends StatefulWidget {
   String collection;
   String nbOfRecords;
   String price;
-  _ViewExpert({
-    @required this.name,
-    @required this.field,
-    this.id,
-    this.cvName,
-    this.imgPath,
-    this.collection,
-    this.reputation,
-    this.nbOfRecords,
-    this.price
-  });
+  _ViewExpert(
+      {@required this.name,
+      @required this.field,
+      this.id,
+      this.cvName,
+      this.imgPath,
+      this.collection,
+      this.reputation,
+      this.nbOfRecords,
+      this.price});
   @override
   State<_ViewExpert> createState() => _ViewExpertState(
       name: name,
@@ -204,8 +204,13 @@ class _ViewExpertState extends State<_ViewExpert> {
                     padding: EdgeInsets.only(bottom: 20, top: 20),
                     // ignore: deprecated_member_use
                     child: RaisedButton(
-                      onPressed: () {
-                        _showDialog("title", cvLink, context);
+                      onPressed: () async {
+                        if (cvLink != null) {
+                          await PdftronFlutter.openDocument(cvLink);
+                        } else {
+                          _showDialog("title", "url", context);
+                        }
+                        //_showDialog("title", cvLink, context);
                         //Databasers().downloadFileExample();
                         /*Databasers().downloadFile(firebase_storage.FirebaseStorage.instance
                                                     .ref()
@@ -257,7 +262,7 @@ void _showDialog(String title, String url, BuildContext context) {
           ),
           title: Center(
               child: Text(
-            "Dowload the CV via this link!",
+            "This expert does not have CV yet",
             style: TextStyle(
                 color: Colors.deepPurple, fontWeight: FontWeight.w900),
           )),
@@ -269,16 +274,21 @@ void _showDialog(String title, String url, BuildContext context) {
               width: screenWidth / 1.8,
               height: screenHeight / 7,
               child: Column(children: [
+                SizedBox(
+                  height: 80,
+                ),
                 Container(
                     //width: double.infinity,
+                    padding: EdgeInsets.only(right: 1.9),
                     child: new InkWell(
-                  child: new Text(
-                    'Dowload CV',
-                    style: TextStyle(
-                        color: Colors.deepPurple, fontWeight: FontWeight.w900),
-                  ),
-                  onTap: () => launch(url),
-                )
+                      child: new Text(
+                        'OK',
+                        style: TextStyle(
+                            color: Colors.deepPurple,
+                            fontWeight: FontWeight.w900),
+                      ),
+                      onTap: () => Navigator.pop(context),
+                    )
                     /* Text(
                   url,
                   textAlign: TextAlign.center,
