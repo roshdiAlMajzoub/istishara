@@ -17,7 +17,7 @@ class DataBaseServiceHelp {
 
   final String uid;
   DataBaseServiceHelp({this.uid});
-  Future updateuserData(fname, lname, pnumber, email,passwoard) async {
+  Future updateuserData(fname, lname, pnumber, email, priceRange,passwoard) async {
     return await collectionReference.doc(uid).set({
       'first name': fname,
       'last name': lname,
@@ -28,7 +28,7 @@ class DataBaseServiceHelp {
       'money': 50000,
       'image name':"https://firebasestorage.googleapis.com/v0/b/istisharaa.appspot.com/o/playground%2Fprofile1.jpg?alt=media&token=0d539f85-b3b7-462d-83b8-97383993efea",
       'available': true,
-      'price range': 0,
+      'price range': priceRange,
     });
   }
 }
@@ -36,7 +36,7 @@ class DataBaseServiceHelp {
 class DataBaseServiceExperts {
   final String uid;
   DataBaseServiceExperts({this.uid});
-  Future updateuserData(fname, lname, pnumber, email, exp, cvN, passwoard) async {
+  Future updateuserData(fname, lname, pnumber, email, exp, cvN, priceRange,passwoard) async {
     CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(exp);
 
@@ -52,7 +52,7 @@ class DataBaseServiceExperts {
       'money': 50000,
       'image name':"https://firebasestorage.googleapis.com/v0/b/istisharaa.appspot.com/o/playground%2Fprofile1.jpg?alt=media&token=0d539f85-b3b7-462d-83b8-97383993efea",
       'available': true,
-      'price range': 0,
+      'price range': priceRange,
     });
   }
 }

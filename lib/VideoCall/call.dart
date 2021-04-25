@@ -292,7 +292,7 @@ class _CallPageState extends State<CallPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ISTISHARA MEETING'),
+        title: Text('ISTISHARA Meeting'),
       ),
       backgroundColor: Colors.black,
       body: Center(

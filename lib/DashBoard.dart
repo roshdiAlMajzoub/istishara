@@ -209,10 +209,13 @@ class DashboardState extends State<Dashboard> {
                   color: Colors.white,
                 )),
                 SizedBox(height: 20.0),
-                new Center(
-                  child: new Text(title,
-                      style:
-                          new TextStyle(fontSize: 18.0, color: Colors.white)),
+                Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: new Center(
+                    child: new Text(title,
+                        style:
+                            new TextStyle(fontSize: 18.0, color: Colors.white)),
+                  ),
                 )
               ],
             ),
