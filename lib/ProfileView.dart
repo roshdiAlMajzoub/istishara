@@ -337,7 +337,7 @@ class ProfileState extends State<Profile> {
                                         endIndent: 15,
                                         thickness: 1,
                                       ),
-                                      h.buildText("Price Range:",
+                                      h.buildText("Price:",
                                           lst[0]['price range'].toString()),
                                       VerticalDivider(
                                         color: Colors.black,

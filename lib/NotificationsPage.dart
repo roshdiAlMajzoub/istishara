@@ -99,7 +99,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                 child: ListTile(
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: 20.0, vertical: 10.0),
-                                  title: Text("Your appointemnt with ..." +
+                                  title: Text("Your appointemnt with "
                                       "has been accepted"),
                                   trailing: Container(
                                       padding: EdgeInsets.only(right: 1.0),

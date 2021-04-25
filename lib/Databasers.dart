@@ -15,7 +15,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:cloud_firestore/cloud_firestore.dart' as cloud;
 
 var listOfExperts = [
-  'Software Engineer',
+  'Developer',
   'Civil Engineer',
   'Electrician',
   'Dietician',
@@ -26,7 +26,14 @@ var listOfExperts = [
   'Data Scientist',
   'Industrial Engineer',
   'IT Specialist',
-  'BlackSmith'
+  'BlackSmith',
+  'Chemist',
+  'Biologist',
+  'Physicist',
+  'Physician',
+  'Psychologist',
+  'Handyman',
+  'Lawyer'
 ];
 
 class Databasers {

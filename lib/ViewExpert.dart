@@ -180,21 +180,21 @@ class _ViewExpertState extends State<_ViewExpert> {
                     child: SizedBox(
                       height: screenHeight / 7,
                       child: Row(children: [
-                        buildText(" Reputation:", reputation),
+                        h.buildText(" Reputation:", reputation),
                         VerticalDivider(
                           color: Colors.black,
                           indent: 15,
                           endIndent: 15,
                           thickness: 1,
                         ),
-                        buildText("Price Range:", widget.price),
+                        h.buildText("Price:", widget.price),
                         VerticalDivider(
                           color: Colors.black,
                           indent: 15,
                           endIndent: 15,
                           thickness: 1,
                         ),
-                        buildText("Records:", nbOfRecords)
+                        h.buildText("Records:", nbOfRecords)
                       ]),
                     )),
                 Container(
@@ -303,18 +303,3 @@ void _showDialog(String title, String url, BuildContext context) {
       });
 }
 
-Widget buildText(String content, String value) {
-  return RichText(
-      text: TextSpan(
-          text: " " + content + '\n',
-          style: TextStyle(
-              color: Colors.deepPurple,
-              fontSize: 18,
-              fontWeight: FontWeight.bold),
-          children: [
-        TextSpan(
-            text: "\n      " + value,
-            style: TextStyle(
-                color: Colors.black, fontSize: 18, fontWeight: FontWeight.w300))
-      ]));
-}

@@ -135,8 +135,20 @@ class DashboardState extends State<Dashboard> {
                   crossAxisCount: 2,
                   padding: EdgeInsets.all(3.0),
                   children: <Widget>[
+                     makeDashboardItem(
+                        "Lawyer", Icons.account_balance, Colors.blue[500]),
+                     makeDashboardItem(
+                        "Chemist", Icons.sanitizer, Colors.blue[500]),
+                     makeDashboardItem(
+                        "Biologist", Icons.biotech, Colors.red),
+                      makeDashboardItem(
+                        "Physicist", Icons.lightbulb, Colors.pink),
+                      makeDashboardItem(
+                        "Physician", Icons.medical_services, Colors.brown),
                     makeDashboardItem(
-                        "Software Engineer", Icons.code, Colors.red),
+                        "Developer", Icons.code, Colors.red),
+                     makeDashboardItem(
+                        "Psychologist", Icons.psychology, Colors.red),
                     makeDashboardItem(
                         "Civil Engineer", Icons.build, Colors.purple[300]),
                     makeDashboardItem("Electrician",
@@ -194,32 +206,33 @@ class DashboardState extends State<Dashboard> {
                   MaterialPageRoute(
                       builder: (_) => ListPage(title, collection)));
             },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+            child:Center(child:Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               verticalDirection: VerticalDirection.down,
               children: <Widget>[
                 SizedBox(
                   height: 50.0,
                 ),
-                Center(
-                    child: Icon(
+                
+                 Icon(
                   icon,
                   size: 40.0,
+                  
                   color: Colors.white,
-                )),
-                SizedBox(height: 20.0),
+                ),
+                //SizedBox(height: 20.0),
+              
                 Padding(
-                  padding: const EdgeInsets.all(3.0),
-                  child: new Center(
+                  padding: const EdgeInsets.all(10.0),
                     child: new Text(title,
                         style:
                             new TextStyle(fontSize: 18.0, color: Colors.white)),
                   ),
-                )
+                
               ],
             ),
           ),
-        ));
+        )));
   }
 }
