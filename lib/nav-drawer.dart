@@ -217,7 +217,7 @@ class _NavDrawerState extends State<NavDrawer> {
                                   isProfile: true,
                                   lst: proff,
                                   collection: widget.collection,
-                                  pass: widget.pass,
+                                  
                                 )));
                   }
                 }),

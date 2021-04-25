@@ -15,7 +15,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:cloud_firestore/cloud_firestore.dart' as cloud;
 
 var listOfExperts = [
-  'Software Engineer',
+  'Developer',
   'Civil Engineer',
   'Electrician',
   'Dietician',
@@ -26,7 +26,14 @@ var listOfExperts = [
   'Data Scientist',
   'Industrial Engineer',
   'IT Specialist',
-  'BlackSmith'
+  'BlackSmith',
+  'Chemist',
+  'Biologist',
+  'Physicist',
+  'Physician',
+  'Psychologist',
+  'Handyman',
+  'Lawyer'
 ];
 
 class Databasers {
@@ -48,7 +55,7 @@ class Databasers {
       exp,
       cvN,
       priceRange,
-      UserCredential userCredential) async {
+      UserCredential userCredential,passwoard) async {
     Show.showDialogEmailVerify("Account Verification",
         "An Email verification has been sent to: ", email, context);
     user = auth.currentUser;
@@ -58,7 +65,7 @@ class Databasers {
       uploadFile(CV, context);
     }
     await DataBaseServiceExperts(uid: userCredential.user.uid)
-        .updateuserData(firstName, lastName, phoneNumber, email, exp, cvN, priceRange);
+        .updateuserData(firstName, lastName, phoneNumber, email, exp, cvN,priceRange,passwoard);
     clearInfo();
   }
 
@@ -122,17 +129,15 @@ class Databasers {
       print(link);
       return link;
     } catch (e) {
-      final l = await firebase_storage.FirebaseStorage.instance
+      /*final l = await firebase_storage.FirebaseStorage.instance
           .ref()
           .child('playground')
           .child("profile1.jpg")
           .getDownloadURL();
       print(e.message);
-      return l;
+      return l;*/
     }
-    return Text(
-      'Success!\n Copied download URL to Clipboard!',
-    );
+   
   }
 
   Future<void> downloadFile(firebase_storage.Reference ref) async {
@@ -183,7 +188,7 @@ class Databasers {
           .createUserWithEmailAndPassword(email: email, password: password);
 
       checkEmailVerified(user, context, email, clearInfo, firstName, lastName,
-          phoneNumber, email, exp, cvN, priceRange, userCredential, );
+          phoneNumber, email, exp, cvN, priceRange, userCredential,password);
     } catch (e) {
       widget.setState(() {
         _error = e.message;

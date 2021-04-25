@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:pdftron_flutter/pdftron_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ViewExpert extends StatelessWidget {
@@ -17,6 +18,7 @@ class ViewExpert extends StatelessWidget {
   String collection;
   String reputation;
   String nbOfRecords;
+  String price;
   ViewExpert(
       {@required this.name,
       @required this.field,
@@ -25,7 +27,8 @@ class ViewExpert extends StatelessWidget {
       this.imgPath,
       this.collection,
       this.reputation,
-      this.nbOfRecords});
+      this.nbOfRecords,
+      this.price});
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +41,7 @@ class ViewExpert extends StatelessWidget {
       collection: collection,
       reputation: reputation,
       nbOfRecords: nbOfRecords,
+      price: price,
     );
   }
 }
@@ -51,16 +55,17 @@ class _ViewExpert extends StatefulWidget {
   final String reputation;
   String collection;
   String nbOfRecords;
-  _ViewExpert({
-    @required this.name,
-    @required this.field,
-    this.id,
-    this.cvName,
-    this.imgPath,
-    this.collection,
-    this.reputation,
-    this.nbOfRecords,
-  });
+  String price;
+  _ViewExpert(
+      {@required this.name,
+      @required this.field,
+      this.id,
+      this.cvName,
+      this.imgPath,
+      this.collection,
+      this.reputation,
+      this.nbOfRecords,
+      this.price});
   @override
   State<_ViewExpert> createState() => _ViewExpertState(
       name: name,
@@ -85,18 +90,17 @@ class _ViewExpertState extends State<_ViewExpert> {
   String collection;
   String reputation;
   String nbOfRecords;
-  _ViewExpertState(
-      {@required this.name,
-      @required this.field,
-      this.id,
-      this.cvName,
-      this.imgPath,
-      this.rep,
-      this.collection,
-      this.reputation,this.nbOfRecords,});
-
- 
-
+  _ViewExpertState({
+    @required this.name,
+    @required this.field,
+    this.id,
+    this.cvName,
+    this.imgPath,
+    this.rep,
+    this.collection,
+    this.reputation,
+    this.nbOfRecords,
+  });
 
   downloadCV() async {
     var a = await Databasers().downloadLink(firebase_storage
@@ -143,13 +147,13 @@ class _ViewExpertState extends State<_ViewExpert> {
           Align(
               alignment: Alignment(0, -1),
               child: Column(children: [
-               Container(
+                Container(
                     width: screenWidth / 2.75,
                     height: screenHeight / 3,
                     padding: EdgeInsets.only(bottom: 0),
                     child: CircleAvatar(
-                      backgroundImage:NetworkImage(imgPath),)),
-
+                      backgroundImage: NetworkImage(imgPath),
+                    )),
                 Container(
                     padding: EdgeInsets.only(top: 0, bottom: 15),
                     child: Text(
@@ -176,21 +180,21 @@ class _ViewExpertState extends State<_ViewExpert> {
                     child: SizedBox(
                       height: screenHeight / 7,
                       child: Row(children: [
-                        buildText(" Reputation:", reputation),
+                        h.buildText(" Reputation:", reputation),
                         VerticalDivider(
                           color: Colors.black,
                           indent: 15,
                           endIndent: 15,
                           thickness: 1,
                         ),
-                        buildText("Price Range:", "2-3 LBP"),
+                        h.buildText("Price:", widget.price),
                         VerticalDivider(
                           color: Colors.black,
                           indent: 15,
                           endIndent: 15,
                           thickness: 1,
                         ),
-                        buildText("Records:", nbOfRecords)
+                        h.buildText("Records:", nbOfRecords)
                       ]),
                     )),
                 Container(
@@ -200,8 +204,13 @@ class _ViewExpertState extends State<_ViewExpert> {
                     padding: EdgeInsets.only(bottom: 20, top: 20),
                     // ignore: deprecated_member_use
                     child: RaisedButton(
-                      onPressed: () {
-                        _showDialog("title", cvLink, context);
+                      onPressed: () async {
+                        if (cvLink != null) {
+                          await PdftronFlutter.openDocument(cvLink);
+                        } else {
+                          _showDialog("title", "url", context);
+                        }
+                        //_showDialog("title", cvLink, context);
                         //Databasers().downloadFileExample();
                         /*Databasers().downloadFile(firebase_storage.FirebaseStorage.instance
                                                     .ref()
@@ -253,7 +262,7 @@ void _showDialog(String title, String url, BuildContext context) {
           ),
           title: Center(
               child: Text(
-            "Dowload the CV via this link!",
+            "This expert does not have CV yet",
             style: TextStyle(
                 color: Colors.deepPurple, fontWeight: FontWeight.w900),
           )),
@@ -265,16 +274,21 @@ void _showDialog(String title, String url, BuildContext context) {
               width: screenWidth / 1.8,
               height: screenHeight / 7,
               child: Column(children: [
+                SizedBox(
+                  height: 80,
+                ),
                 Container(
                     //width: double.infinity,
+                    padding: EdgeInsets.only(right: 1.9),
                     child: new InkWell(
-                  child: new Text(
-                    'Dowload CV',
-                    style: TextStyle(
-                        color: Colors.deepPurple, fontWeight: FontWeight.w900),
-                  ),
-                  onTap: () => launch(url),
-                )
+                      child: new Text(
+                        'OK',
+                        style: TextStyle(
+                            color: Colors.deepPurple,
+                            fontWeight: FontWeight.w900),
+                      ),
+                      onTap: () => Navigator.pop(context),
+                    )
                     /* Text(
                   url,
                   textAlign: TextAlign.center,
@@ -289,18 +303,3 @@ void _showDialog(String title, String url, BuildContext context) {
       });
 }
 
-Widget buildText(String content, String value) {
-  return RichText(
-      text: TextSpan(
-          text: " " + content + '\n',
-          style: TextStyle(
-              color: Colors.deepPurple,
-              fontSize: 18,
-              fontWeight: FontWeight.bold),
-          children: [
-        TextSpan(
-            text: "\n      " + value,
-            style: TextStyle(
-                color: Colors.black, fontSize: 18, fontWeight: FontWeight.w300))
-      ]));
-}

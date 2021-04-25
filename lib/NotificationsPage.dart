@@ -99,7 +99,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                 child: ListTile(
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: 20.0, vertical: 10.0),
-                                  title: Text("Your appointemnt with ..." +
+                                  title: Text("Your appointemnt with "
                                       "has been accepted"),
                                   trailing: Container(
                                       padding: EdgeInsets.only(right: 1.0),
@@ -335,6 +335,7 @@ acceptAppt(col, id1, uid, id2, st, et, token1, token2) async {
     'token2': token2,
     'collection': collection,
     'price range': priceRange,
+    'started': false,
     'status': "not-paid",
   });
   print("after final");

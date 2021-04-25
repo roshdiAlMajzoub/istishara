@@ -10,7 +10,8 @@ class ExpertType {
 
   static List<ExpertType> getType() {
     return <ExpertType>[
-      ExpertType(1, 'Software Engineer'),
+       ExpertType(22, 'Choose your profession'),
+      ExpertType(1, 'Developer'),
       ExpertType(2, 'Civil Engineer'),
       ExpertType(3, 'Electrician'),
       ExpertType(4, 'Dietician'),
@@ -25,6 +26,12 @@ class ExpertType {
       ExpertType(13, 'Industrial Engineer'),
       ExpertType(14, 'Data Scientist'),
       ExpertType(15, 'IT Specialist'),
+      ExpertType(16, 'Lawyer'),
+      ExpertType(17, 'Chemist'),
+      ExpertType(18, 'Biologist'),
+      ExpertType(19, 'Physicist'),
+      ExpertType(20, 'Physician'),
+      ExpertType(21, 'Psychologist'),
     ];
   }
 }

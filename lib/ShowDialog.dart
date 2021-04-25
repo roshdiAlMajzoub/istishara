@@ -74,6 +74,31 @@ class Show {
         });
   }
 
+  static Future<AlertDialog> showDialogChooseProfession(BuildContext context1) {
+    final double screenWidth = MediaQuery.of(context1).size.width;
+    final double screenHeight = MediaQuery.of(context1).size.height;
+    return showDialog<AlertDialog>(
+        context: context1,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              insetPadding: EdgeInsets.symmetric(
+                horizontal: 5.0,
+              ),
+              title: Text(
+                "Please choose your profession",
+                style: TextStyle(
+                    color: Colors.deepPurple, fontWeight: FontWeight.w900),
+              ),
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("OK")),
+              ]);
+        });
+  }
+
   static Future<AlertDialog> showDialogMeetingDetails(BuildContext context1,
       String title, String startTime, String endTime, String date) {
     return showDialog<AlertDialog>(
@@ -210,8 +235,6 @@ class Show {
           );
         });
   }
-
-  
 
   static Widget showAlert(String error, State widget) {
     if (error != null) {

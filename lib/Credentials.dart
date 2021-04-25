@@ -616,61 +616,25 @@ class CredentialsState extends State<Credentials> {
                                       fontWeight: FontWeight.w900)),
                             ),
                             Container(
-                                child: Experts(),
+                              child: Experts(),
                             ),
-                            Container(
-                              height: screenHeight / 10,
-                              padding: EdgeInsets.only(
-                                bottom: screenHeight / 30,
-                              ),
-                              child: OutlinedButton(
-                                  onPressed: ()async {
-                                    setState(()  {
-                                      choosingCv = true;
-                                    });
-                                   await d.upload();
-                                     setState(() {
-                                      choosingCv = false;
-                                    });
-                                  },
-                                  child: Text("Upload CV",
-                                      style: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w900,
-                                          color: Color(0xff5848CF))),
-                                  style: ElevatedButton.styleFrom(
-                                    side: BorderSide(
-                                        width: 3.0, color: Colors.deepPurple),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(32.0),
-                                    ),
-                                  ))),
-                          if(choosingCv)
-                              CircularProgressIndicator(),
-                          if(!choosingCv)
-                              d.cvName(),
-                          Container(height: screenHeight / 20),
-                          isProfile == false
-                              ? Container(
-                                  height: screenHeight / 10,
-                                  padding: EdgeInsets.only(
-                                    bottom: screenHeight / 30,
-                                  ),
-                                  // ignore: deprecated_member_use
-                                  child: RaisedButton(
-                                      color: Colors.deepPurple,
-                                      
-                                      //fontSize: 18,
-                                      //fontWeight: FontWeight.w900, onPressed: () {  },)),
-                            ),):
+                            SizedBox(
+                              height: 30,
+                            ),
                             Container(
                                 height: screenHeight / 10,
                                 padding: EdgeInsets.only(
                                   bottom: screenHeight / 30,
                                 ),
                                 child: OutlinedButton(
-                                    onPressed: () {
-                                      d.upload();
+                                    onPressed: () async {
+                                      setState(() {
+                                        choosingCv = true;
+                                      });
+                                      await d.upload();
+                                      setState(() {
+                                        choosingCv = false;
+                                      });
                                     },
                                     child: Text("Upload CV",
                                         style: TextStyle(
@@ -685,8 +649,41 @@ class CredentialsState extends State<Credentials> {
                                             BorderRadius.circular(32.0),
                                       ),
                                     ))),
+                            if (choosingCv) CircularProgressIndicator(),
+                            if (!choosingCv) d.cvName(),
+                            Container(height: screenHeight / 20),
+                            isProfile == false
+                                ? Container(
+                                    height: screenHeight / 10,
+                                    padding: EdgeInsets.only(
+                                      bottom: screenHeight / 30,
+                                    ),
+                                  )
+                                : Container(
+                                    height: screenHeight / 10,
+                                    padding: EdgeInsets.only(
+                                      bottom: screenHeight / 30,
+                                    ),
+                                    child: OutlinedButton(
+                                        onPressed: () {
+                                          d.upload();
+                                        },
+                                        child: Text("Upload CV",
+                                            style: TextStyle(
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w900,
+                                                color: Color(0xff5848CF))),
+                                        style: ElevatedButton.styleFrom(
+                                          side: BorderSide(
+                                              width: 3.0,
+                                              color: Colors.deepPurple),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(32.0),
+                                          ),
+                                        ))),
                             d.cvName(),
-                            Container(height: screenHeight / 30),
+                            // Container(height: screenHeight / 30),
                             Container(
                               height: screenHeight / 20,
                               padding: EdgeInsets.only(
@@ -708,7 +705,6 @@ class CredentialsState extends State<Credentials> {
                                 ),
                               ),
                               child: Column(
-                                
                                 children: [
                                   Slider(
                                     min: 0,
@@ -719,17 +715,15 @@ class CredentialsState extends State<Credentials> {
                                         _repValue = value;
                                       });
                                     },
-
-                                    divisions:10,
+                                    divisions: 10,
                                     label: _repValue.toString(),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
                                       "L.B.P Thousands",
-                                      style:  TextStyle(
+                                      style: TextStyle(
                                         color: Colors.deepPurple,
-                      
                                       ),
                                     ),
                                   )
@@ -763,8 +757,14 @@ class CredentialsState extends State<Credentials> {
                                               _formKeyPass.currentState
                                                   .validate() &&
                                               _formKeyConf.currentState
-                                                  .validate() &&
-                                              h.expertt() != null) {
+                                                  .validate()
+                                              ) {
+                                            if (ExpertsState.getExpertType() ==
+                                                null) {
+                                              Show.showDialogChooseProfession(
+                                                  context);
+                                            }
+                                            else{
                                             d.signup(
                                                 this,
                                                 user,
@@ -777,9 +777,8 @@ class CredentialsState extends State<Credentials> {
                                                 h.expertt(),
                                                 d.cvN,
                                                 _repValue,
-                                                () => {h.clearInfo(l)});
-                                          } else {
-                                            print("here");
+                                                () => {h.clearInfo(l)});}
+                                          
                                           }
                                         }),
                                   )
@@ -855,6 +854,7 @@ class CredentialsState extends State<Credentials> {
                                                 .validate() &&
                                             _formKeyConf.currentState
                                                 .validate()) {
+                                                  
                                           d.signup(
                                               this,
                                               user,

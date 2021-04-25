@@ -255,7 +255,7 @@ class CalendarState extends State<MyCalendar> {
                           print("two");
                           String IDofTheOther = await getIDOfTheOther(i);
                           print("three");
-                         
+
                           print("four");
                           String collection2 =
                               await Databasers().docExistsIn(apptt[i]['id2']);
@@ -268,6 +268,14 @@ class CalendarState extends State<MyCalendar> {
                               FirebaseAuth.instance.currentUser.displayName;
                           String id1 = FirebaseAuth.instance.currentUser.uid;
                           _isLoading = false;
+
+
+                          FirebaseFirestore.instance
+                              .collection('conversations')                  /*@omarAssidi dont delete this*/ 
+                              .doc(apptt[i]['id'])
+                              .update({'started': true});
+
+
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
                             return ChatScreen(
@@ -282,7 +290,6 @@ class CalendarState extends State<MyCalendar> {
                               priceRange: priceRange,
                               collection2: collection2,
                               secId1: apptt[i]['id1'],
-                              
                             );
                           }));
                           break;

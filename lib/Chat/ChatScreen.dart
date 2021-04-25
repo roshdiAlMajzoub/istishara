@@ -21,7 +21,6 @@ class ChatScreen extends StatefulWidget {
   String collection2;
   String collection1;
   bool isConversation;
-  bool isEnd = false;
   var priceRange;
   String secId1;
   ChatScreen({
@@ -252,7 +251,6 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   ),
                   if (!widget.isConversation)
-                    if (!widget.isEnd)
                       Container(
                           height: 45,
                           decoration: BoxDecoration(
@@ -266,33 +264,11 @@ class _ChatScreenState extends State<ChatScreen> {
                                     fontWeight: FontWeight.w900),
                                 endTime: endTimeint,
                                 onEnd: () {
-                                  setState(() {
-                                    widget.isEnd = true;
-                                  });
                                   pay();
+                                  Navigator.of(context).pop();
+                                  showRatingPayment(context);
                                 }),
                           )),
-                  if (widget.isEnd)
-                    Container(
-                        height: 45,
-                        decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(15)),
-                        child: Center(
-                          child: FlatButton(
-                            child: Text(
-                              "Leave",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w900,
-                              ),
-                            ),
-                            onPressed: () {
-                              showRatingPayment(context);
-                              //Navigator.of(context).pop();
-                            },
-                          ),
-                        )),
                 ],
               ),
             ),
