@@ -186,16 +186,17 @@ class _NavDrawerState extends State<NavDrawer> {
                   if (widget.type == "Expert") {
                     await getData();
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomePage()));
-                    // MaterialPageRoute(
-                    //     builder: (context) => Profile(
-                    //           descirbe: "Expert Profile",
-                    //           barTitle: "Expert's Profile",
-                    //           isProfile: true,
-                    //           lst: proff,
-                    //           collection: widget.collection,
-                    //           nbOfRec: nbOFRec,
-                    //         )));
+                     //   MaterialPageRoute(builder: (context) => HomePage()));
+                     MaterialPageRoute(
+                         builder: (context) => Profile(
+                               descirbe: "Expert Profile",
+                               barTitle: "Expert's Profile",
+                               isProfile: true,
+                               lst: proff,
+                               collection: widget.collection,
+                               nbOfRec: nbOFRec,
+                               
+                             )));
                   } else {
                     await getData();
                     Navigator.push(
@@ -207,7 +208,7 @@ class _NavDrawerState extends State<NavDrawer> {
                                   isProfile: true,
                                   lst: proff,
                                   collection: widget.collection,
-                                  pass: widget.pass,
+                                  
                                 )));
                   }
                 }),

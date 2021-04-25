@@ -211,6 +211,7 @@ class _ListPageState extends State<ListPage> {
                                         collection: collection,
                                         reputation: reputation,
                                         nbOfRecords: nbOfRec,
+                                        price: expertProfileList[index]['price range'].toString(),
                                       ))));
                         },
                       )),

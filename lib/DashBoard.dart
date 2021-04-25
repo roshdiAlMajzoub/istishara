@@ -40,12 +40,12 @@ class DashboardState extends State<Dashboard> {
     setState(() {
       collection = coll;
     });
+    getToken();
   }
 
   @override
   void initState() {
     getCollection();
-    getToken();
     super.initState();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification notification = message.notification;
@@ -81,7 +81,7 @@ class DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    getToken();
+    //getToken();
     getMyMoney();
     return Scaffold(
         // backgroundColor: kPrimaryLightColor,

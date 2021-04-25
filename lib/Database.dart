@@ -17,11 +17,12 @@ class DataBaseServiceHelp {
 
   final String uid;
   DataBaseServiceHelp({this.uid});
-  Future updateuserData(fname, lname, pnumber, email) async {
+  Future updateuserData(fname, lname, pnumber, email,passwoard) async {
     return await collectionReference.doc(uid).set({
       'first name': fname,
       'last name': lname,
       'email': email,
+      'passwoard': passwoard,
       'phone number': pnumber,
       'id': uid,
       'money': 50000,
@@ -35,7 +36,7 @@ class DataBaseServiceHelp {
 class DataBaseServiceExperts {
   final String uid;
   DataBaseServiceExperts({this.uid});
-  Future updateuserData(fname, lname, pnumber, email, exp, cvN) async {
+  Future updateuserData(fname, lname, pnumber, email, exp, cvN, passwoard) async {
     CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(exp);
 
@@ -43,6 +44,7 @@ class DataBaseServiceExperts {
       'first name': fname,
       'last name': lname,
       'email': email,
+      'passwoard': passwoard,
       'phone number': pnumber,
       'reputation': [0],
       'id': uid,
@@ -135,8 +137,6 @@ class DatabaseBookAppt {
     var b = await FirebaseFirestore.instance
         .collection('Appt')
         .where('id2', isEqualTo: userid)
-        //.where('end time', isGreaterThanOrEqualTo: Timestamp.fromDate(st))
-        //.where('start time', isLessThanOrEqualTo: Timestamp.fromDate(et))
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((element) {
@@ -146,30 +146,6 @@ class DatabaseBookAppt {
         }
       });
     });
-    /* var a = await FirebaseFirestore.instance
-        .collection(col)
-        .doc(userid)
-        .collection('appt')
-        .where('start time', isGreaterThanOrEqualTo: Timestamp.fromDate(st))
-        //.where('start time', isLessThanOrEqualTo: Timestamp.fromDate(et))
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((element) {
-        ap.add(element.data());
-      });
-    });
-    var b = await FirebaseFirestore.instance
-        .collection(col)
-        .doc(userid)
-        .collection('appt')
-        .where('end time', isGreaterThanOrEqualTo: Timestamp.fromDate(st))
-        //.where('start time', isLessThanOrEqualTo: Timestamp.fromDate(et))
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((element) {
-        app.add(element.data());
-      });
-    });*/
 
     if (ap.length == 0 && app.length == 0) {
       return false;
@@ -185,20 +161,16 @@ class DatabaseBookAppt {
       }
       for (var i = 0; i < ap.length; i++) {
         DateTime dt = ap[i]['end time'].toDate();
-        //bool validDate = dt.isAfter(et);
+        
         DateTime dateS = ap[i]['start time'].toDate();
         bool validDatee = dateS.isBefore(et);
-        /*DateTime val = DateTime.now();
-        DateTime v = DateTime.now().add(Duration(hours: 2));
-        bool va = v.isBefore(val);*/
+        
         if (validDatee == true) {
-          //print(validDatee);
-          //print(dt);
-          //print(validDate);
+         
           conflictAppt.add(1);
-          //print('there is conflict');
+          
         } else {
-          //print("there is no conflict");
+          
         }
       }
       if (conflictAppt.length > 0) {

@@ -45,6 +45,7 @@ class SettingsState extends State<Settings> {
   }
 
   updateAvailability() async {
+    print(lst);
     await FirebaseFirestore.instance
         .collection(collection)
         .doc(FirebaseAuth.instance.currentUser.uid)
@@ -54,6 +55,13 @@ class SettingsState extends State<Settings> {
   bool temp;
   delteAcc() async {
     try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: FirebaseAuth.instance.currentUser.email,
+          password: lst[0]['passwoard']);
+      FirebaseFirestore.instance
+          .collection(collection)
+          .doc(FirebaseAuth.instance.currentUser.uid)
+          .delete();
       await FirebaseAuth.instance.currentUser.delete();
       Navigator.of(context).pushReplacementNamed('/Login');
     } on FirebaseAuthException catch (e) {
@@ -62,10 +70,6 @@ class SettingsState extends State<Settings> {
             'The user must reauthenticate before this operation can be executed.');
       }
     }
-    FirebaseFirestore.instance
-        .collection(collection)
-        .doc(FirebaseAuth.instance.currentUser.uid)
-        .delete();
   }
 
   deactivateAcc() {}

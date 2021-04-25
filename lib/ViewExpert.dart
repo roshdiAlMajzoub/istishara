@@ -17,6 +17,7 @@ class ViewExpert extends StatelessWidget {
   String collection;
   String reputation;
   String nbOfRecords;
+  String price;
   ViewExpert(
       {@required this.name,
       @required this.field,
@@ -25,7 +26,8 @@ class ViewExpert extends StatelessWidget {
       this.imgPath,
       this.collection,
       this.reputation,
-      this.nbOfRecords});
+      this.nbOfRecords,
+      this.price});
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +40,7 @@ class ViewExpert extends StatelessWidget {
       collection: collection,
       reputation: reputation,
       nbOfRecords: nbOfRecords,
+      price: price,
     );
   }
 }
@@ -51,6 +54,7 @@ class _ViewExpert extends StatefulWidget {
   final String reputation;
   String collection;
   String nbOfRecords;
+  String price;
   _ViewExpert({
     @required this.name,
     @required this.field,
@@ -60,6 +64,7 @@ class _ViewExpert extends StatefulWidget {
     this.collection,
     this.reputation,
     this.nbOfRecords,
+    this.price
   });
   @override
   State<_ViewExpert> createState() => _ViewExpertState(
@@ -85,18 +90,17 @@ class _ViewExpertState extends State<_ViewExpert> {
   String collection;
   String reputation;
   String nbOfRecords;
-  _ViewExpertState(
-      {@required this.name,
-      @required this.field,
-      this.id,
-      this.cvName,
-      this.imgPath,
-      this.rep,
-      this.collection,
-      this.reputation,this.nbOfRecords,});
-
- 
-
+  _ViewExpertState({
+    @required this.name,
+    @required this.field,
+    this.id,
+    this.cvName,
+    this.imgPath,
+    this.rep,
+    this.collection,
+    this.reputation,
+    this.nbOfRecords,
+  });
 
   downloadCV() async {
     var a = await Databasers().downloadLink(firebase_storage
@@ -143,13 +147,13 @@ class _ViewExpertState extends State<_ViewExpert> {
           Align(
               alignment: Alignment(0, -1),
               child: Column(children: [
-               Container(
+                Container(
                     width: screenWidth / 2.75,
                     height: screenHeight / 3,
                     padding: EdgeInsets.only(bottom: 0),
                     child: CircleAvatar(
-                      backgroundImage:NetworkImage(imgPath),)),
-
+                      backgroundImage: NetworkImage(imgPath),
+                    )),
                 Container(
                     padding: EdgeInsets.only(top: 0, bottom: 15),
                     child: Text(
@@ -183,7 +187,7 @@ class _ViewExpertState extends State<_ViewExpert> {
                           endIndent: 15,
                           thickness: 1,
                         ),
-                        buildText("Price Range:", "2-3 LBP"),
+                        buildText("Price Range:", widget.price),
                         VerticalDivider(
                           color: Colors.black,
                           indent: 15,

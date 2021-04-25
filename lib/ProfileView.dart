@@ -28,14 +28,16 @@ class Profile extends StatefulWidget {
   List lst;
   String collection;
   String nbOfRec;
-  final String pass;
+
+
   Profile(
       {@required this.descirbe,
       @required this.barTitle,
       @required this.isProfile,
       this.lst,
       this.collection,
-      this.nbOfRec,this.pass});
+      this.nbOfRec,
+      });
   @override
   ProfileState createState() => ProfileState(
         describe: descirbe,
@@ -140,6 +142,7 @@ class ProfileState extends State<Profile> {
       if (_formKeyEmail.currentState.validate()) {
         collectionReference.doc(id).update({
           'email': _email,
+          
         });
         changeEmail();
       }
@@ -192,7 +195,12 @@ class ProfileState extends State<Profile> {
     if (_password != null) {
       if (_formKeyPass.currentState.validate() &&
           _formKeyConf.currentState.validate()) {
+            collectionReference.doc(id).update({
+          'passwoard': _password,
+          
+        });
         await changePass();
+
       }
     }
 
@@ -200,8 +208,9 @@ class ProfileState extends State<Profile> {
   }
 
   void changePass() async {
-    await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: FirebaseAuth.instance.currentUser.email, password: lst[0]['pass']);
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: FirebaseAuth.instance.currentUser.email,
+        password: lst[0]['passwoard']).then((_) => print("yoyyyyyyyyyyyyyyyyyyyyyyy"));
     User user1 = await FirebaseAuth.instance.currentUser;
     user1.updatePassword(_password).then((_) {
       print("Successfully changed password");
@@ -211,8 +220,9 @@ class ProfileState extends State<Profile> {
   }
 
   void changeEmail() async {
-    await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: FirebaseAuth.instance.currentUser.email, password: lst[0]['pass']);
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: FirebaseAuth.instance.currentUser.email,
+        password: lst[0]['passwoard']).then((_) => print("signed in wowwwwwwwwwwwwwwwwwwwwwwwwww"));
     FirebaseAuth.instance.currentUser.updateEmail(_email).then((_) {
       print("Successfully changed email");
     }).catchError((error) {
@@ -244,6 +254,14 @@ class ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
+    String reputation = ((lst[0]['reputation'].reduce((a, b) => a + b) /
+                    lst[0]['reputation'].length)
+                .toDouble() /
+            5)
+        .toString();
+    if (reputation.length > 4) {
+      reputation = reputation.substring(0, 4);
+    }
     /* if (flag == true) {
       flag = false;
       updateData();
@@ -309,15 +327,15 @@ class ProfileState extends State<Profile> {
                                 child: SizedBox(
                                     height: screenHeight / 7,
                                     child: Row(children: [
-                                      h.buildText(" Reputation:",
-                                          lst[0]['reputation'].toString()),
+                                      h.buildText(" Reputation:", reputation),
                                       VerticalDivider(
                                         color: Colors.black,
                                         indent: 15,
                                         endIndent: 15,
                                         thickness: 1,
                                       ),
-                                      h.buildText("Price Range:", "2-3 LBP"),
+                                      h.buildText("Price Range:",
+                                          lst[0]['price range'].toString()),
                                       VerticalDivider(
                                         color: Colors.black,
                                         indent: 15,

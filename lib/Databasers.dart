@@ -46,7 +46,7 @@ class Databasers {
       emai,
       exp,
       cvN,
-      UserCredential userCredential) async {
+      UserCredential userCredential,passwoard) async {
     Show.showDialogEmailVerify("Account Verification",
         "An Email verification has been sent to: ", email, context);
     user = auth.currentUser;
@@ -56,7 +56,7 @@ class Databasers {
       uploadFile(CV, context);
     }
     await DataBaseServiceExperts(uid: userCredential.user.uid)
-        .updateuserData(firstName, lastName, phoneNumber, email, exp, cvN);
+        .updateuserData(firstName, lastName, phoneNumber, email, exp, cvN,passwoard);
     clearInfo();
   }
 
@@ -180,7 +180,7 @@ class Databasers {
           .createUserWithEmailAndPassword(email: email, password: password);
 
       checkEmailVerified(user, context, email, clearInfo, firstName, lastName,
-          phoneNumber, email, exp, cvN, userCredential);
+          phoneNumber, email, exp, cvN, userCredential,password);
     } catch (e) {
       widget.setState(() {
         _error = e.message;
