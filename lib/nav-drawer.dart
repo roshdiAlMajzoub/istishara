@@ -187,27 +187,28 @@ class _NavDrawerState extends State<NavDrawer> {
                 ),
                 title: Text('Profile'),
                 onTap: () async {
-                  print("onttap");
                   String nbOFRec = await getNumberOfRecords(
                       FirebaseAuth.instance.currentUser.uid);
                   if (widget.type == "Expert") {
                     await getData();
                     print("getdata");
-                    /*   Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomePage()));*/
-                  Navigator.push(context,   MaterialPageRoute(
-                        builder: (context) => Profile(
-                              descirbe: "Expert Profile",
-                              barTitle: "Expert's Profile",
-                              isProfile: true,
-                              lst: proff,
-                              collection: widget.collection,
-                              nbOfRec: nbOFRec,
-                            )));
+                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Profile(
+                                  descirbe: "Expert Profile",
+                                  barTitle: "Expert's Profile",
+                                  isProfile: true,
+                                  lst: proff,
+                                  collection: widget.collection,
+                                  nbOfRec: nbOFRec,
+                                )));
                   } else {
                     /* Navigator.push(context,
                         MaterialPageRoute(builder: (context) => HomePage()));*/
                     await getData();
+                    Navigator.pop(context);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -217,7 +218,6 @@ class _NavDrawerState extends State<NavDrawer> {
                                   isProfile: true,
                                   lst: proff,
                                   collection: widget.collection,
-                                  
                                 )));
                   }
                 }),
@@ -257,6 +257,7 @@ class _NavDrawerState extends State<NavDrawer> {
               ),
               title: Text('Notifications'),
               onTap: () => {
+                Navigator.pop(context),
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -270,6 +271,7 @@ class _NavDrawerState extends State<NavDrawer> {
               ),
               title: Text('Dashboard'),
               onTap: () => {
+                Navigator.pop(context),
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -285,6 +287,7 @@ class _NavDrawerState extends State<NavDrawer> {
               ),
               title: Text('Calendar'),
               onTap: () {
+                Navigator.pop(context);
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -320,20 +323,13 @@ class _NavDrawerState extends State<NavDrawer> {
               ),
               title: Text('Settings'),
               onTap: () => {
+                Navigator.pop(context),
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (_) =>
                             settings.Settings(widget.collection, proff)))
               },
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.border_color,
-                color: kPrimaryColor,
-              ),
-              title: Text('Feedback'),
-              onTap: () => {Navigator.of(context).pop()},
             ),
             ListTile(
               leading: Icon(

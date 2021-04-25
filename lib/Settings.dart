@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:flutter/material.dart';
 import 'nav-drawer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MainSettings extends StatelessWidget {
   var collection;
@@ -98,11 +99,6 @@ class SettingsState extends State<Settings> {
               titlePadding: EdgeInsets.all(20),
               title: 'Account Settings',
               tiles: [
-                SettingsTile(
-                  title: 'Deactivate Account',
-                  leading: Icon(Icons.perm_device_information),
-                  onPressed: (BuildContext context) {},
-                ),
                 SettingsTile(
                   title: 'Delete Account',
                   leading: Icon(Icons.delete),

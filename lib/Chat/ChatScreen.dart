@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
+
 class ChatScreen extends StatefulWidget {
   String id1;
   String id2;
@@ -251,24 +252,24 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   ),
                   if (!widget.isConversation)
-                      Container(
-                          height: 45,
-                          decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(15)),
-                          padding: EdgeInsets.only(left: 5, right: 5),
-                          child: Center(
-                            child: CountdownTimer(
-                                textStyle: TextStyle(
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.w900),
-                                endTime: endTimeint,
-                                onEnd: () {
-                                  pay();
-                                  Navigator.of(context).pop();
-                                  showRatingPayment(context);
-                                }),
-                          )),
+                    Container(
+                        height: 45,
+                        decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(15)),
+                        padding: EdgeInsets.only(left: 5, right: 5),
+                        child: Center(
+                          child: CountdownTimer(
+                              textStyle: TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.w900),
+                              endTime: endTimeint,
+                              onEnd: () {
+                                pay();
+                                Navigator.of(context).pop();
+                                showRatingPayment(context);
+                              }),
+                        )),
                 ],
               ),
             ),
