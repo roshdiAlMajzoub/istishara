@@ -222,9 +222,9 @@ class _CallPageState extends State<CallPage> {
       ),
     );
   }
-/*
+
   /// Info panel to show logs
-  Widget _panel() {
+ /* Widget _panel() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 48),
       alignment: Alignment.bottomCenter,
@@ -299,7 +299,7 @@ class _CallPageState extends State<CallPage> {
         child: Stack(
           children: <Widget>[
             _viewRows(),
-            //_panel(),
+           // _panel(),
             _toolbar(),
           ],
         ),

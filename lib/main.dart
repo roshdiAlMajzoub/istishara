@@ -1,6 +1,7 @@
 import 'package:ISTISHARA/Chat/Conversations.dart';
 import 'package:ISTISHARA/LOGIN-SIGNUP/Log_in.dart';
 import 'package:ISTISHARA/LOGIN-SIGNUP/Welcome.dart';
+import 'package:ISTISHARA/NotificationsPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -41,7 +42,7 @@ class Display extends StatelessWidget {
         '/Login': (BuildContext context)    => Loginscreen(),
         '/UserMain': (BuildContext context)    => Dashboard(type:"Help-Seeker"),
         '/ExpertMain': (BuildContext context)    => Dashboard(type: "Expert"),
-  
+        '/Notifications':(BuildContext context) => NotificationsPage(dynamic),
       },
     );
   }

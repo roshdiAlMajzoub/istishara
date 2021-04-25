@@ -23,63 +23,6 @@ class SendTextField extends StatefulWidget {
 class SendTextFieldState extends State<SendTextField> {
   final msgTextField = TextEditingController();
 
-  Future<AlertDialog> CameraSource(BuildContext context1) {
-    final double screenWidth = MediaQuery.of(context1).size.width;
-    final double screenHeight = MediaQuery.of(context1).size.height;
-    return showDialog<AlertDialog>(
-        context: context1,
-        builder: (BuildContext context) {
-          return AlertDialog(
-              insetPadding: EdgeInsets.symmetric(
-                horizontal: 5.0,
-              ),
-              title: Center(
-                child: Text(
-                  "Choose Source",
-                  style: TextStyle(
-                      color: Colors.deepPurple, fontWeight: FontWeight.w900),
-                ),
-              ),
-              content: Row(
-                children: [
-                  Container(
-                    height: 100,
-                    child: Column(children: [
-                      IconButton(
-                          icon: Icon(Icons.image),
-                          onPressed: () {
-                            pickImage("Take a Photo");
-                            Navigator.of(context).pop();
-                          }),
-                      Text("Take a Photo",
-                          style: TextStyle(
-                              color: Colors.deepPurple,
-                              fontWeight: FontWeight.bold))
-                    ]),
-                  ),
-                  SizedBox(
-                    width: 30,
-                  ),
-                  Container(
-                    height: 100,
-                    child: Column(children: [
-                      IconButton(
-                          icon: Icon(Icons.video_collection_sharp),
-                          onPressed: () {
-                            pickVideo("Record a Video");
-                            Navigator.of(context).pop();
-                          }),
-                      Text("Record a Video",
-                          style: TextStyle(
-                              color: Colors.deepPurple,
-                              fontWeight: FontWeight.bold))
-                    ]),
-                  ),
-                ],
-              ));
-        });
-  }
-
   Future<AlertDialog> GallerySource(BuildContext context1) {
     final double screenWidth = MediaQuery.of(context1).size.width;
     final double screenHeight = MediaQuery.of(context1).size.height;
@@ -112,24 +55,6 @@ class SendTextFieldState extends State<SendTextField> {
                           style: TextStyle(
                               color: Colors.deepPurple,
                               fontWeight: FontWeight.bold))
-                    ]),
-                  ),
-                  SizedBox(
-                    width: 30,
-                  ),
-                  Container(
-                    height: 100,
-                    child: Column(children: [
-                      IconButton(
-                          icon: Icon(Icons.video_collection_sharp),
-                          onPressed: () {
-                            pickVideo("Gallery");
-                            Navigator.of(context).pop();
-                          }),
-                      Text("Video",
-                          style: TextStyle(
-                              color: Colors.deepPurple,
-                              fontWeight: FontWeight.bold)),
                     ]),
                   ),
                   SizedBox(
@@ -175,8 +100,6 @@ class SendTextFieldState extends State<SendTextField> {
 
   File pickedImage;
   String url;
-  File pickedVideo;
-  String urlVideo;
   String urlAudio;
   String urlDoc;
 
@@ -225,22 +148,19 @@ class SendTextFieldState extends State<SendTextField> {
     _sendMessage();
   }
 
-  void pickVideo(String source) async {
-    final ImagePicker _picker = ImagePicker();
-    final pickedImageFile = await _picker.getVideo(
-      source: source == "Gallery" ? ImageSource.gallery : ImageSource.camera,
-    );
-    pickedVideo = File(pickedImageFile.path);
-    urlVideo = await Databasers().uploadFile(pickedVideo, context);
-    _sendMessage();
-  }
-
   void _sendMessage() async {
     if (msgTextField.value.text.length > 0 &&
         url == null &&
-        urlVideo == null &&
         urlDoc == null &&
         urlAudio == null) {
+      bool flag = false;
+      for (int i=0; i < msgTextField.value.text.length; i++) {
+        if (msgTextField.value.text[i] != ' ') {
+          flag = true;
+          break;
+        }
+      }
+      if(flag){
       FirebaseFirestore.instance
           .collection("conversations")
           .doc(widget.id)
@@ -250,15 +170,12 @@ class SendTextFieldState extends State<SendTextField> {
         'CreatedAt': Timestamp.now(),
         'userID': FirebaseAuth.instance.currentUser.uid,
         'image': "",
-        'video': "",
         'audio': "",
         'doc': "",
       });
       msgTextField.clear();
-    } else if (url != null &&
-        urlVideo == null &&
-        urlDoc == null &&
-        urlAudio == null) {
+        }
+    } else if (url != null && urlDoc == null && urlAudio == null) {
       FirebaseFirestore.instance
           .collection("conversations")
           .doc(widget.id)
@@ -266,7 +183,6 @@ class SendTextFieldState extends State<SendTextField> {
           .add({
         'text': "",
         'image': url,
-        'video': "",
         'audio': "",
         'doc': "",
         'CreatedAt': Timestamp.now(),
@@ -276,11 +192,7 @@ class SendTextFieldState extends State<SendTextField> {
         url = null;
         pickedImage = null;
       });
-    } else if (url == null &&
-        urlVideo != null &&
-        urlDoc == null &&
-        urlAudio == null) {
-      print("I am in the lese if of sending video");
+    } else if (url == null && urlAudio != null && urlDoc == null) {
       FirebaseFirestore.instance
           .collection("conversations")
           .doc(widget.id)
@@ -288,29 +200,6 @@ class SendTextFieldState extends State<SendTextField> {
           .add({
         'text': "",
         'image': "",
-        'video': urlVideo,
-        'audio':"",
-        'doc': "",
-        'CreatedAt': Timestamp.now(),
-        'userID': FirebaseAuth.instance.currentUser.uid
-      });
-      print("After putting in firebase");
-      setState(() {
-        urlVideo = null;
-        pickedVideo = null;
-      });
-    } else if (url == null &&
-        urlVideo == null &&
-        urlAudio != null &&
-        urlDoc == null) {
-      FirebaseFirestore.instance
-          .collection("conversations")
-          .doc(widget.id)
-          .collection("messages")
-          .add({
-        'text': "",
-        'image': "",
-        'video': "",
         'audio': urlAudio,
         'doc': "",
         'CreatedAt': Timestamp.now(),
@@ -319,10 +208,7 @@ class SendTextFieldState extends State<SendTextField> {
       setState(() {
         urlAudio = null;
       });
-    } else if (url == null &&
-        urlVideo == null &&
-        urlAudio == null &&
-        urlDoc != null) {
+    } else if (url == null && urlAudio == null && urlDoc != null) {
       FirebaseFirestore.instance
           .collection("conversations")
           .doc(widget.id)
@@ -330,7 +216,6 @@ class SendTextFieldState extends State<SendTextField> {
           .add({
         'text': "",
         'image': "",
-        'video': "",
         'audio': "",
         'doc': urlDoc,
         'CreatedAt': Timestamp.now(),
@@ -385,7 +270,7 @@ class SendTextFieldState extends State<SendTextField> {
                         IconButton(
                             icon: Icon(Icons.camera_alt),
                             onPressed: () {
-                              CameraSource(context);
+                              pickImage("camera");
                             })
                       ],
                     )),
@@ -395,9 +280,7 @@ class SendTextFieldState extends State<SendTextField> {
               backgroundColor: Colors.deepPurple,
               radius: 25,
               child: IconButton(
-                icon: sendButton == true || msgTextField.value.text.length > 0
-                    ? Icon(Icons.send)
-                    : Icon(Icons.mic),
+                icon: Icon(Icons.send),
                 onPressed: _sendMessage,
                 color: Colors.white,
               ),

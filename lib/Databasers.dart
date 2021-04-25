@@ -25,7 +25,8 @@ var listOfExperts = [
   'Plumber',
   'Data Scientist',
   'Industrial Engineer',
-  'IT Specialist'
+  'IT Specialist',
+  'BlackSmith'
 ];
 
 class Databasers {
@@ -191,8 +192,10 @@ class Databasers {
 
   Widget cvName() {
     if (cvN != null) {
+      String cv = cvN;
+      cvN = null;
       return Container(
-        child: Text(cvN),
+        child: Text(cv),
       );
     } else {
       return Container(

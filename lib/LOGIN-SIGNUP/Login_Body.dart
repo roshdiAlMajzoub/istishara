@@ -37,7 +37,6 @@ class _Login_BodyState extends State<Login_Body> {
   List conversations;
   Databasers d = Databasers();
 
- 
   Future<void> signin() async {
     if (_email == null) {
       print("enull");
@@ -49,7 +48,8 @@ class _Login_BodyState extends State<Login_Body> {
       });
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: _email, password: _password);
-      User user = FirebaseAuth.instance.currentUser; //.instance.currentUser;
+      User user = userCredential
+          .user; //FirebaseAuth.instance.currentUser; //.instance.currentUser;
       if (user.emailVerified) {
         String id = FirebaseAuth.instance.currentUser.uid;
         bool docExists = await d.checkIfDocExists(id, "help_seekers");
@@ -57,13 +57,15 @@ class _Login_BodyState extends State<Login_Body> {
           showPassword = false;
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return Dashboard(
-              type: "Help-Seeker",pass: _password,
+              type: "Help-Seeker",
+              pass: _password,
             );
           }));
         } else {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return Dashboard(
-              type: "Expert",pass: _password,
+              type: "Expert",
+              pass: _password,
             );
           }));
           showPassword = false;
@@ -72,7 +74,7 @@ class _Login_BodyState extends State<Login_Body> {
         setState(() {
           _isloading = false;
         });
-        user.sendEmailVerification();
+        await user.sendEmailVerification();
         Show.showDialogEmailVerify("Account Verification",
             "An Email verification has been sent to: ", user.email, context);
       }

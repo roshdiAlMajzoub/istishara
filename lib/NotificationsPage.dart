@@ -335,6 +335,7 @@ acceptAppt(col, id1, uid, id2, st, et, token1, token2) async {
     'token2': token2,
     'collection': collection,
     'price range': priceRange,
+    'started': false,
     'status': "not-paid",
   });
   print("after final");
