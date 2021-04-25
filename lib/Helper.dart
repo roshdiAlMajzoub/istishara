@@ -29,7 +29,7 @@ class Helper {
     } on Exception {
       return false;
     }
-    var validPrefixes = ["79", "78", "03", "81", "70", "71"];
+    var validPrefixes = ["79", "78", "03", "81", "70", "71","76"];
     String prefix = number.substring(0, 2);
     if (number.length == 8 && validPrefixes.contains(prefix)) {
       return true;

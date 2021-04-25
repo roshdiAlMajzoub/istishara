@@ -53,6 +53,7 @@ class VideoMessageState extends State<VideoMessage> {
     }
   }
 
+
   getMediaWidget() {
     _controller = fetchVideoFromOnline
         ? VideoPlayerController.network(widget.message)
@@ -82,6 +83,8 @@ class VideoMessageState extends State<VideoMessage> {
             widget.isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
           Container(
+            height: screenHeight/3,
+            width: screenWidth/1.5,
             decoration: BoxDecoration(
               color: widget.isMe
                   ? Colors.grey[300]
@@ -96,34 +99,32 @@ class VideoMessageState extends State<VideoMessage> {
               ),
             ),
             margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-            child: FlatButton(
-              child: Stack(children: [
-                VideoPlayer(getMediaWidget()),
-                Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Row(children: [
-                      Text(
-                        widget.time,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black),
-                      ),
-                      Text("   "),
-                    ]))
-              ]),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return FullVideo(
-                    url: getMediaWidget(),
-                  );
-                }));
-              },
-            ),
-            height: screenHeight / 3,
-            width: screenWidth / 1.5,
-          )
+           child:    Stack( children: [
+                   Container(
+                     height: screenHeight/3,
+                          child: BetterPlayer.network(message,betterPlayerConfiguration: BetterPlayerConfiguration(controlsConfiguration: BetterPlayerControlsConfiguration(enableMute: false,enableSkips: false,pipMenuIcon: null,)))),
+             Positioned(
+        bottom: 0,
+        right: 0,
+                child: Row(children:[Text(
+                  widget.time,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: 
+                        Colors.grey[100]
+                  ),
+                ),
+                Text("   ")
+                ,])
+              )
+            ]),
+          ),
         ]);
   }
 }
+
+              
+             
+            
+      

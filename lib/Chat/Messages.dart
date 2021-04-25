@@ -41,10 +41,6 @@ class Messages extends StatelessWidget {
                   print(message);
                   var image = chatSnapShot.data.docs[index]['image'];
                   print(image);
-                  var video = chatSnapShot.data.docs[index]['video'];
-                  print("before");
-                  print(video);
-                   print("after");
                   var audio = chatSnapShot.data.docs[index]['audio'];
                   print(audio);
                   var document = chatSnapShot.data.docs[index]['doc'];
@@ -62,17 +58,6 @@ class Messages extends StatelessWidget {
                   } else if (audio != "") {
                     return VoiceMessage(
                         message: chatSnapShot.data.docs[index]['audio'],
-                        isMe: chatSnapShot.data.docs[index]['userID'] ==
-                            FirebaseAuth.instance.currentUser.uid,
-                        key: ValueKey(chatSnapShot.data.docs[index].id),
-                        time: getTime(chatSnapShot.data.docs[index]['CreatedAt']
-                            .toDate()
-                            .toString()));
-                  } else if (video != "") {
-                    print("I AM SENDING VIDEOOOO!!!!");
-                    print(message);
-                    return VideoMessage(
-                        message: chatSnapShot.data.docs[index]['video'],
                         isMe: chatSnapShot.data.docs[index]['userID'] ==
                             FirebaseAuth.instance.currentUser.uid,
                         key: ValueKey(chatSnapShot.data.docs[index].id),

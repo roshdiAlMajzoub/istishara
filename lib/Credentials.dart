@@ -69,6 +69,7 @@ class CredentialsState extends State<Credentials> {
   final _formKeyPhone = GlobalKey<FormState>();
   final _formKeyPass = GlobalKey<FormState>();
   final _formKeyConf = GlobalKey<FormState>();
+  bool choosingCv = false;
   final String describe;
   final String barTitle;
   final bool isProfile;
@@ -619,21 +620,46 @@ class CredentialsState extends State<Credentials> {
                               padding: EdgeInsets.only(
                                 bottom: screenHeight / 30,
                               ),
-                              child: Experts(),
-                            ),
-                            Container(
-                              height: screenHeight / 20,
-                              padding: EdgeInsets.only(
-                                left: screenWidth / 25,
-                                right: screenWidth / 25,
-                                bottom: screenHeight / 60,
-                              ),
-                              child: Text("2. Upload your CV:",
-                                  style: TextStyle(
+                              child: OutlinedButton(
+                                  onPressed: ()async {
+                                    setState(()  {
+                                      choosingCv = true;
+                                    });
+                                   await d.upload();
+                                     setState(() {
+                                      choosingCv = false;
+                                    });
+                                  },
+                                  child: Text("Upload CV",
+                                      style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w900,
+                                          color: Color(0xff5848CF))),
+                                  style: ElevatedButton.styleFrom(
+                                    side: BorderSide(
+                                        width: 3.0, color: Colors.deepPurple),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(32.0),
+                                    ),
+                                  ))),
+                          if(choosingCv)
+                              CircularProgressIndicator(),
+                          if(!choosingCv)
+                              d.cvName(),
+                          Container(height: screenHeight / 20),
+                          isProfile == false
+                              ? Container(
+                                  height: screenHeight / 10,
+                                  padding: EdgeInsets.only(
+                                    bottom: screenHeight / 30,
+                                  ),
+                                  // ignore: deprecated_member_use
+                                  child: RaisedButton(
                                       color: Colors.deepPurple,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w900)),
-                            ),
+                                      
+                                      //fontSize: 18,
+                                      //fontWeight: FontWeight.w900, onPressed: () {  },)),
+                            ),):
                             Container(
                                 height: screenHeight / 10,
                                 padding: EdgeInsets.only(

@@ -124,30 +124,28 @@ class ProfileState extends State<Profile> {
     CollectionReference collectionReference2 =
         FirebaseFirestore.instance.collection('conversations');
 
-    if (_firstName != null) {
-      if (_formKeyFname.currentState.validate()) {
+    if (_firstName != null && _firstName!="")
+       {
         collectionReference.doc(id).update({
           'first name': _firstName,
         });
-      }
     }
-    if (_lastName != null) {
-      if (_formKeyLname.currentState.validate()) {
+    if (_lastName != null && _lastName!="") {
+      
         collectionReference.doc(id).update({
           'last name': _lastName,
         });
-      }
+      
     }
-    if (_email != null) {
-      if (_formKeyEmail.currentState.validate()) {
+    if (_email != null && _email!="") {
         collectionReference.doc(id).update({
           'email': _email,
         });
         changeEmail();
-      }
+      
     }
 
-    if (_phoneNumber != null) {
+    if (_phoneNumber != null && _phoneNumber!="") {
       print(_phoneNumber);
       collectionReference.doc(id).update({
         'phone number': _phoneNumber,
@@ -192,10 +190,8 @@ class ProfileState extends State<Profile> {
       cvRes = null;
     }
     if (_password != null) {
-      if (_formKeyPass.currentState.validate() &&
-          _formKeyConf.currentState.validate()) {
+       
         await changePass();
-      }
     }
 
     Navigator.of(context).pop();
@@ -354,7 +350,7 @@ class ProfileState extends State<Profile> {
                           textAlignVertical: TextAlignVertical(y: 1),
                           controller: FirstNameController,
                           validator: (String value) {
-                            if (value.length < 3) {
+                            if (value.length < 3 && value.length>=1) {
                               return "First name has to be at least 3 characters long";
                             } else {
                               return null;
@@ -415,7 +411,7 @@ class ProfileState extends State<Profile> {
                             textAlignVertical: TextAlignVertical(y: 1),
                             controller: LastNameController,
                             validator: (String value) {
-                              if (value.length < 3) {
+                              if (value.length < 3  && value.length>=1) {
                                 return "Last name has to be at least 3 characters long";
                               } else {
                                 return null;
@@ -475,7 +471,7 @@ class ProfileState extends State<Profile> {
                             textAlignVertical: TextAlignVertical(y: 1),
                             controller: EmailController,
                             validator: (String value) {
-                              if (!h.validEmail(value)) {
+                              if (!h.validEmail(value) && value.length>=1) {
                                 return "Incorrect Format";
                               } else {
                                 return null;
@@ -538,7 +534,7 @@ class ProfileState extends State<Profile> {
                             textAlignVertical: TextAlignVertical(y: 1),
                             controller: PhoneController,
                             validator: (String value) {
-                              if (!h.validPhoneNumber(value)) {
+                              if (!h.validPhoneNumber(value) && value.length>0) {
                                 return "Incorrect Format";
                               } else {
                                 return null;
@@ -599,7 +595,7 @@ class ProfileState extends State<Profile> {
                                 textAlignVertical: TextAlignVertical(y: 1),
                                 controller: PasswordController,
                                 validator: (String value) {
-                                  if (value.length < 6) {
+                                  if (value.length < 6 && value.length>0){
                                     return "Password has to be at least 6 characters long.";
                                   } else {
                                     return null;
