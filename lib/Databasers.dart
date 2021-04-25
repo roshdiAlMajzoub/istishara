@@ -46,6 +46,7 @@ class Databasers {
       emai,
       exp,
       cvN,
+      priceRange,
       UserCredential userCredential) async {
     Show.showDialogEmailVerify("Account Verification",
         "An Email verification has been sent to: ", email, context);
@@ -56,7 +57,7 @@ class Databasers {
       uploadFile(CV, context);
     }
     await DataBaseServiceExperts(uid: userCredential.user.uid)
-        .updateuserData(firstName, lastName, phoneNumber, email, exp, cvN);
+        .updateuserData(firstName, lastName, phoneNumber, email, exp, cvN, priceRange);
     clearInfo();
   }
 
@@ -174,13 +175,14 @@ class Databasers {
       String phoneNumber,
       String exp,
       String cvName,
+      double priceRange,
       Function clearInfo) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
 
       checkEmailVerified(user, context, email, clearInfo, firstName, lastName,
-          phoneNumber, email, exp, cvN, userCredential);
+          phoneNumber, email, exp, cvN, priceRange, userCredential, );
     } catch (e) {
       widget.setState(() {
         _error = e.message;

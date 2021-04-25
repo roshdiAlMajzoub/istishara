@@ -35,7 +35,8 @@ class Profile extends StatefulWidget {
       @required this.isProfile,
       this.lst,
       this.collection,
-      this.nbOfRec,this.pass});
+      this.nbOfRec,
+      this.pass});
   @override
   ProfileState createState() => ProfileState(
         describe: descirbe,
@@ -79,6 +80,7 @@ Databasers d = Databasers();
 FilePickerResult cvRes;
 
 class ProfileState extends State<Profile> {
+  double _repValue = 0;
   void _pickedImage(File image) {
     imgRes = image;
   }
@@ -200,8 +202,9 @@ class ProfileState extends State<Profile> {
   }
 
   void changePass() async {
-    await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: FirebaseAuth.instance.currentUser.email, password: lst[0]['pass']);
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: FirebaseAuth.instance.currentUser.email,
+        password: lst[0]['pass']);
     User user1 = await FirebaseAuth.instance.currentUser;
     user1.updatePassword(_password).then((_) {
       print("Successfully changed password");
@@ -211,8 +214,9 @@ class ProfileState extends State<Profile> {
   }
 
   void changeEmail() async {
-    await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: FirebaseAuth.instance.currentUser.email, password: lst[0]['pass']);
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: FirebaseAuth.instance.currentUser.email,
+        password: lst[0]['pass']);
     FirebaseAuth.instance.currentUser.updateEmail(_email).then((_) {
       print("Successfully changed email");
     }).catchError((error) {
@@ -710,147 +714,197 @@ class ProfileState extends State<Profile> {
                     )
                   ])),
                   describe == "Expert" || describe == "Expert Profile"
-                      ? Container(
-                          child: Column(children: [
-                          Container(
-                            height: screenHeight / 20,
-                            padding: EdgeInsets.only(
-                              left: screenWidth / 25,
-                              right: screenWidth / 25,
-                              bottom: screenHeight / 60,
-                            ),
-                            child: Text("Upload your CV:",
-                                style: TextStyle(
-                                    color: Colors.deepPurple,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w900)),
-                          ),
-                          Container(
-                              height: screenHeight / 10,
-                              padding: EdgeInsets.only(
-                                bottom: screenHeight / 30,
-                              ),
-                              child: OutlinedButton(
-                                  onPressed: () {
-                                    setState(() async {
-                                      cvRes = await d.upload();
-                                    });
-                                  },
-                                  child: Text("Upload CV",
-                                      style: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w900,
-                                          color: Color(0xff5848CF))),
-                                  style: ElevatedButton.styleFrom(
-                                    side: BorderSide(
-                                        width: 3.0, color: Colors.deepPurple),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(32.0),
-                                    ),
-                                  ))),
-                          d.cvName(),
-                          Container(height: screenHeight / 20),
-                          isProfile == false
-                              ? Container(
-                                  height: screenHeight / 10,
-                                  padding: EdgeInsets.only(
-                                    bottom: screenHeight / 30,
+                      ? Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                                  border: Border(
+                                    top: BorderSide(
+                                        color: Colors.purple, width: 1),
                                   ),
-                                  child: RaisedButton(
-                                      color: Colors.deepPurple,
-                                      child: Text(
-                                        "Create Account",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w900),
-                                      ),
-                                      onPressed: () {
-                                        if (_formKeyFname.currentState.validate() &&
-                                            _formKeyLname.currentState
-                                                .validate() &&
-                                            _formKeyEmail.currentState
-                                                .validate() &&
-                                            _formKeyPhone.currentState
-                                                .validate() &&
-                                            _formKeyPass.currentState
-                                                .validate() &&
-                                            _formKeyConf.currentState
-                                                .validate() &&
-                                            h.expertt() != null) {
-                                          d.signup(
-                                              this,
-                                              user,
-                                              context,
-                                              _email,
-                                              _password,
-                                              _firstName,
-                                              _lastName,
-                                              _phoneNumber,
-                                              h.expertt(),
-                                              d.cvN,
-                                              () => {h.clearInfo(l)});
-                                        } else {
-                                          print("here");
-                                        }
-                                      }),
-                                )
-                              : Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    // ignore: deprecated_member_use
-                                    OutlineButton(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 50),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20)),
-                                        onPressed: () {
-                                          editableFN = false;
-                                          editableEmail = false;
-                                          editablePhone = false;
-                                          editablePass = false;
-                                          editableConf = false;
-                                          Show.showDialogGiveUp(
-                                              context,
-                                              "changing information",
-                                              this,
-                                              () => {h.clearInfo(l)});
-                                        },
-                                        child: Text("Cancel",
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                letterSpacing: 2.2,
-                                                color: Colors.black))),
-                                    // ignore: deprecated_member_use
-                                    RaisedButton(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 50),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20)),
-                                        onPressed: () {
-                                          setState(() {
-                                            editableFN = false;
-                                            editableEmail = false;
-                                            editablePhone = false;
-                                            editablePass = false;
-                                            editableConf = false;
-                                            flag = true;
-                                            updateData();
-                                            h.clearInfo(l);
-                                          });
-                                        },
-                                        elevation: 2,
-                                        color: Colors.deepPurple,
-                                        child: Text("Save",
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                letterSpacing: 2.2,
-                                                color: Colors.white))),
-                                  ],
                                 ),
-                        ]))
+                            child: Column(children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                height: screenHeight / 20,
+                                padding: EdgeInsets.only(
+                                  left: screenWidth / 25,
+                                  right: screenWidth / 25,
+                                  bottom: screenHeight / 60,
+                                ),
+                                child: Text("Upload your CV:",
+                                    style: TextStyle(
+                                        color: Colors.deepPurple,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w900)),
+                              ),
+                            ),
+                            Container(
+                               
+                                height: screenHeight / 10,
+                                padding: EdgeInsets.only(
+                                  bottom: screenHeight / 30,
+                                ),
+                                child: OutlinedButton(
+                                    onPressed: () {
+                                      setState(() async {
+                                        cvRes = await d.upload();
+                                      });
+                                    },
+                                    child: Text("Upload CV",
+                                        style: TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w900,
+                                            color: Color(0xff5848CF))),
+                                    style: ElevatedButton.styleFrom(
+                                      side: BorderSide(
+                                          width: 3.0, color: Colors.deepPurple),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(32.0),
+                                      ),
+                                    ))),
+                            d.cvName(),
+                            Container(height: screenHeight / 30),
+                             Container(
+                                height: screenHeight / 20,
+                                padding: EdgeInsets.only(
+                                  left: screenWidth / 25,
+                                  right: screenWidth / 25,
+                                  bottom: screenHeight / 60,
+                                ),
+                                child: Text("Edit Price:",
+                                    style: TextStyle(
+                                        color: Colors.deepPurple,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w900)),
+                              ),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom:
+                                      BorderSide(color: Colors.purple, width: 1),
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  Slider(
+                                    min: 0,
+                                    max: 20,
+                                    value: _repValue,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _repValue = value;
+                                      });
+                                    },
+                                    divisions: 10,
+                                    label: _repValue.toString(),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      "L.B.P Thousands",
+                                      style: TextStyle(
+                                        color: Colors.deepPurple,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            isProfile == false
+                                ? Container(
+                                    height: screenHeight / 10,
+                                    padding: EdgeInsets.only(
+                                      bottom: screenHeight / 30,
+                                    ),
+                                    child: RaisedButton(
+                                        color: Colors.deepPurple,
+                                        child: Text(
+                                          "Create Account",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w900),
+                                        ),
+                                        onPressed: () {
+                                          if (_formKeyFname.currentState.validate() &&
+                                              _formKeyLname.currentState
+                                                  .validate() &&
+                                              _formKeyEmail.currentState
+                                                  .validate() &&
+                                              _formKeyPhone.currentState
+                                                  .validate() &&
+                                              _formKeyPass.currentState
+                                                  .validate() &&
+                                              _formKeyConf.currentState
+                                                  .validate() &&
+                                              h.expertt() != null) {
+                                          } else {
+                                            print("here");
+                                          }
+                                        }),
+                                  )
+                                : Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        // ignore: deprecated_member_use
+                                        OutlineButton(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 50),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                            onPressed: () {
+                                              editableFN = false;
+                                              editableEmail = false;
+                                              editablePhone = false;
+                                              editablePass = false;
+                                              editableConf = false;
+                                              Show.showDialogGiveUp(
+                                                  context,
+                                                  "changing information",
+                                                  this,
+                                                  () => {h.clearInfo(l)});
+                                            },
+                                            child: Text("Cancel",
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    letterSpacing: 2.2,
+                                                    color: Colors.black))),
+                                        // ignore: deprecated_member_use
+                                        RaisedButton(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 50),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                            onPressed: () {
+                                              setState(() {
+                                                editableFN = false;
+                                                editableEmail = false;
+                                                editablePhone = false;
+                                                editablePass = false;
+                                                editableConf = false;
+                                                flag = true;
+                                                updateData();
+                                                h.clearInfo(l);
+                                              });
+                                            },
+                                            elevation: 2,
+                                            color: Colors.deepPurple,
+                                            child: Text("Save",
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    letterSpacing: 2.2,
+                                                    color: Colors.white))),
+                                      ],
+                                    ),
+                                ),
+                          ])),
+                      )
                       : describe == "User"
                           ? Container(
                               child: Column(children: [
@@ -880,18 +934,6 @@ class ProfileState extends State<Profile> {
                                                 .validate() &&
                                             _formKeyConf.currentState
                                                 .validate()) {
-                                          d.signup(
-                                              this,
-                                              user,
-                                              context,
-                                              _email,
-                                              _password,
-                                              _firstName,
-                                              _lastName,
-                                              _phoneNumber,
-                                              "help_seekers",
-                                              d.cvN,
-                                              () => {h.clearInfo(l)});
                                         }
                                       }))
                             ]))
