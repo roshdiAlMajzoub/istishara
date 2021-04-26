@@ -211,41 +211,48 @@ class _ViewCalendarState extends State<ViewCalendar> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         // ignore: deprecated_member_use
-                        OutlineButton(
-                            padding: EdgeInsets.symmetric(horizontal: 50),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                            onPressed: () {
-                              Show.showDialogGiveUp(
-                                  context,
-                                  "Booking this consultation",
-                                  this,
-                                  () => {h.clearInfo(l)});
-                            },
-                            child: Text("Cancel",
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    letterSpacing: 2.2,
-                                    color: Colors.black))),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          // ignore: deprecated_member_use
+                          child: OutlineButton(
+                              padding: EdgeInsets.symmetric(horizontal: 50),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              onPressed: () {
+                                Show.showDialogGiveUp(
+                                    context,
+                                    "Booking this consultation",
+                                    this,
+                                    () => {h.clearInfo(l)});
+                              },
+                              child: Text("Cancel",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      letterSpacing: 2.2,
+                                      color: Colors.black))),
+                        ),
                         // ignore: deprecated_member_use
-                        RaisedButton(
-                            padding: EdgeInsets.symmetric(horizontal: 50),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                            onPressed: () {
-                              if (dateKey.currentState.validate() &&
-                                  stKey.currentState.validate() &&
-                                  etKey.currentState.validate()) {
-                                hey();
-                              }
-                            },
-                            elevation: 2,
-                            color: Colors.deepPurple,
-                            child: Text("Book",
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    letterSpacing: 2.2,
-                                    color: Colors.white))),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: RaisedButton(
+                              padding: EdgeInsets.symmetric(horizontal: 50),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              onPressed: () {
+                                if (dateKey.currentState.validate() &&
+                                    stKey.currentState.validate() &&
+                                    etKey.currentState.validate()) {
+                                  hey();
+                                }
+                              },
+                              elevation: 2,
+                              color: Colors.deepPurple,
+                              child: Text("Book",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      letterSpacing: 2.2,
+                                      color: Colors.white))),
+                        ),
                       ],
                     )
                   ]),

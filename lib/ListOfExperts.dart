@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:ISTISHARA/Databasers.dart';
 import 'package:ISTISHARA/LOGIN-SIGNUP/constants.dart';
 import 'package:ISTISHARA/ViewExpert.dart';
@@ -97,6 +99,25 @@ class _ListPageState extends State<ListPage> {
     }
   }
 
+  List<Color> lst = [
+    Colors.orange[600],
+    Colors.blue[500],
+    Colors.indigoAccent[700],
+    Colors.pink,
+    Colors.lime[600],
+    Colors.red,
+    Colors.amber[900],
+    Colors.purple[300],
+    Colors.amber[400],
+    Colors.pink,
+    Colors.purple,
+    Colors.grey,
+    Colors.indigo,
+    Colors.cyan[900],
+    Colors.blueAccent,
+    Colors.deepOrange
+  ];
+  final _random = new Random();
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -104,10 +125,9 @@ class _ListPageState extends State<ListPage> {
           type: "Expert",
           collection: collection,
         ),
-        backgroundColor: kPrimaryLightColor,
+        //backgroundColor: kPrimaryLightColor,
         appBar: AppBar(
           elevation: 0.1,
-          backgroundColor: kPrimaryColor,
           title: Text(type + "'s " + "List"),
         ),
         body: new Container(
@@ -121,7 +141,8 @@ class _ListPageState extends State<ListPage> {
                   margin:
                       new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
                   child: Container(
-                      decoration: BoxDecoration(color: kPrimaryColor),
+                      decoration: BoxDecoration(
+                          color: lst[_random.nextInt(lst.length)]),
                       child: ListTile(
                         contentPadding: EdgeInsets.symmetric(
                             horizontal: 20.0, vertical: 10.0),
@@ -211,7 +232,9 @@ class _ListPageState extends State<ListPage> {
                                         collection: collection,
                                         reputation: reputation,
                                         nbOfRecords: nbOfRec,
-                                        price: expertProfileList[index]['price range'].toString(),
+                                        price: expertProfileList[index]
+                                                ['price range']
+                                            .toString(),
                                       ))));
                         },
                       )),
