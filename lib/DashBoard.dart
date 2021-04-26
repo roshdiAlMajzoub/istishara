@@ -16,7 +16,11 @@ import 'package:countup/countup.dart';
 class Dashboard extends StatefulWidget {
   final String type;
   final String pass;
-  Dashboard({@required this.type, this.pass});
+  var collection;
+  Dashboard({
+    @required this.type,
+    this.pass,
+  });
   @override
   DashboardState createState() => DashboardState(type: type);
 }
@@ -25,6 +29,7 @@ class DashboardState extends State<Dashboard> {
   final String type;
   final String pass;
   bool isExtended = false;
+  bool isLoading = true;
   DashboardState({@required this.type, this.pass});
 
   void _switchActionBar() {
@@ -52,7 +57,7 @@ class DashboardState extends State<Dashboard> {
       AndroidNotification android = message.notification?.android;
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
- 
+      print('A new onMessageOpenedApp event was published!');
       Navigator.pushNamed(context, '/Notifications');
     });
   }
@@ -76,6 +81,7 @@ class DashboardState extends State<Dashboard> {
         .get();
     setState(() {
       availableMoney = docData.get('money');
+      print(availableMoney.toString());
     });
   }
 
@@ -83,7 +89,9 @@ class DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     getCollection();
     getMyMoney();
-   
+    setState(() {
+      isLoading = false;
+    });
     return Scaffold(
         // backgroundColor: kPrimaryLightColor,
         drawer: NavDrawer(type: type, collection: collection, pass: pass),
@@ -106,15 +114,19 @@ class DashboardState extends State<Dashboard> {
                         child: Icon(
                           Icons.attach_money,
                         )),
-                    Countup(
-                      begin: 0,
-                      end: double.parse("$availableMoney"),
-                      duration: Duration(seconds: 2),
-                      separator: ',',
-                      style: TextStyle(
-                        fontSize: 15,
+                    if (isLoading) CircularProgressIndicator(),
+                    if (!isLoading)
+                      Countup(
+                        begin: 0,
+                        end: availableMoney == null
+                            ? 0
+                            : double.parse("$availableMoney"),
+                        duration: Duration(seconds: 2),
+                        separator: ',',
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
                       ),
-                    ),
                     Text(" L.L"),
                   ],
                 )
@@ -169,7 +181,7 @@ class DashboardState extends State<Dashboard> {
                     makeDashboardItem("Interior Designer", Icons.home_outlined,
                         Colors.lightBlue),
                     makeDashboardItem(
-                        "BlackSmith", Icons.construction, Colors.green),
+                        "BlackSmith", Icons.construction, Colors.pink),
                     makeDashboardItem(
                         "Industrial Engineer", Icons.work, Colors.blueAccent),
                     makeDashboardItem(
@@ -199,6 +211,8 @@ class DashboardState extends State<Dashboard> {
                 borderRadius: BorderRadius.circular(50.0), color: col),
             child: new InkWell(
               onTap: () {
+                print(title);
+                print(collection);
                 Navigator.push(
                     context,
                     MaterialPageRoute(

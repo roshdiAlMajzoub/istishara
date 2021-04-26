@@ -322,7 +322,7 @@ class _NavDrawerState extends State<NavDrawer> {
               title: Text('Settings'),
               onTap: () async =>  {
                 await getData(),
-                Navigator.pop(context),
+               Navigator.pop(context),
                 Navigator.push(
                     context,
                     MaterialPageRoute(
