@@ -48,7 +48,7 @@ class SettingsState extends State<Settings> {
   }
 
   updateAvailability() async {
-    print(lst);
+
     await FirebaseFirestore.instance
         .collection(collection)
         .doc(FirebaseAuth.instance.currentUser.uid)
@@ -58,11 +58,8 @@ class SettingsState extends State<Settings> {
   bool temp;
   delteAcc() async {
     try {
-      print("before");
-      print(lst[0]['email']);
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: lst[0]['email'], password: lst[0]['passwoard']);
-      print("after");
       FirebaseFirestore.instance
           .collection(collection)
           .doc(FirebaseAuth.instance.currentUser.uid)
@@ -122,7 +119,7 @@ class SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     getAvailability();
-    print(lst);
+
     return Scaffold(
         drawer: NavDrawer(
           type: "Expert",

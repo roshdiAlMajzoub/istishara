@@ -121,7 +121,6 @@ class _ViewExpertState extends State<_ViewExpert> {
 
   @override
   Widget build(BuildContext context) {
-    print(collection);
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -210,12 +209,6 @@ class _ViewExpertState extends State<_ViewExpert> {
                         } else {
                           _showDialog("title", "url", context);
                         }
-                        //_showDialog("title", cvLink, context);
-                        //Databasers().downloadFileExample();
-                        /*Databasers().downloadFile(firebase_storage.FirebaseStorage.instance
-                                                    .ref()
-                                                    .child('playground')
-                                                    .child('BirdMeertens98Nested.pdf'));*/
                       },
                       child: Text("View CV",
                           style: TextStyle(color: Colors.white)),
@@ -226,8 +219,6 @@ class _ViewExpertState extends State<_ViewExpert> {
                     // ignore: deprecated_member_use
                     child: RaisedButton(
                       onPressed: () {
-                        print(collection);
-                        print(field);
                         Navigator.push(
                             context,
                             MaterialPageRoute(

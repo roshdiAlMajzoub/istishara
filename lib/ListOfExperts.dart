@@ -50,19 +50,10 @@ class _ListPageState extends State<ListPage> {
     List nbOfRecord = [];
     Query collectionRef = FirebaseFirestore.instance
         .collection("Appt")
-        .where('id1', isEqualTo: id)
-        .where('state', isEqualTo: "Accepted");
-    Query collectionRef2 = FirebaseFirestore.instance
-        .collection("Appt")
         .where('id2', isEqualTo: id)
         .where('state', isEqualTo: "Accepted");
 
     await collectionRef.get().then((QuerySnapshot) {
-      QuerySnapshot.docs.forEach((element) {
-        nbOfRecord.add(element.data());
-      });
-    });
-    await collectionRef2.get().then((QuerySnapshot) {
       QuerySnapshot.docs.forEach((element) {
         nbOfRecord.add(element.data());
       });
@@ -81,7 +72,7 @@ class _ListPageState extends State<ListPage> {
       imName = img;
     });
     return img;
-    //print("rosh"+ x);
+  
   }
 
   List expertProfileList = [];
@@ -95,7 +86,6 @@ class _ListPageState extends State<ListPage> {
       setState(() {
         expertProfileList = resultant;
       });
-      print(expertProfileList.length);
     }
   }
 
@@ -125,7 +115,7 @@ class _ListPageState extends State<ListPage> {
           type: "Expert",
           collection: collection,
         ),
-        //backgroundColor: kPrimaryLightColor,
+        
         appBar: AppBar(
           elevation: 0.1,
           title: Text(type + "'s " + "List"),
@@ -134,7 +124,7 @@ class _ListPageState extends State<ListPage> {
           child: ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
-              itemCount: expertProfileList.length, //depends on firebase count;;
+              itemCount: expertProfileList.length, 
               itemBuilder: (BuildContext context, int index) {
                 return Card(
                   elevation: 8.0,
@@ -158,13 +148,10 @@ class _ListPageState extends State<ListPage> {
                           expertProfileList[index]['first name'] +
                               " " +
                               expertProfileList[index]['last name'],
-                          //"John Marlin",
-
-                          ///this should be expert.name where name is the expert's name@roshdiAlMajzoub
                           style: TextStyle(
                               color: Colors.white, fontWeight: FontWeight.bold),
                         ),
-                        // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
+                        
 
                         subtitle: Row(
                           children: <Widget>[
@@ -182,7 +169,7 @@ class _ListPageState extends State<ListPage> {
                                                       .length)
                                               .toDouble() /
                                           5,
-                                      //0.5, //this should be expert.reputation where it will be brought from the expert's database@roshdiAlMajzoub
+                                      
                                       valueColor:
                                           AlwaysStoppedAnimation(Colors.green)),
                                 )),
@@ -191,7 +178,7 @@ class _ListPageState extends State<ListPage> {
                               child: Padding(
                                   padding: EdgeInsets.only(left: 10.0),
                                   child: Text(
-                                      "Reputable", //this should be expert.text where it will be brought from the expert's database@roshdiAlMajzoub
+                                      "Reputable", 
                                       style: TextStyle(color: Colors.white))),
                             )
                           ],
@@ -201,8 +188,7 @@ class _ListPageState extends State<ListPage> {
                         onTap: () async {
                           String nbOfRec = await getNumberOfRecords(
                               type, expertProfileList[index]['id']);
-                          print(collection);
-                          print(type);
+                         
                           String reputation = ((expertProfileList[index]
                                                   ['reputation']
                                               .reduce((a, b) => a + b) /

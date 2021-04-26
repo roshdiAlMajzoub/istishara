@@ -149,14 +149,14 @@ class DatabaseBookAppt {
 
     if (ap.length == 0 && app.length == 0) {
       return false;
-      print("no elements");
+  
     } else {
       for (var i = 0; i < app.length; i++) {
         DateTime dt = app[i]['end time'].toDate();
         bool validEndDate = dt.isBefore(et);
         if (validEndDate) {
           conflictAppt.add(1);
-          //print("there is conflict");
+         
         }
       }
       for (var i = 0; i < ap.length; i++) {
@@ -174,7 +174,7 @@ class DatabaseBookAppt {
         }
       }
       if (conflictAppt.length > 0) {
-        print("there is conflict");
+      
         return true;
       }
 
@@ -182,12 +182,11 @@ class DatabaseBookAppt {
     }
   }
 
-  Future bookAppt(uid1, collection, uid2, field, st, et, token, token2,name1,name2) async {
+  Future bookAppt(uid1, collection, uid2, field, st, et, token, token2,name1,name2,image1,image2) async {
     User user = auth.currentUser;
     List pe = [];
     var check = await checkAp(field, uid2, st, et);
-    //print(check);
-    // ignore: unrelated_type_equality_checks
+   
     String x = st.toString() + et.toString();
     await FirebaseFirestore.instance
         .collection('Appt')
@@ -203,46 +202,11 @@ class DatabaseBookAppt {
       'token': token,
       'SecToken': token2,
       'name1': name1,
-      'name2':name2
-      
+      'name2':name2,
+      'image1':image1,
+      'image2':image2,
     });
-    /*await FirebaseFirestore.instance
-        .collection(field)
-        .doc(uid2)
-        .collection('appt')
-        .doc(x)
-        .set({
-      'start time': Timestamp.fromDate(st),
-      'end time': Timestamp.fromDate(et),
-      'state': 'pending',
-      'coll': collection,
-      'id': auth.currentUser.uid,
-      'uid':x,
-    });*/
-
-    /* for (var col in coll) {
-      await FirebaseFirestore.instance
-          .collection(col)
-          .doc(uid1)
-          .get()
-          .then((DocumentSnapshot documentSnapshot) {
-        if (documentSnapshot.exists) {
-          FirebaseFirestore.instance
-              .collection(col)
-              .doc(uid1)
-              .collection('appt')
-              .doc()
-              .set({
-            'start time': Timestamp.fromDate(st),
-            'end time': Timestamp.fromDate(et),
-            'state': 'pending'
-          });
-
-          print(col + " document exist");
-        }
-      });
-    }*/
-    print(pe);
+    
   }
 }
 
@@ -320,21 +284,16 @@ class DatabaseAppt {
 
   Future getAppt(uid, type) async {
     List appts = [];
-    /*for (var col in coll) {
-      Query colcollectionReference = await FirebaseFirestore.instance
-          .collection(col)
-          .doc(uid)
-          .collection('appt');*/
     Query colcollectionReference = await FirebaseFirestore.instance
         .collection('Appt')
         .where('id1', isEqualTo: auth.currentUser.uid)
         .where('state', isEqualTo: "Accepted");
-    // .where('end time', isLessThan: Timestamp.fromDate(DateTime.now()));
+    
     Query colcollectionReference2 = await FirebaseFirestore.instance
         .collection('Appt')
         .where('id2', isEqualTo: auth.currentUser.uid)
         .where('state', isEqualTo: "Accepted");
-    //.where('end time', isLessThan: Timestamp.fromDate(DateTime.now()));
+   
     try {
       await colcollectionReference.get().then((QuerySnapshot) {
         QuerySnapshot.docs.forEach((element) {
@@ -354,33 +313,10 @@ class DatabaseAppt {
       print(e.toString());
     }
     return appts;
-    /*Query colcollectionReference = await FirebaseFirestore.instance
-        .collection(type)
-        .doc(uid)
-        .collection('appt')
-        .where('state', isEqualTo: "Accepted");
-    try {
-      await colcollectionReference.get().then((QuerySnapshot) {
-        QuerySnapshot.docs.forEach((element) {
-          appts.add(element.data());
-        });
-      });
-    } catch (e) {
-      print(e.toString());
-    }
-    return appts;*/
   }
 }
 
 class DataBaseService {
-  /*List proff = [];
-  getData() async{
-    dynamic prof = await DataBaseService().getCurrentUSerData();
-    proff = prof;
-    print(proff[0]['first name']);
-
-  
-  }*/
   final FirebaseAuth auth = FirebaseAuth.instance;
   Future getCurrentUSerData(id, collection) async {
     List coll = [
@@ -394,7 +330,6 @@ class DataBaseService {
     ];
     User user = auth.currentUser;
     List profile = [];
-    print(auth.currentUser.uid);
     await FirebaseFirestore.instance
         .collection(collection)
         .doc(id)
@@ -402,17 +337,6 @@ class DataBaseService {
         .then((DocumentSnapshot documentSnapshot) {
       profile.add(documentSnapshot.data());
     });
-    /* for (var col in coll) {
-      await FirebaseFirestore.instance
-          .collection(col)
-          .doc(id)
-          .get()
-          .then((DocumentSnapshot documentSnapshot) {
-        if (documentSnapshot.exists) {
-          profile.add(documentSnapshot.data());
-        }
-      });
-    }*/
     return profile;
   }
 }

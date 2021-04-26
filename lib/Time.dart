@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
-// ...
+
 
 DateTime selected;
 DateTime start;
@@ -24,7 +24,6 @@ class BasicDateField extends StatelessWidget {
         child: DateTimeField(
           onChanged: (value) {
             selected = value;
-            print(dateControl.value.text);
           },
           validator: (DateTime value) {
             DateTime thresh = DateTime.now().add(Duration(days: 7));
@@ -35,7 +34,6 @@ class BasicDateField extends StatelessWidget {
             } else if (value.day < DateTime.now().day) {
               return "Do you live in the past?";
             } else {
-              print(selected.toString());
               return null;
             }
           },
@@ -98,7 +96,7 @@ class BasicTimeField extends StatelessWidget {
                   ((value.hour < DateTime.now().hour) ||
                       (value.minute < DateTime.now().minute + 10 &&
                           value.hour == DateTime.now().hour))) {
-                print(value.toString());
+                
                 return "Invalid Time";
               } else {
                 return null;

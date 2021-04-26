@@ -32,7 +32,6 @@ class _ConversationListState extends State<ConversationList> {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          print(FirebaseAuth.instance.currentUser.uid);
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return ChatScreen(
               id1: FirebaseAuth.instance.currentUser.uid,

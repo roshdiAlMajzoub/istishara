@@ -22,14 +22,13 @@ class _VerifyScreenState extends State<VerifyScreen> {
     timer = Timer.periodic(Duration(seconds: 3), (timer) {
       checkEmailVerified();
     });
-    // TODO: implement initState
+  
     super.initState();
   }
 
   @override
   void dispose() {
     timer.cancel();
-    // TODO: implement dispose
     super.dispose();
   }
 

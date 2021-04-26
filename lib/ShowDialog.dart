@@ -146,7 +146,7 @@ class Show {
                   ((DateTime.now()
                           .difference(DateTime.parse(startTime))
                           .inSeconds)
-                      .abs()); //*(DateTime.now().difference(DateTime.parse(startTime)).inMinutes)*(DateTime.now().difference(DateTime.parse(startTime)).inHours)).abs();
+                      .abs()); 
           return AlertDialog(
             insetPadding: EdgeInsets.symmetric(
               horizontal: 5.0,
@@ -166,7 +166,7 @@ class Show {
                   child: Container(
                 alignment: Alignment.center,
                 width: screenWidth,
-                // height: screenHeight / 1.7,
+               
                 child: Column(children: [
                   Align(
                     alignment: Alignment.topLeft,
@@ -306,98 +306,5 @@ class Show {
       height: 0,
     );
   }
-  /*void _showDialog(String title, String content, BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final double screenHeight = MediaQuery.of(context).size.height;
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-              insetPadding: EdgeInsets.symmetric(
-                horizontal: 5.0,
-              ),
-              title: Center(
-                  child: Text(
-                title,
-                style: TextStyle(
-                    color: Colors.deepPurple, fontWeight: FontWeight.w900),
-              )),
-              content: StatefulBuilder(
-                  builder: (BuildContext context, StateSetter setState1) {
-                return SingleChildScrollView(
-                    child: Container(
-                  height: screenHeight / 3,
-                  child: Column(children: [
-                    Container(
-                        width: double.infinity,
-                        child: Text(
-                          content,
-                          style: TextStyle(
-                              color: Colors.deepPurple,
-                              fontWeight: FontWeight.w900),
-                        )),
-                    Container(
-                        width: double.infinity,
-                        child: Row(children: [
-                          Align(
-                              alignment: Alignment(-1, 0),
-                              child: Radio<int>(
-                                activeColor: Colors.deepPurple,
-                                value: 0,
-                                groupValue: radioValue,
-                                onChanged: (value) {
-                                  setState1(() {
-                                    radioValue = value;
-                                  });
-                                },
-                              )),
-                          Text(_email)
-                        ])),
-                    Container(
-                        width: double.infinity,
-                        child: Row(children: [
-                          Align(
-                              alignment: Alignment(-1, 0),
-                              child: Radio<int>(
-                                activeColor: Colors.deepPurple,
-                                value: 1,
-                                groupValue: radioValue,
-                                onChanged: (value) {
-                                  setState1(() {
-                                    radioValue = value;
-                                  });
-                                },
-                              )),
-                          Text(_phoneNumber)
-                        ])),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: screenHeight / 50, bottom: screenHeight / 50),
-                      child: Text(
-                        "Please insert the code sent to you here:",
-                        style: TextStyle(
-                            color: Colors.deepPurple,
-                            fontWeight: FontWeight.w900),
-                      ),
-                    ),
-                    Container(
-                        height: screenHeight / 15,
-                        child: TextField(
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0)),
-                            hintText: "Verification Code",
-                          ),
-                          textAlignVertical: TextAlignVertical(y: 1),
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 15),
-                        )),
-                  ]),
-                ));
-              }),
-              actions: <Widget>[
-                TextButton( onPressed:(){Navigator.push( context, MaterialPageRoute(builder: (_) => DashboardScreen()));} , child: Text("Verify"))
-              ]);
-        });
-  }*/
+  
 }

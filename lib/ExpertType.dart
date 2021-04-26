@@ -80,7 +80,6 @@ class ExpertsState extends State<Experts> {
       _selectedType = selectedType;
       selected = _selectedType.type;
     });
-    //print(selected);
   }
 
   @override

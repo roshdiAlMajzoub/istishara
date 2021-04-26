@@ -16,17 +16,13 @@ var x;
 
 class UserImagePickerState extends State<UserImagePicker> {
   viewImage() async {
-    print("inside viewimage");
-    print(widget.list[0]['image name']);
     x = widget.list[0]['image name'];
-    print("here is x:");
-    print(x);
   }
 
   void initState() {
     super.initState();
     viewImage();
-    print(x);
+   
   }
 
   File pickedImage;
@@ -36,7 +32,7 @@ class UserImagePickerState extends State<UserImagePicker> {
     setState(() {
       pickedImage = File(pickedImageFile.path);
     });
-    print(pickedImage.path);
+ 
     widget.pickImagefn(pickedImage);
     final TextEditingController maxWidthController = TextEditingController();
     final TextEditingController maxHeightController = TextEditingController();

@@ -108,11 +108,9 @@ class Databasers {
     if (kIsWeb) {
       uploadTask = ref.putData(await file.readAsBytes(), metadata);
     } else {
-      print("I am here in putFile");
-      print(file.path);
       await ref.putFile(file, metadata);
       final url = await ref.getDownloadURL();
-      print(url);
+      
       return url;
     }
   }
@@ -124,18 +122,9 @@ class Databasers {
       await Clipboard.setData(ClipboardData(
         text: link,
       ));
-
-      print("link is:");
-      print(link);
       return link;
     } catch (e) {
-      /*final l = await firebase_storage.FirebaseStorage.instance
-          .ref()
-          .child('playground')
-          .child("profile1.jpg")
-          .getDownloadURL();
-      print(e.message);
-      return l;*/
+     
     }
    
   }
@@ -165,8 +154,7 @@ class Databasers {
           .ref('playground/Lecture28.4up.pdf')
           .writeToFile(downloadToFile);
     } on firebase_core.FirebaseException catch (e) {
-      print(e.message);
-      // e.g, e.code == 'canceled'
+      
     }
   }
 

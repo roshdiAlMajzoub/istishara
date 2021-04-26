@@ -87,70 +87,20 @@ class CalendarState extends State<MyCalendar> {
     return apptt[i]['end time'].toDate().toString().substring(0, 10);
   }
 
-  Future<String> getIDOfTheOther(int i) async {
+   getIDOfTheOther(int i)  {
     String IDofTheOther;
-    String collectionOfTheOther;
     String myID = FirebaseAuth.instance.currentUser.uid;
     if (myID != apptt[i]['id2']) {
-      collectionOfTheOther = await databasers.docExistsIn(apptt[i]['id2']);
       IDofTheOther = apptt[i]['id2'];
     } else {
-      collectionOfTheOther = await databasers.docExistsIn(apptt[i]['id1']);
       IDofTheOther = apptt[i]['id1'];
     }
     return IDofTheOther;
   }
 
-  Future<String> getNameOfTheOther(int i) async {
-    String IDofTheOther;
-    String name = "";
-    String collectionOfTheOther;
-    String myID = FirebaseAuth.instance.currentUser.uid;
-    if (myID != apptt[i]['id2']) {
-      collectionOfTheOther = await databasers.docExistsIn(apptt[i]['id2']);
-      IDofTheOther = apptt[i]['id2'];
-    } else {
-      collectionOfTheOther = await databasers.docExistsIn(apptt[i]['id1']);
-      IDofTheOther = apptt[i]['id1'];
-    }
-    Query colcollectionReference =
-        FirebaseFirestore.instance.collection(collectionOfTheOther);
-    await colcollectionReference.get().then((QuerySnapshot) {
-      QuerySnapshot.docs.forEach((element) {
-        if (element.get('id') == IDofTheOther) {
-          name = element.get('first name') + " " + element.get('last name');
-        }
-      });
-    });
+  
 
-    return name;
-  }
-
-  Future<String> getImageOfTheOther(int i) async {
-    String imageOfTheOther = "";
-    String myID = FirebaseAuth.instance.currentUser.uid;
-    String IDofTheOther;
-    String collectionOfTheOther;
-    if (myID != apptt[i]['id2']) {
-      collectionOfTheOther = await databasers.docExistsIn(apptt[i]['id2']);
-      IDofTheOther = apptt[i]['id2'];
-    } else {
-      collectionOfTheOther = await databasers.docExistsIn(apptt[i]['id1']);
-      IDofTheOther = apptt[i]['id1'];
-    }
-    Query colcollectionReference =
-        FirebaseFirestore.instance.collection(collectionOfTheOther);
-    await colcollectionReference.get().then((QuerySnapshot) {
-      QuerySnapshot.docs.forEach((element) {
-        String myId = FirebaseAuth.instance.currentUser.uid;
-        if (element.get('id') == IDofTheOther) {
-          imageOfTheOther = element.get('image name');
-        }
-      });
-    });
-
-    return imageOfTheOther.toString();
-  }
+  
 
   Future getPriceRange(String id) async {
     Databasers db = Databasers();
@@ -169,27 +119,9 @@ class CalendarState extends State<MyCalendar> {
     return price;
   }
 
-  Future<String> getImageOfMe(int i) async {
-    String imageOfMe;
-    String myID = FirebaseAuth.instance.currentUser.uid;
-    Query colcollectionReference =
-        FirebaseFirestore.instance.collection(widget.collection);
-    await colcollectionReference.get().then((QuerySnapshot) {
-      QuerySnapshot.docs.forEach((element) {
-        if (element.get('id') == myID) {
-          imageOfMe = element.get('image name');
-        }
-      });
-    });
+  
 
-    return imageOfMe.toString();
-  }
 
-  /*book() {
-    final User user = auth.currentUser;
-    DatabaseBookAppt().bookAppt(user.uid, 'uid2', DateTime.now(),
-        DateTime.now().add(Duration(hours: 2)));
-  }*/
   List<Meeting> meetings = <Meeting>[];
   @override
   Widget build(BuildContext context) {
@@ -229,7 +161,7 @@ class CalendarState extends State<MyCalendar> {
                       String date_from_calendar = appointmentDetails.date;
                       String _endTimeText =
                           getEndTimeFromCalendar(appointmentDetails);
-                      print(appointmentDetails.from.toString());
+                  
                       for (int i = 0; i < apptt.length; i++) {
                         String startTimeFromFirebase =
                             getStartTimeFromFirebase(i);
@@ -248,33 +180,37 @@ class CalendarState extends State<MyCalendar> {
                           setState(() {
                             _isLoading = true;
                           });
-                          print("I am in if");
-                          String imageOfTheOther = await getImageOfTheOther(i);
-                          print("one");
-                          String nameOfTheOther = await getNameOfTheOther(i);
-                          print("two");
-                          String IDofTheOther = await getIDOfTheOther(i);
-                          print("three");
-
-                          print("four");
+                      
+                          String imageOfTheOther = "";
+                         
+                          String IDofTheOther =  getIDOfTheOther(i);
+                          String nameOfTheOther = "";
+                          if (IDofTheOther == apptt[i]['id1']) {
+                            setState(() {
+                              imageOfTheOther = apptt[i]['image1'];
+                              nameOfTheOther = apptt[i]['name1'];
+                            });
+                          } else {
+                            setState(() {
+                              imageOfTheOther = apptt[i]['image2'];
+                              nameOfTheOther = apptt[i]['name2'];
+                            });
+                          }
                           String collection2 =
                               await Databasers().docExistsIn(apptt[i]['id2']);
-                          print("five");
+                      
                           String collection1 =
                               await Databasers().docExistsIn(apptt[i]['id1']);
                           var priceRange = await getPriceRange(apptt[i]['id2']);
-                          print("six");
-                          String myName =
-                              FirebaseAuth.instance.currentUser.displayName;
+                    
                           String id1 = FirebaseAuth.instance.currentUser.uid;
                           _isLoading = false;
 
-
                           FirebaseFirestore.instance
-                              .collection('conversations')                  /*@omarAssidi dont delete this*/ 
+                              .collection(
+                                  'conversations')
                               .doc(apptt[i]['id'])
                               .update({'started': true});
-
 
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
@@ -297,11 +233,20 @@ class CalendarState extends State<MyCalendar> {
                                 startTimeFromCalendar &&
                             EndTimeFromCalendar == EndTimeFromFirebase &&
                             date_from_calendar == date_from_Firebase) {
-                          String name = await getNameOfTheOther(i);
-
+                               String IDofTheOther =  getIDOfTheOther(i);
+                          String nameOfTheOther = "";
+                          if (IDofTheOther == apptt[i]['id1']) {
+                            setState(() {
+                              nameOfTheOther = apptt[i]['name1'];
+                            });
+                          } else {
+                            setState(() {
+                              nameOfTheOther = apptt[i]['name2'];
+                            });
+                          }
                           Show.showDialogMeetingDetails(
                               context,
-                              "Meeting with " + name,
+                              "Meeting with " + nameOfTheOther,
                               apptt[i]['start time'].toDate().toString(),
                               _endTimeText,
                               date_from_Firebase);
@@ -321,13 +266,10 @@ class CalendarState extends State<MyCalendar> {
         user.uid,
         DateTime.now().add(Duration(hours: 1, minutes: 5)),
         DateTime.now().add(Duration(hours: 3)));
-    print(bool);
   }
 
   void _getData() async {
     final User user = auth.currentUser;
-    //getConflictappt();
-    //print(DateTime.now());
 
     fetchDatabaseAppt();
     for (var ap in apptt) {
@@ -342,8 +284,7 @@ class CalendarState extends State<MyCalendar> {
 }
 
 class MeetingDataSource extends CalendarDataSource {
-  /// Creates a meeting data source, which used to set the appointment
-  /// collection to the calendar
+ 
   MeetingDataSource(List<Meeting> source) {
     appointments = source;
   }
@@ -379,8 +320,7 @@ class MeetingDataSource extends CalendarDataSource {
   }
 }
 
-/// Custom business object class which contains properties to hold the detailed
-/// information about the event data which will be rendered in calendar.
+
 class Meeting {
   /// Creates a meeting class with required details.
   Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay,
@@ -406,91 +346,3 @@ class Meeting {
   bool isAllDay;
 }
 
-/*
-class DataSource extends CalendarDataSource {
-  DataSource(List<Appointment> source) {
-    appointments = source;
-  }
-}
-
-DataSource _getCalendarDataSource() {
-  List<Appointment> appointments = <Appointment>[];
-  final DateTime today = DateTime.now();
-  final DateTime startTime =
-      DateTime(today.year, today.month, today.day, 9, 0, 0);
-  final DateTime endTime = startTime.add(const Duration(hours: 2));
-  final DateTime st = startTime.add(const Duration(hours: 2));
-  final DateTime et = startTime.add(const Duration(hours: 4));
-  Appointment app = Appointment('rosh', st, et, const Color(0xFF0F8644), true);
-  appointments.add(app);
-  appointments.add(
-    Appointment(
-        'Conference', startTime, endTime, const Color(0xFF0F8644), false),
-    /*startTime: DateTime.now(),
-         endTime: DateTime.now().add(
-             Duration(hours: 1)),
-         subject: 'Meeting',
-         color: Colors.blue,
-         startTimeZone: '',
-         endTimeZone: '',*/
-  );
-
-  return DataSource(appointments);
-}
-
-class MeetingDataSource extends CalendarDataSource {
-  /// Creates a meeting data source, which used to set the appointment
-  /// collection to the calendar
-  AppointmentDataSource(List<Appointment> source) {
-    appointments = source;
-  }
-
-  @override
-  DateTime getStartTime(int index) {
-    return appointments[index].from;
-  }
-
-  @override
-  DateTime getEndTime(int index) {
-    return appointments[index].to;
-  }
-
-  @override
-  String getSubject(int index) {
-    return appointments[index].eventName;
-  }
-
-  @override
-  Color getColor(int index) {
-    return appointments[index].background;
-  }
-
-  @override
-  bool isAllDay(int index) {
-    return appointments[index].isAllDay;
-  }
-}
-
-/// Custom business object class which contains properties to hold the detailed
-/// information about the event data which will be rendered in calendar.
-class Appointment {
-  /// Creates a meeting class with required details.
-  Appointment(
-      this.eventName, this.from, this.to, this.background, this.isAllDay);
-
-  /// Event name which is equivalent to subject property of [Appointment].
-  String eventName;
-
-  /// From which is equivalent to start time property of [Appointment].
-  DateTime from;
-
-  /// To which is equivalent to end time property of [Appointment].
-  DateTime to;
-
-  /// Background which is equivalent to color property of [Appointment].
-  Color background;
-
-  /// IsAllDay which is equivalent to isAllDay property of [Appointment].
-  bool isAllDay;
-}
-*/

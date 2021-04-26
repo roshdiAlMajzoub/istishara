@@ -59,10 +59,12 @@ class _ChatScreenState extends State<ChatScreen> {
         .snapshots();
   }
 
-  updateRating() async {
-    var updt = await FirebaseFirestore.instance
-        .collection(widget.collection2)
-        .doc(widget.id2);
+  updateRating(
+    collection2,
+    id2,
+  ) async {
+    var updt =
+        await FirebaseFirestore.instance.collection(collection2).doc(id2);
     List repList;
     await updt.get().then((DocumentSnapshot doc) {
       setState(() {
@@ -84,7 +86,7 @@ class _ChatScreenState extends State<ChatScreen> {
     var updtExpertMoney = await FirebaseFirestore.instance
         .collection(widget.collection2)
         .doc(widget.id2);
-    print(1);
+    
     var updtHelpSeekMoney = await FirebaseFirestore.instance
         .collection(widget.collection1)
         .doc(widget.secId1);
@@ -104,7 +106,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     helpSeekMoney = helpSeekMoney - widget.priceRange;
     expMoney = expMoney + widget.priceRange;
-    print(helpSeekMoney);
+    
     await updtExpertMoney.update({'money': expMoney});
     await updtHelpSeekMoney.update({'money': helpSeekMoney});
     FirebaseFirestore.instance
@@ -114,7 +116,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   double rating;
-  showRatingPayment(BuildContext context1) {
+  showRatingPayment(BuildContext context1, collection2, id2) {
     return showDialog<AlertDialog>(
         context: context1,
         builder: (BuildContext context) {
@@ -157,7 +159,6 @@ class _ChatScreenState extends State<ChatScreen> {
                         color: Colors.amber,
                       ),
                       onRatingUpdate: (rate) {
-                        print(rate);
                         setState(() {
                           rating = rate;
                         });
@@ -182,7 +183,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   alignment: Alignment.bottomRight,
                   child: ElevatedButton(
                     onPressed: () {
-                      updateRating();
+                      updateRating(collection2, id2);
                       Navigator.pop(context);
                     },
                     child: Text("Submit"),
@@ -271,10 +272,15 @@ class _ChatScreenState extends State<ChatScreen> {
                                   color: Colors.red,
                                   fontWeight: FontWeight.w900),
                               endTime: endTimeint,
-                              onEnd: () {
-                                pay();
-                                Navigator.of(context).pop();
-                                showRatingPayment(context);
+                              onEnd: ()async {
+                                setState(() {
+                                  widget.isConversation = true;
+                                });
+                                await pay();
+                                //Navigator.of(context).pop();
+                                showRatingPayment(
+                                    context, widget.collection2, widget.id2);
+                              
                               }),
                         )),
                 ],

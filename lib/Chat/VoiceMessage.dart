@@ -42,10 +42,10 @@ class VoiceMessageState extends State<VoiceMessage> {
   @override
   void initPlatformState() async {
     FileInfo fileInfo = await DefaultCacheManager().getFileFromCache(message);
-    print("here1");
+  
 
     if (fileInfo == null) {
-      print('cache ln: caching now ');
+     
 
       setState(() {
         fetchVideoFromOnline = true;
@@ -53,7 +53,7 @@ class VoiceMessageState extends State<VoiceMessage> {
 
       file = await DefaultCacheManager().getSingleFile(widget.message);
     } else {
-      print('cache ln: ${fileInfo.validTill}');
+     
       setState(() {
         fetchVideoFromOnline = false;
         file = fileInfo.file;
@@ -116,7 +116,7 @@ class VoiceMessageState extends State<VoiceMessage> {
                           setState(() {
                             isPlaying = true;
                           });
-                          print("play");
+                         
                           if (fetchVideoFromOnline) {
                             setState(() {
                               isLoading = true;
@@ -126,7 +126,7 @@ class VoiceMessageState extends State<VoiceMessage> {
                               isLoading = false;
                             });
                           } else {
-                            print("here in caching, good job");
+                           
                             if (fetchVideoFromOnline) {
                               setState(() {
                                 isLoading = true;
@@ -144,8 +144,6 @@ class VoiceMessageState extends State<VoiceMessage> {
                         icon: Icon(Icons.pause),
                         onPressed: () async {
                           setState(() {
-                            print("current time:");
-                            print(currentTime);
                             isPlaying = false;
                           });
                           await audioPlayer.pause();
@@ -159,15 +157,7 @@ class VoiceMessageState extends State<VoiceMessage> {
                     completeTime,
                     style: TextStyle(fontWeight: FontWeight.w300),
                   ),
-                  /* IconButton(
-                    tooltip: "press to stop audio",
-                    icon: Icon(Icons.pause),
-                    onPressed: () async {
-                      print("pause");
-                      int i = await audioPlayer.pause();
-                      print(i);
-                      print("pause");
-                    }),*/
+              
                   IconButton(
                       icon: Icon(Icons.file_download),
                         onPressed: () async {

@@ -147,16 +147,10 @@ class ProfileState extends State<Profile> {
     }
 
     if (_phoneNumber != null && _phoneNumber != "") {
-      print(_phoneNumber);
       collectionReference.doc(id).update({
         'phone number': _phoneNumber,
       });
-      /* if (_formKeyPhone.currentState.validate()) {
-        print(_phoneNumber);
-        collectionReference.doc(id).update({
-          'phone number': _phoneNumber,
-        });
-      }*/
+      
     }
 
     if (imgRes != null) {
@@ -228,7 +222,6 @@ class ProfileState extends State<Profile> {
   }
 
   viewImage() async {
-    print(lst[0]['image name']);
     var img = await Databasers().downloadLink(firebase_storage
         .FirebaseStorage.instance
         .ref()
@@ -861,9 +854,7 @@ class ProfileState extends State<Profile> {
                                                   _formKeyConf.currentState
                                                       .validate() &&
                                                   h.expertt() != null) {
-                                              } else {
-                                                print("here");
-                                              }
+                                              } 
                                             }),
                                       )
                                     : Padding(
