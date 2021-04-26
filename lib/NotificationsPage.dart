@@ -117,7 +117,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                           ));
                     } else {
                       return SizedBox(
-                          height: screenHeight / 4,
+                          height: screenHeight/5.5,
                           child: Card(
                             elevation: 8.0,
                             margin: new EdgeInsets.symmetric(

@@ -169,7 +169,7 @@ class DashboardState extends State<Dashboard> {
                     makeDashboardItem("Interior Designer", Icons.home_outlined,
                         Colors.lightBlue),
                     makeDashboardItem(
-                        "BlackSmith", Icons.construction, Colors.pink),
+                        "BlackSmith", Icons.construction, Colors.green),
                     makeDashboardItem(
                         "Industrial Engineer", Icons.work, Colors.blueAccent),
                     makeDashboardItem(
