@@ -52,7 +52,7 @@ class DashboardState extends State<Dashboard> {
       AndroidNotification android = message.notification?.android;
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('A new onMessageOpenedApp event was published!');
+ 
       Navigator.pushNamed(context, '/Notifications');
     });
   }
@@ -83,7 +83,7 @@ class DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     getCollection();
     getMyMoney();
-    print(collection);
+   
     return Scaffold(
         // backgroundColor: kPrimaryLightColor,
         drawer: NavDrawer(type: type, collection: collection, pass: pass),
@@ -199,8 +199,6 @@ class DashboardState extends State<Dashboard> {
                 borderRadius: BorderRadius.circular(50.0), color: col),
             child: new InkWell(
               onTap: () {
-                print(title);
-                print(collection);
                 Navigator.push(
                     context,
                     MaterialPageRoute(

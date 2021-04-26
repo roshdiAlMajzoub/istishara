@@ -40,7 +40,6 @@ class _NavDrawerState extends State<NavDrawer> {
         QuerySnapshot.docs.forEach((element) {
           if ((element.get('id1') == id || element.get('id2') == id) &&
               element.get('start time').toDate().isBefore(DateTime.now())) {
-            print("inside if");
             conversations.add(
               element.data(),
             );
@@ -65,7 +64,6 @@ class _NavDrawerState extends State<NavDrawer> {
       setState(() {
         conversationsList = resultant;
       });
-      print(conversationsList.length);
     }
   }
 
@@ -88,12 +86,11 @@ class _NavDrawerState extends State<NavDrawer> {
   List proff = [];
 
   getData() async {
-    print(widget.collection);
-    print(auth.currentUser.uid);
+   
     dynamic prof = await DataBaseService()
         .getCurrentUSerData(auth.currentUser.uid, widget.collection);
     proff = prof;
-    print(proff[0]['first name']);
+    
   }
 
   List notificationList = [];
@@ -187,13 +184,13 @@ class _NavDrawerState extends State<NavDrawer> {
                 ),
                 title: Text('Profile'),
                 onTap: () async {
-                  print("before");
+                 
                   String nbOFRec = await getNumberOfRecords(
                       FirebaseAuth.instance.currentUser.uid);
-                  print("after");
+          
                   if (widget.type == "Expert") {
                     await getData();
-                    print("getdata");
+                   
                     Navigator.pop(context);
                     Navigator.push(
                         context,
@@ -207,8 +204,7 @@ class _NavDrawerState extends State<NavDrawer> {
                                   nbOfRec: nbOFRec,
                                 )));
                   } else {
-                    /* Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomePage()));*/
+                   
                     await getData();
                     Navigator.pop(context);
                     Navigator.push(

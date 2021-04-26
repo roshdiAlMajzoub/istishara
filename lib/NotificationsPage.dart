@@ -9,7 +9,7 @@ import 'nav-drawer.dart';
 import 'ShowDialog.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-// ignore: must_be_immutable
+
 class MainNotificationsPage extends StatelessWidget {
   var t;
   var collection;
@@ -19,7 +19,7 @@ class MainNotificationsPage extends StatelessWidget {
   }
 }
 
-// ignore: must_be_immutable
+
 class NotificationsPage extends StatefulWidget {
   var collection;
   NotificationsPage(collection) {
@@ -51,7 +51,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
   }
 
   void initState() {
-    // TODO: implement initState
     super.initState();
     fetchDataBaseNotificationList();
   }
@@ -86,7 +85,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemCount:
-                      notificationList.length, //depends on firebase count;;
+                      notificationList.length, 
                   itemBuilder: (BuildContext context, int index) {
                     if (notificationList[index]['state2'] == "p") {
                       return SizedBox(
@@ -188,10 +187,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
   }
 }
 
-// flutter defined function
+
 showAlertDialog(
     BuildContext context, id1, uid, col, id2, st, et, token1, token2) {
-  // set up the buttons
+
   Widget cancelButton = FlatButton(
     child: Text("Cancel"),
     onPressed: () {
@@ -206,7 +205,7 @@ showAlertDialog(
     },
   );
 
-  // set up the AlertDialog
+  
   AlertDialog alert = AlertDialog(
     title: Text("Are you sure?"),
     content: Text("Would you like to come back to this later?"),
@@ -216,7 +215,7 @@ showAlertDialog(
     ],
   );
 
-  // show the dialog
+  
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -226,7 +225,7 @@ showAlertDialog(
 }
 
 showAlertDialog2(BuildContext context, id1, uid, col, id2, st) {
-  // set up the buttons
+  
   Widget cancelButton = FlatButton(
     child: Text("Cancel"),
     onPressed: () {
@@ -241,7 +240,7 @@ showAlertDialog2(BuildContext context, id1, uid, col, id2, st) {
     },
   );
 
-  // set up the AlertDialog
+  
   AlertDialog alert = AlertDialog(
     title: Text("Are you sure?"),
     content: Text("Would you like to come back to this later?"),
@@ -300,7 +299,7 @@ Future<String> getImage(String id) async {
   String collection = await db.docExistsIn(id);
   Query colcollectionReference =
       FirebaseFirestore.instance.collection(collection);
-  print(collection);
+
   await colcollectionReference.get().then((QuerySnapshot) {
     QuerySnapshot.docs.forEach((element) {
       if (element.get('id') == id) {
@@ -326,9 +325,9 @@ acceptAppt(col, id1, uid, id2, st, et, token1, token2) async {
   String image1 = await getImage(id1);
   String image2 = await getImage(id2);
   var collection = await db.docExistsIn(id2);
-  print("after collec");
+ 
   var priceRange = await getPriceRange(id2);
-  print("after price");
+
   await FirebaseFirestore.instance.collection("conversations").doc(uid).set({
     'id1': id1,
     'id2': id2,
@@ -346,7 +345,6 @@ acceptAppt(col, id1, uid, id2, st, et, token1, token2) async {
     'started': false,
     'status': "not-paid",
   });
-  print("after final");
 }
 
 denyAppt(col, id1, uid, id2, st) async {

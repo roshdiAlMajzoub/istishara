@@ -24,7 +24,7 @@ class SendImagePickerState extends State<SendImagePicker> {
     setState(() {
       pickedImage = File(pickedImageFile.path);
     });
-    print(pickedImage.path);
+ 
     final TextEditingController maxWidthController = TextEditingController();
     final TextEditingController maxHeightController = TextEditingController();
     final TextEditingController qualityController = TextEditingController();

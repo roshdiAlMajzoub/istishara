@@ -81,7 +81,7 @@ class _ViewCalendarState extends State<ViewCalendar> {
     String collection = await db.docExistsIn(id);
     Query colcollectionReference =
         FirebaseFirestore.instance.collection(collection);
-    print(collection);
+
     await colcollectionReference.get().then((QuerySnapshot) {
       QuerySnapshot.docs.forEach((element) {
         if (element.get('id') == id) {
@@ -100,11 +100,10 @@ class _ViewCalendarState extends State<ViewCalendar> {
     DateTime startTime = DateTime.parse(x);
     DateTime endTime = DateTime.parse(y);
     var h = await getConflictappt(startTime, endTime);
-    print(h);
+
     if (h == false) {
       String token;
       String token2;
-      print(collection);
       await FirebaseFirestore.instance
           .collection(field)
           .doc(id)
@@ -112,8 +111,6 @@ class _ViewCalendarState extends State<ViewCalendar> {
           .then((DocumentSnapshot d) {
         token = d.data()['token'];
       });
-      print("before");
-      print(collection);
       await FirebaseFirestore.instance
           .collection(collection)
           .doc(auth.currentUser.uid)
@@ -121,7 +118,6 @@ class _ViewCalendarState extends State<ViewCalendar> {
           .then((DocumentSnapshot d) {
         token2 = d.data()['token'];
       });
-      print("After");
       showAlertDialog(context, "Your request has been sent to the expert.",
           "You will recieve notification once your request is approved.");
       String name1 = await getName(auth.currentUser.uid);
@@ -130,19 +126,15 @@ class _ViewCalendarState extends State<ViewCalendar> {
       String image2 = await getImage(id);
       DatabaseBookAppt().bookAppt(auth.currentUser.uid, collection, id, field,
           startTime, endTime, token, token2, name1, name2,image1,image2);
-      print(token);
-      print('done');
     } else {
       showAlertDialog(
           context,
           "This appointemnet is in conflict with another one",
           "Try another one!");
-      print('not');
     }
   }
 
   Future<bool> getConflictappt(st, et) async {
-    //final User user = auth.currentUser;
     bool h = await DatabaseBookAppt().checkAp(field, id, st, et);
     setState(() {
       check = h;
@@ -153,7 +145,6 @@ class _ViewCalendarState extends State<ViewCalendar> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     book();
   }

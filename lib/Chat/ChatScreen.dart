@@ -85,7 +85,7 @@ class _ChatScreenState extends State<ChatScreen> {
     var updtExpertMoney = await FirebaseFirestore.instance
         .collection(widget.collection2)
         .doc(widget.id2);
-    print(1);
+    
     var updtHelpSeekMoney = await FirebaseFirestore.instance
         .collection(widget.collection1)
         .doc(widget.secId1);
@@ -105,7 +105,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     helpSeekMoney = helpSeekMoney - widget.priceRange;
     expMoney = expMoney + widget.priceRange;
-    print(helpSeekMoney);
+    
     await updtExpertMoney.update({'money': expMoney});
     await updtHelpSeekMoney.update({'money': helpSeekMoney});
     FirebaseFirestore.instance
@@ -158,7 +158,6 @@ class _ChatScreenState extends State<ChatScreen> {
                         color: Colors.amber,
                       ),
                       onRatingUpdate: (rate) {
-                        print(rate);
                         setState(() {
                           rating = rate;
                         });

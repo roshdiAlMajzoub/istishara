@@ -28,7 +28,7 @@ class _StartState extends State<_Start> {
     return Scaffold(
         backgroundColor: Colors.white,
         body: WillPopScope(
-            // ignore: missing_return
+            
             onWillPop: () async {
               Navigator.of(context).pop();
             },

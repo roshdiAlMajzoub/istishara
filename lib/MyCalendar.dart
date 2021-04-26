@@ -161,7 +161,7 @@ class CalendarState extends State<MyCalendar> {
                       String date_from_calendar = appointmentDetails.date;
                       String _endTimeText =
                           getEndTimeFromCalendar(appointmentDetails);
-                      print(appointmentDetails.from.toString());
+                  
                       for (int i = 0; i < apptt.length; i++) {
                         String startTimeFromFirebase =
                             getStartTimeFromFirebase(i);
@@ -180,9 +180,9 @@ class CalendarState extends State<MyCalendar> {
                           setState(() {
                             _isLoading = true;
                           });
-                          print("I am in if");
+                      
                           String imageOfTheOther = "";
-                          print("one");
+                         
                           String IDofTheOther =  getIDOfTheOther(i);
                           String nameOfTheOther = "";
                           if (IDofTheOther == apptt[i]['id1']) {
@@ -196,21 +196,19 @@ class CalendarState extends State<MyCalendar> {
                               nameOfTheOther = apptt[i]['name2'];
                             });
                           }
-
-                          print("four");
                           String collection2 =
                               await Databasers().docExistsIn(apptt[i]['id2']);
-                          print("five");
+                      
                           String collection1 =
                               await Databasers().docExistsIn(apptt[i]['id1']);
                           var priceRange = await getPriceRange(apptt[i]['id2']);
-                          print("six");
+                    
                           String id1 = FirebaseAuth.instance.currentUser.uid;
                           _isLoading = false;
 
                           FirebaseFirestore.instance
                               .collection(
-                                  'conversations') /*@omarAssidi dont delete this*/
+                                  'conversations')
                               .doc(apptt[i]['id'])
                               .update({'started': true});
 
@@ -268,13 +266,10 @@ class CalendarState extends State<MyCalendar> {
         user.uid,
         DateTime.now().add(Duration(hours: 1, minutes: 5)),
         DateTime.now().add(Duration(hours: 3)));
-    print(bool);
   }
 
   void _getData() async {
     final User user = auth.currentUser;
-    //getConflictappt();
-    //print(DateTime.now());
 
     fetchDatabaseAppt();
     for (var ap in apptt) {
@@ -289,8 +284,7 @@ class CalendarState extends State<MyCalendar> {
 }
 
 class MeetingDataSource extends CalendarDataSource {
-  /// Creates a meeting data source, which used to set the appointment
-  /// collection to the calendar
+ 
   MeetingDataSource(List<Meeting> source) {
     appointments = source;
   }
@@ -326,8 +320,7 @@ class MeetingDataSource extends CalendarDataSource {
   }
 }
 
-/// Custom business object class which contains properties to hold the detailed
-/// information about the event data which will be rendered in calendar.
+
 class Meeting {
   /// Creates a meeting class with required details.
   Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay,
@@ -353,91 +346,3 @@ class Meeting {
   bool isAllDay;
 }
 
-/*
-class DataSource extends CalendarDataSource {
-  DataSource(List<Appointment> source) {
-    appointments = source;
-  }
-}
-
-DataSource _getCalendarDataSource() {
-  List<Appointment> appointments = <Appointment>[];
-  final DateTime today = DateTime.now();
-  final DateTime startTime =
-      DateTime(today.year, today.month, today.day, 9, 0, 0);
-  final DateTime endTime = startTime.add(const Duration(hours: 2));
-  final DateTime st = startTime.add(const Duration(hours: 2));
-  final DateTime et = startTime.add(const Duration(hours: 4));
-  Appointment app = Appointment('rosh', st, et, const Color(0xFF0F8644), true);
-  appointments.add(app);
-  appointments.add(
-    Appointment(
-        'Conference', startTime, endTime, const Color(0xFF0F8644), false),
-    /*startTime: DateTime.now(),
-         endTime: DateTime.now().add(
-             Duration(hours: 1)),
-         subject: 'Meeting',
-         color: Colors.blue,
-         startTimeZone: '',
-         endTimeZone: '',*/
-  );
-
-  return DataSource(appointments);
-}
-
-class MeetingDataSource extends CalendarDataSource {
-  /// Creates a meeting data source, which used to set the appointment
-  /// collection to the calendar
-  AppointmentDataSource(List<Appointment> source) {
-    appointments = source;
-  }
-
-  @override
-  DateTime getStartTime(int index) {
-    return appointments[index].from;
-  }
-
-  @override
-  DateTime getEndTime(int index) {
-    return appointments[index].to;
-  }
-
-  @override
-  String getSubject(int index) {
-    return appointments[index].eventName;
-  }
-
-  @override
-  Color getColor(int index) {
-    return appointments[index].background;
-  }
-
-  @override
-  bool isAllDay(int index) {
-    return appointments[index].isAllDay;
-  }
-}
-
-/// Custom business object class which contains properties to hold the detailed
-/// information about the event data which will be rendered in calendar.
-class Appointment {
-  /// Creates a meeting class with required details.
-  Appointment(
-      this.eventName, this.from, this.to, this.background, this.isAllDay);
-
-  /// Event name which is equivalent to subject property of [Appointment].
-  String eventName;
-
-  /// From which is equivalent to start time property of [Appointment].
-  DateTime from;
-
-  /// To which is equivalent to end time property of [Appointment].
-  DateTime to;
-
-  /// Background which is equivalent to color property of [Appointment].
-  Color background;
-
-  /// IsAllDay which is equivalent to isAllDay property of [Appointment].
-  bool isAllDay;
-}
-*/

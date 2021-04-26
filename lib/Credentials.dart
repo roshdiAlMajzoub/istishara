@@ -82,7 +82,7 @@ class CredentialsState extends State<Credentials> {
   double _repValue = 0;
   @override
   Widget build(BuildContext context) {
-    print(_repValue);
+
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(

@@ -12,7 +12,6 @@ class Messages extends StatelessWidget {
   String id;
   var messages;
   getTime(String time) {
-    print(time.substring(12, 16));
     return time.substring(11, 16);
   }
 
@@ -33,17 +32,14 @@ class Messages extends StatelessWidget {
                 reverse: true,
                 itemCount: chatSnapShot.data.docs.length,
                 itemBuilder: (ctxt, index) {
-                  print(chatSnapShot.data.docs[index]['userID']);
-                  print(id1);
                   var message = chatSnapShot.data.docs[index]['text'];
-                  print(message);
+                  
                   var image = chatSnapShot.data.docs[index]['image'];
-                  print(image);
+                 
                   var audio = chatSnapShot.data.docs[index]['audio'];
-                  print(audio);
+                  
                   var document = chatSnapShot.data.docs[index]['doc'];
-                  print(document);
-
+                  
                   if (document != "") {
                     return DocumentMessage(
                         message: chatSnapShot.data.docs[index]['doc'],
