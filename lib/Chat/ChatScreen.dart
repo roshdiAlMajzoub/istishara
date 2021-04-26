@@ -3,13 +3,13 @@ import 'package:ISTISHARA/Chat/Messages.dart';
 import 'package:ISTISHARA/Chat/SendTextField.dart';
 import 'package:ISTISHARA/Databasers.dart';
 import 'package:ISTISHARA/ShowDialog.dart';
+import 'package:ISTISHARA/VideoCall/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-
 
 class ChatScreen extends StatefulWidget {
   String id1;
@@ -248,6 +248,13 @@ class _ChatScreenState extends State<ChatScreen> {
                               fontWeight: FontWeight.w600,
                               color: Colors.white),
                         ),
+                        IconButton(
+                            icon: Icon(Icons.video_call_sharp),
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return HomePage();
+          }));
+                            })
                       ],
                     ),
                   ),
