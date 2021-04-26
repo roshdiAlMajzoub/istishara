@@ -218,6 +218,7 @@ class CredentialsState extends State<Credentials> {
                           textAlignVertical: TextAlignVertical(y: 1),
                           controller: FirstNameController,
                           validator: (String value) {
+                            value = value.trim();
                             if (value.isEmpty) {
                               return "This field cannot be Empty";
                             } else if (value.length < 3) {
@@ -271,7 +272,7 @@ class CredentialsState extends State<Credentials> {
                             //initialValue: lst[0]['last name'],
                             onChanged: (value) {
                               setState(() {
-                                _lastName = value;
+                                _lastName = value.trim();
                               });
                             },
                             onTap: () {
@@ -282,6 +283,7 @@ class CredentialsState extends State<Credentials> {
                             textAlignVertical: TextAlignVertical(y: 1),
                             controller: LastNameController,
                             validator: (String value) {
+                              value = value.trim();
                               if (value.isEmpty) {
                                 return "This field cannot be Empty";
                               } else if (value.length < 3) {
@@ -345,6 +347,7 @@ class CredentialsState extends State<Credentials> {
                             textAlignVertical: TextAlignVertical(y: 1),
                             controller: EmailController,
                             validator: (String value) {
+                              value = value.trim();
                               if (value.isEmpty) {
                                 return "This field cannot be Empty";
                               } else if (!h.validEmail(value)) {
@@ -411,6 +414,7 @@ class CredentialsState extends State<Credentials> {
                             textAlignVertical: TextAlignVertical(y: 1),
                             controller: PhoneController,
                             validator: (String value) {
+                              value = value.trim();
                               if (value.isEmpty) {
                                 return "This field cannot be Empty";
                               } else if (!h.validPhoneNumber(value)) {
@@ -474,6 +478,7 @@ class CredentialsState extends State<Credentials> {
                                 textAlignVertical: TextAlignVertical(y: 1),
                                 controller: PasswordController,
                                 validator: (String value) {
+                                  value = value.trim();
                                   if (value.isEmpty) {
                                     return "This field cannot be Empty";
                                   } else if (value.length < 6) {
@@ -551,10 +556,11 @@ class CredentialsState extends State<Credentials> {
                             textAlignVertical: TextAlignVertical(y: 1),
                             controller: ConfirmPasswordController,
                             validator: (String value) {
+                              value = value.trim();
                               if (value.isEmpty) {
                                 return "This field cannot be Empty";
                               } else if (value !=
-                                  PasswordController.value.text) {
+                                  PasswordController.value.text.trim()) {
                                 return "Password Mismatch";
                               } else {
                                 return null;
@@ -615,7 +621,7 @@ class CredentialsState extends State<Credentials> {
                                       fontSize: 18,
                                       fontWeight: FontWeight.w900)),
                             ),
-                           
+
                             Container(
                               child: Experts(),
                             ),
@@ -625,7 +631,7 @@ class CredentialsState extends State<Credentials> {
                             Container(
                                 height: screenHeight / 10,
                                 padding: EdgeInsets.only(
-                                 bottom: screenHeight / 30,
+                                  bottom: screenHeight / 30,
                                 ),
                                 child: OutlinedButton(
                                     onPressed: () async {
@@ -651,7 +657,7 @@ class CredentialsState extends State<Credentials> {
                                       ),
                                     ))),
                             if (choosingCv) CircularProgressIndicator(),
-                            if (!choosingCv) d.cvName(),                        
+                            if (!choosingCv) d.cvName(),
                             isProfile == false
                                 ? Container(
                                     height: screenHeight / 10,
@@ -757,28 +763,26 @@ class CredentialsState extends State<Credentials> {
                                               _formKeyPass.currentState
                                                   .validate() &&
                                               _formKeyConf.currentState
-                                                  .validate()
-                                              ) {
+                                                  .validate()) {
                                             if (ExpertsState.getExpertType() ==
                                                 null) {
                                               Show.showDialogChooseProfession(
                                                   context);
+                                            } else {
+                                              d.signup(
+                                                  this,
+                                                  user,
+                                                  context,
+                                                  _email,
+                                                  _password,
+                                                  _firstName,
+                                                  _lastName,
+                                                  _phoneNumber,
+                                                  h.expertt(),
+                                                  d.cvN,
+                                                  _repValue,
+                                                  () => {h.clearInfo(l)});
                                             }
-                                            else{
-                                            d.signup(
-                                                this,
-                                                user,
-                                                context,
-                                                _email,
-                                                _password,
-                                                _firstName,
-                                                _lastName,
-                                                _phoneNumber,
-                                                h.expertt(),
-                                                d.cvN,
-                                                _repValue,
-                                                () => {h.clearInfo(l)});}
-                                          
                                           }
                                         }),
                                   )
@@ -854,7 +858,6 @@ class CredentialsState extends State<Credentials> {
                                                 .validate() &&
                                             _formKeyConf.currentState
                                                 .validate()) {
-                                                  
                                           d.signup(
                                               this,
                                               user,

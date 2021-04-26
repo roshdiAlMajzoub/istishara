@@ -99,6 +99,41 @@ class Show {
         });
   }
 
+  static Future<AlertDialog> showDialogDeleteAccount(
+      BuildContext context1, Function() delete) {
+    final double screenWidth = MediaQuery.of(context1).size.width;
+    final double screenHeight = MediaQuery.of(context1).size.height;
+    return showDialog<AlertDialog>(
+        context: context1,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              insetPadding: EdgeInsets.symmetric(
+                horizontal: 5.0,
+              ),
+              title: Text(
+                "Are you sure you want to delete your account?!:(",
+                style:
+                    TextStyle(color: Colors.red, fontWeight: FontWeight.w900),
+              ),
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () {
+                      delete();
+                      Navigator.of(context).pushReplacementNamed("/Login");
+                    },
+                    child: Text(
+                      "Yes",
+                      style: TextStyle(color: Colors.red),
+                    )),
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("No")),
+              ]);
+        });
+  }
+
   static Future<AlertDialog> showDialogMeetingDetails(BuildContext context1,
       String title, String startTime, String endTime, String date) {
     return showDialog<AlertDialog>(

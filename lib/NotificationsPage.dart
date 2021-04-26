@@ -37,6 +37,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
   List notificationList = [];
 
+
   fetchDataBaseNotificationList() async {
     dynamic resultant = await DataBaseList().getNotificationList(collection);
 
@@ -99,8 +100,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                 child: ListTile(
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: 20.0, vertical: 10.0),
-                                  title: Text("Your appointemnt with "
-                                      "has been accepted",style:TextStyle(fontSize: 15)),
+                                  title: Text("Your appointemnt with " +notificationList[index]['name2']+
+                                      " has been accepted",style:TextStyle(fontSize: 15)),
                                   trailing: Container(
                                       padding: EdgeInsets.only(right: 1.0),
                                       child: IconButton(
@@ -116,7 +117,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                           ));
                     } else {
                       return SizedBox(
-                          height: screenHeight / 6.5,
+                          height: screenHeight / 4,
                           child: Card(
                             elevation: 8.0,
                             margin: new EdgeInsets.symmetric(
@@ -159,9 +160,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                       "\nto:       " +
                                       notificationList[index]['end time']
                                           .toDate()
-                                          .toString().substring(11,16),
-                                           style: TextStyle(fontSize: 15 )
-                                          ),
+                                          .toString().substring(11,16) +"\nClient: "+notificationList[index]['name1']
+                                           ,style: TextStyle(fontSize: 15 )
+                                  ),
                                   trailing: IconButton(
                                     icon: SvgPicture.asset(
                                         "asset/images/cancel.svg"),

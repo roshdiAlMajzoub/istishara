@@ -1,3 +1,4 @@
+import 'package:ISTISHARA/Databasers.dart';
 import 'package:ISTISHARA/Helper.dart';
 import 'package:ISTISHARA/ProfileView.dart';
 import 'package:ISTISHARA/Time.dart';
@@ -57,6 +58,23 @@ class _ViewCalendarState extends State<ViewCalendar> {
     @required this.color,
     this.collection,
   });
+  Future<String> getName(String id) async {
+    Databasers db = Databasers();
+    String name = "";
+    String collection = await db.docExistsIn(id);
+    Query colcollectionReference =
+        FirebaseFirestore.instance.collection(collection);
+    await colcollectionReference.get().then((QuerySnapshot) {
+      QuerySnapshot.docs.forEach((element) {
+        if (element.get('id') == id) {
+          name = element.get('first name') + " " + element.get('last name');
+        }
+      });
+    });
+
+    return name;
+  }
+
   bool check;
   hey() async {
     DateTime day = DateTime.parse(dateControl.value.text);
@@ -87,6 +105,8 @@ class _ViewCalendarState extends State<ViewCalendar> {
         token2 = d.data()['token'];
       });
       print("After");
+      String name1 = await getName(auth.currentUser.uid);
+      String name2 = await getName(id);
       DatabaseBookAppt().bookAppt(
         auth.currentUser.uid,
         collection,
@@ -96,6 +116,8 @@ class _ViewCalendarState extends State<ViewCalendar> {
         endTime,
         token,
         token2,
+        name1,
+        name2
       );
       showAlertDialog(context, "Your request has been sent to the expert.",
           "You will recieve notification once your request is approved.");

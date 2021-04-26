@@ -1,5 +1,7 @@
+import 'package:ISTISHARA/ShowDialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:http/http.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:flutter/material.dart';
 import 'nav-drawer.dart';
@@ -56,9 +58,11 @@ class SettingsState extends State<Settings> {
   bool temp;
   delteAcc() async {
     try {
+      print("before");
+      print(lst[0]['email']);
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: FirebaseAuth.instance.currentUser.email,
-          password: lst[0]['passwoard']);
+          email: lst[0]['email'], password: lst[0]['passwoard']);
+      print("after");
       FirebaseFirestore.instance
           .collection(collection)
           .doc(FirebaseAuth.instance.currentUser.uid)
@@ -73,6 +77,40 @@ class SettingsState extends State<Settings> {
     }
   }
 
+  Future<AlertDialog> showDialogDeleteAccount(BuildContext context1) {
+    final double screenWidth = MediaQuery.of(context1).size.width;
+    final double screenHeight = MediaQuery.of(context1).size.height;
+    return showDialog<AlertDialog>(
+        context: context1,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              insetPadding: EdgeInsets.symmetric(
+                horizontal: 5.0,
+              ),
+              title: Text(
+                "Are you sure you want to delete your account?!",
+                style:
+                    TextStyle(color: Colors.red, fontWeight: FontWeight.w900),
+              ),
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () {
+                      delteAcc();
+                      Navigator.of(context).pushReplacementNamed("/Login");
+                    },
+                    child: Text(
+                      "Yes",
+                      style: TextStyle(color: Colors.red),
+                    )),
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("No")),
+              ]);
+        });
+  }
+
   deactivateAcc() {}
 
   @override
@@ -84,6 +122,7 @@ class SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     getAvailability();
+    print(lst);
     return Scaffold(
         drawer: NavDrawer(
           type: "Expert",

@@ -187,8 +187,10 @@ class _NavDrawerState extends State<NavDrawer> {
                 ),
                 title: Text('Profile'),
                 onTap: () async {
+                  print("before");
                   String nbOFRec = await getNumberOfRecords(
                       FirebaseAuth.instance.currentUser.uid);
+                  print("after");
                   if (widget.type == "Expert") {
                     await getData();
                     print("getdata");
@@ -322,7 +324,8 @@ class _NavDrawerState extends State<NavDrawer> {
                 color: kPrimaryColor,
               ),
               title: Text('Settings'),
-              onTap: () => {
+              onTap: () async =>  {
+                await getData(),
                 Navigator.pop(context),
                 Navigator.push(
                     context,

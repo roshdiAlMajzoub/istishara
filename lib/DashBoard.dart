@@ -40,7 +40,7 @@ class DashboardState extends State<Dashboard> {
     setState(() {
       collection = coll;
     });
-    getToken();
+    await getToken();
   }
 
   @override
@@ -81,8 +81,9 @@ class DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    //getToken();
+    getCollection();
     getMyMoney();
+    print(collection);
     return Scaffold(
         // backgroundColor: kPrimaryLightColor,
         drawer: NavDrawer(type: type, collection: collection, pass: pass),
@@ -135,19 +136,18 @@ class DashboardState extends State<Dashboard> {
                   crossAxisCount: 2,
                   padding: EdgeInsets.all(3.0),
                   children: <Widget>[
-                     makeDashboardItem(
-                        "Lawyer", Icons.account_balance, Colors.orange[600]),
-                     makeDashboardItem(
-                        "Chemist", Icons.sanitizer, Colors.blue[500]),
-                     makeDashboardItem(
-                        "Biologist", Icons.biotech, Colors.indigoAccent[700]),
-                      makeDashboardItem(
-                        "Physicist", Icons.lightbulb, Colors.pink),
-                      makeDashboardItem(
-                        "Physician", Icons.medical_services, Colors.lime[600]),
                     makeDashboardItem(
-                        "Developer", Icons.code, Colors.red),
-                     makeDashboardItem(
+                        "Lawyer", Icons.account_balance, Colors.orange[600]),
+                    makeDashboardItem(
+                        "Chemist", Icons.sanitizer, Colors.blue[500]),
+                    makeDashboardItem(
+                        "Biologist", Icons.biotech, Colors.indigoAccent[700]),
+                    makeDashboardItem(
+                        "Physicist", Icons.lightbulb, Colors.pink),
+                    makeDashboardItem(
+                        "Physician", Icons.medical_services, Colors.lime[600]),
+                    makeDashboardItem("Developer", Icons.code, Colors.red),
+                    makeDashboardItem(
                         "Psychologist", Icons.psychology, Colors.amber[900]),
                     makeDashboardItem(
                         "Civil Engineer", Icons.build, Colors.purple[300]),
@@ -183,7 +183,7 @@ class DashboardState extends State<Dashboard> {
               ),
             )));
   }
-  
+
   Card makeDashboardItem(
     String title,
     IconData icon,
@@ -195,44 +195,43 @@ class DashboardState extends State<Dashboard> {
         elevation: 1.0,
         margin: new EdgeInsets.all(8.0),
         child: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50.0), color: col),
-          child: new InkWell(
-            onTap: () {
-              print(title);
-              print(collection);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => ListPage(title, collection)));
-            },
-            child:Center(child:Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              verticalDirection: VerticalDirection.down,
-              children: <Widget>[
-                SizedBox(
-                  height: 50.0,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50.0), color: col),
+            child: new InkWell(
+              onTap: () {
+                print(title);
+                print(collection);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => ListPage(title, collection)));
+              },
+              child: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  verticalDirection: VerticalDirection.down,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 50.0,
+                    ),
+
+                    Icon(
+                      icon,
+                      size: 40.0,
+                      color: Colors.white,
+                    ),
+                    //SizedBox(height: 20.0),
+
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: new Text(title,
+                          style: new TextStyle(
+                              fontSize: 18.0, color: Colors.white)),
+                    ),
+                  ],
                 ),
-                
-                 Icon(
-                  icon,
-                  size: 40.0,
-                  
-                  color: Colors.white,
-                ),
-                //SizedBox(height: 20.0),
-              
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                    child: new Text(title,
-                        style:
-                            new TextStyle(fontSize: 18.0, color: Colors.white)),
-                  ),
-                
-              ],
-            ),
-          ),
-        )));
+              ),
+            )));
   }
 }

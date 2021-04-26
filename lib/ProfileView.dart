@@ -368,6 +368,7 @@ class ProfileState extends State<Profile> {
                           textAlignVertical: TextAlignVertical(y: 1),
                           controller: FirstNameController,
                           validator: (String value) {
+                            value = value.trim();
                             if (value.length < 3 && value.length >= 1) {
                               return "First name has to be at least 3 characters long";
                             } else {
@@ -429,6 +430,7 @@ class ProfileState extends State<Profile> {
                             textAlignVertical: TextAlignVertical(y: 1),
                             controller: LastNameController,
                             validator: (String value) {
+                              value = value.trim();
                               if (value.length < 3 && value.length >= 1) {
                                 return "Last name has to be at least 3 characters long";
                               } else {
@@ -489,6 +491,7 @@ class ProfileState extends State<Profile> {
                             textAlignVertical: TextAlignVertical(y: 1),
                             controller: EmailController,
                             validator: (String value) {
+                              value = value.trim();
                               if (!h.validEmail(value) && value.length >= 1) {
                                 return "Incorrect Format";
                               } else {
@@ -552,6 +555,7 @@ class ProfileState extends State<Profile> {
                             textAlignVertical: TextAlignVertical(y: 1),
                             controller: PhoneController,
                             validator: (String value) {
+                              value = value.trim();
                               if (!h.validPhoneNumber(value) &&
                                   value.length > 0) {
                                 return "Incorrect Format";
@@ -614,6 +618,7 @@ class ProfileState extends State<Profile> {
                                 textAlignVertical: TextAlignVertical(y: 1),
                                 controller: PasswordController,
                                 validator: (String value) {
+                                  value = value.trim();
                                   if (value.length < 6 && value.length > 0) {
                                     return "Password has to be at least 6 characters long.";
                                   } else {
@@ -689,6 +694,7 @@ class ProfileState extends State<Profile> {
                             textAlignVertical: TextAlignVertical(y: 1),
                             controller: ConfirmPasswordController,
                             validator: (String value) {
+                              value = value.trim();
                               if (value != PasswordController.value.text) {
                                 return "Password Mismatch";
                               } else {
