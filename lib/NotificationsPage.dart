@@ -62,6 +62,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     return new Container(
+      
         constraints: BoxConstraints.expand(),
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -117,7 +118,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                           ));
                     } else {
                       return SizedBox(
-                          height: screenHeight/5.5,
+                          height: screenHeight/4.5,
                           child: Card(
                             elevation: 8.0,
                             margin: new EdgeInsets.symmetric(

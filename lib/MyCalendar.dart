@@ -87,70 +87,20 @@ class CalendarState extends State<MyCalendar> {
     return apptt[i]['end time'].toDate().toString().substring(0, 10);
   }
 
-  Future<String> getIDOfTheOther(int i) async {
+   getIDOfTheOther(int i)  {
     String IDofTheOther;
-    String collectionOfTheOther;
     String myID = FirebaseAuth.instance.currentUser.uid;
     if (myID != apptt[i]['id2']) {
-      collectionOfTheOther = await databasers.docExistsIn(apptt[i]['id2']);
       IDofTheOther = apptt[i]['id2'];
     } else {
-      collectionOfTheOther = await databasers.docExistsIn(apptt[i]['id1']);
       IDofTheOther = apptt[i]['id1'];
     }
     return IDofTheOther;
   }
 
-  Future<String> getNameOfTheOther(int i) async {
-    String IDofTheOther;
-    String name = "";
-    String collectionOfTheOther;
-    String myID = FirebaseAuth.instance.currentUser.uid;
-    if (myID != apptt[i]['id2']) {
-      collectionOfTheOther = await databasers.docExistsIn(apptt[i]['id2']);
-      IDofTheOther = apptt[i]['id2'];
-    } else {
-      collectionOfTheOther = await databasers.docExistsIn(apptt[i]['id1']);
-      IDofTheOther = apptt[i]['id1'];
-    }
-    Query colcollectionReference =
-        FirebaseFirestore.instance.collection(collectionOfTheOther);
-    await colcollectionReference.get().then((QuerySnapshot) {
-      QuerySnapshot.docs.forEach((element) {
-        if (element.get('id') == IDofTheOther) {
-          name = element.get('first name') + " " + element.get('last name');
-        }
-      });
-    });
+  
 
-    return name;
-  }
-
-  Future<String> getImageOfTheOther(int i) async {
-    String imageOfTheOther = "";
-    String myID = FirebaseAuth.instance.currentUser.uid;
-    String IDofTheOther;
-    String collectionOfTheOther;
-    if (myID != apptt[i]['id2']) {
-      collectionOfTheOther = await databasers.docExistsIn(apptt[i]['id2']);
-      IDofTheOther = apptt[i]['id2'];
-    } else {
-      collectionOfTheOther = await databasers.docExistsIn(apptt[i]['id1']);
-      IDofTheOther = apptt[i]['id1'];
-    }
-    Query colcollectionReference =
-        FirebaseFirestore.instance.collection(collectionOfTheOther);
-    await colcollectionReference.get().then((QuerySnapshot) {
-      QuerySnapshot.docs.forEach((element) {
-        String myId = FirebaseAuth.instance.currentUser.uid;
-        if (element.get('id') == IDofTheOther) {
-          imageOfTheOther = element.get('image name');
-        }
-      });
-    });
-
-    return imageOfTheOther.toString();
-  }
+  
 
   Future getPriceRange(String id) async {
     Databasers db = Databasers();
@@ -169,27 +119,9 @@ class CalendarState extends State<MyCalendar> {
     return price;
   }
 
-  Future<String> getImageOfMe(int i) async {
-    String imageOfMe;
-    String myID = FirebaseAuth.instance.currentUser.uid;
-    Query colcollectionReference =
-        FirebaseFirestore.instance.collection(widget.collection);
-    await colcollectionReference.get().then((QuerySnapshot) {
-      QuerySnapshot.docs.forEach((element) {
-        if (element.get('id') == myID) {
-          imageOfMe = element.get('image name');
-        }
-      });
-    });
+  
 
-    return imageOfMe.toString();
-  }
 
-  /*book() {
-    final User user = auth.currentUser;
-    DatabaseBookAppt().bookAppt(user.uid, 'uid2', DateTime.now(),
-        DateTime.now().add(Duration(hours: 2)));
-  }*/
   List<Meeting> meetings = <Meeting>[];
   @override
   Widget build(BuildContext context) {
@@ -249,12 +181,21 @@ class CalendarState extends State<MyCalendar> {
                             _isLoading = true;
                           });
                           print("I am in if");
-                          String imageOfTheOther = await getImageOfTheOther(i);
+                          String imageOfTheOther = "";
                           print("one");
-                          String nameOfTheOther = await getNameOfTheOther(i);
-                          print("two");
-                          String IDofTheOther = await getIDOfTheOther(i);
-                          print("three");
+                          String IDofTheOther =  getIDOfTheOther(i);
+                          String nameOfTheOther = "";
+                          if (IDofTheOther == apptt[i]['id1']) {
+                            setState(() {
+                              imageOfTheOther = apptt[i]['image1'];
+                              nameOfTheOther = apptt[i]['name1'];
+                            });
+                          } else {
+                            setState(() {
+                              imageOfTheOther = apptt[i]['image2'];
+                              nameOfTheOther = apptt[i]['name2'];
+                            });
+                          }
 
                           print("four");
                           String collection2 =
@@ -264,17 +205,14 @@ class CalendarState extends State<MyCalendar> {
                               await Databasers().docExistsIn(apptt[i]['id1']);
                           var priceRange = await getPriceRange(apptt[i]['id2']);
                           print("six");
-                          String myName =
-                              FirebaseAuth.instance.currentUser.displayName;
                           String id1 = FirebaseAuth.instance.currentUser.uid;
                           _isLoading = false;
 
-
                           FirebaseFirestore.instance
-                              .collection('conversations')                  /*@omarAssidi dont delete this*/ 
+                              .collection(
+                                  'conversations') /*@omarAssidi dont delete this*/
                               .doc(apptt[i]['id'])
                               .update({'started': true});
-
 
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
@@ -297,11 +235,20 @@ class CalendarState extends State<MyCalendar> {
                                 startTimeFromCalendar &&
                             EndTimeFromCalendar == EndTimeFromFirebase &&
                             date_from_calendar == date_from_Firebase) {
-                          String name = await getNameOfTheOther(i);
-
+                               String IDofTheOther =  getIDOfTheOther(i);
+                          String nameOfTheOther = "";
+                          if (IDofTheOther == apptt[i]['id1']) {
+                            setState(() {
+                              nameOfTheOther = apptt[i]['name1'];
+                            });
+                          } else {
+                            setState(() {
+                              nameOfTheOther = apptt[i]['name2'];
+                            });
+                          }
                           Show.showDialogMeetingDetails(
                               context,
-                              "Meeting with " + name,
+                              "Meeting with " + nameOfTheOther,
                               apptt[i]['start time'].toDate().toString(),
                               _endTimeText,
                               date_from_Firebase);

@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-
 class ChatScreen extends StatefulWidget {
   String id1;
   String id2;
@@ -59,10 +58,12 @@ class _ChatScreenState extends State<ChatScreen> {
         .snapshots();
   }
 
-  updateRating() async {
-    var updt = await FirebaseFirestore.instance
-        .collection(widget.collection2)
-        .doc(widget.id2);
+  updateRating(
+    collection2,
+    id2,
+  ) async {
+    var updt =
+        await FirebaseFirestore.instance.collection(collection2).doc(id2);
     List repList;
     await updt.get().then((DocumentSnapshot doc) {
       setState(() {
@@ -114,7 +115,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   double rating;
-  showRatingPayment(BuildContext context1) {
+  showRatingPayment(BuildContext context1, collection2, id2) {
     return showDialog<AlertDialog>(
         context: context1,
         builder: (BuildContext context) {
@@ -182,7 +183,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   alignment: Alignment.bottomRight,
                   child: ElevatedButton(
                     onPressed: () {
-                      updateRating();
+                      updateRating(collection2, id2);
                       Navigator.pop(context);
                     },
                     child: Text("Submit"),
@@ -264,10 +265,15 @@ class _ChatScreenState extends State<ChatScreen> {
                                   color: Colors.red,
                                   fontWeight: FontWeight.w900),
                               endTime: endTimeint,
-                              onEnd: () {
-                                pay();
-                                Navigator.of(context).pop();
-                                showRatingPayment(context);
+                              onEnd: ()async {
+                                setState(() {
+                                  widget.isConversation = true;
+                                });
+                                await pay();
+                                //Navigator.of(context).pop();
+                                showRatingPayment(
+                                    context, widget.collection2, widget.id2);
+                              
                               }),
                         )),
                 ],

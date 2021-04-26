@@ -75,8 +75,25 @@ class _ViewCalendarState extends State<ViewCalendar> {
     return name;
   }
 
+  Future<String> getImage(String id) async {
+    Databasers db = Databasers();
+    String image = "";
+    String collection = await db.docExistsIn(id);
+    Query colcollectionReference =
+        FirebaseFirestore.instance.collection(collection);
+    print(collection);
+    await colcollectionReference.get().then((QuerySnapshot) {
+      QuerySnapshot.docs.forEach((element) {
+        if (element.get('id') == id) {
+          image = element.get('image name');
+        }
+      });
+    });
+    return image;
+  }
+
   bool check;
-  hey() async {
+  book() async {
     DateTime day = DateTime.parse(dateControl.value.text);
     var x = dateControl.value.text + " " + stControl.value.text + ":00.000";
     var y = dateControl.value.text + " " + etControl.value.text + ":00.000";
@@ -105,22 +122,14 @@ class _ViewCalendarState extends State<ViewCalendar> {
         token2 = d.data()['token'];
       });
       print("After");
-      String name1 = await getName(auth.currentUser.uid);
-      String name2 = await getName(id);
-      DatabaseBookAppt().bookAppt(
-        auth.currentUser.uid,
-        collection,
-        id,
-        field,
-        startTime,
-        endTime,
-        token,
-        token2,
-        name1,
-        name2
-      );
       showAlertDialog(context, "Your request has been sent to the expert.",
           "You will recieve notification once your request is approved.");
+      String name1 = await getName(auth.currentUser.uid);
+      String name2 = await getName(id);
+      String image1 = await getImage(auth.currentUser.uid);
+      String image2 = await getImage(id);
+      DatabaseBookAppt().bookAppt(auth.currentUser.uid, collection, id, field,
+          startTime, endTime, token, token2, name1, name2,image1,image2);
       print(token);
       print('done');
     } else {
@@ -130,11 +139,6 @@ class _ViewCalendarState extends State<ViewCalendar> {
           "Try another one!");
       print('not');
     }
-    //print(startTime);
-
-    //print(Timestamp.fromDate(startTime));
-    //print(endTime);
-    //print(Timestamp.fromDate(endTime));
   }
 
   Future<bool> getConflictappt(st, et) async {
@@ -151,15 +155,11 @@ class _ViewCalendarState extends State<ViewCalendar> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    hey();
+    book();
   }
 
   @override
   Widget build(BuildContext context) {
-    //getConflictappt();
-    //print(collection);
-    //print(field);
-    //print(id);
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -264,7 +264,7 @@ class _ViewCalendarState extends State<ViewCalendar> {
                                 if (dateKey.currentState.validate() &&
                                     stKey.currentState.validate() &&
                                     etKey.currentState.validate()) {
-                                  hey();
+                                  book();
                                 }
                               },
                               elevation: 2,

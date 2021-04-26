@@ -182,7 +182,7 @@ class DatabaseBookAppt {
     }
   }
 
-  Future bookAppt(uid1, collection, uid2, field, st, et, token, token2,name1,name2) async {
+  Future bookAppt(uid1, collection, uid2, field, st, et, token, token2,name1,name2,image1,image2) async {
     User user = auth.currentUser;
     List pe = [];
     var check = await checkAp(field, uid2, st, et);
@@ -203,8 +203,9 @@ class DatabaseBookAppt {
       'token': token,
       'SecToken': token2,
       'name1': name1,
-      'name2':name2
-      
+      'name2':name2,
+      'image1':image1,
+      'image2':image2,
     });
     /*await FirebaseFirestore.instance
         .collection(field)

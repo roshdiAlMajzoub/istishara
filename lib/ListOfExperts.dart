@@ -50,19 +50,10 @@ class _ListPageState extends State<ListPage> {
     List nbOfRecord = [];
     Query collectionRef = FirebaseFirestore.instance
         .collection("Appt")
-        .where('id1', isEqualTo: id)
-        .where('state', isEqualTo: "Accepted");
-    Query collectionRef2 = FirebaseFirestore.instance
-        .collection("Appt")
         .where('id2', isEqualTo: id)
         .where('state', isEqualTo: "Accepted");
 
     await collectionRef.get().then((QuerySnapshot) {
-      QuerySnapshot.docs.forEach((element) {
-        nbOfRecord.add(element.data());
-      });
-    });
-    await collectionRef2.get().then((QuerySnapshot) {
       QuerySnapshot.docs.forEach((element) {
         nbOfRecord.add(element.data());
       });
