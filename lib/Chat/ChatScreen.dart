@@ -205,23 +205,18 @@ class _ChatScreenState extends State<ChatScreen> {
         .get()
         .then((value) {
       setState(() {
-              token =
-      value.data()['token'];
-      channelName =
-      value.data()['channel name'];
-            });
+        token = value.data()['token'];
+        channelName = value.data()['channel name'];
+      });
     });
-    
+
     await _handleCameraAndMic(Permission.camera);
     await _handleCameraAndMic(Permission.microphone);
     await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CallPage(
-          channelName: channelName,
-          role: _role,
-          token:token
-        ),
+        builder: (context) =>
+            CallPage(channelName: channelName, role: _role, token: token),
       ),
     );
   }
@@ -291,9 +286,11 @@ class _ChatScreenState extends State<ChatScreen> {
                   IconButton(
                       icon: SvgPicture.asset("asset/icons/video-camera.svg"),
                       iconSize: 2,
-                      onPressed: widget.isConversation ? null: () {
-                        onJoin();
-                      }),
+                      onPressed: widget.isConversation
+                          ? null
+                          : () {
+                              onJoin();
+                            }),
                   if (!widget.isConversation)
                     Container(
                         height: 45,
@@ -311,11 +308,15 @@ class _ChatScreenState extends State<ChatScreen> {
                                 setState(() {
                                   widget.isConversation = true;
                                 });
-                                await pay();
-                               FirebaseAuth.instance.currentUser.uid == widget.secId1?
-                                showRatingPayment(
-                                    context, widget.collection2, widget.id2): Navigator.of(context).pop()
-                                    ;
+                                if (FirebaseAuth.instance.currentUser.uid ==
+                                    widget.id2) {
+                                  await pay();
+                                }
+                                FirebaseAuth.instance.currentUser.uid ==
+                                        widget.secId1
+                                    ? showRatingPayment(
+                                        context, widget.collection2, widget.id2)
+                                    : Navigator.of(context).pop();
                               }),
                         )),
                 ],

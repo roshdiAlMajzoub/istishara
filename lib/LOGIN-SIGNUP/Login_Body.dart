@@ -63,7 +63,6 @@ class _Login_BodyState extends State<Login_Body> {
             return Dashboard(
               type: "Expert",
               pass: _password,
-              
             );
           }));
           showPassword = false;
@@ -79,6 +78,7 @@ class _Login_BodyState extends State<Login_Body> {
     } catch (e) {
       setState(() {
         _isloading = false;
+        _error = e.toString();
       });
     }
   }
