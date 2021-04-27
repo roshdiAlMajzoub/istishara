@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:ISTISHARA/Chat/ChatScreen.dart';
 import 'package:ISTISHARA/Chat/Conversations.dart';
-import 'package:ISTISHARA/Database.dart';
-import 'package:ISTISHARA/Databasers.dart';
-import 'package:ISTISHARA/Helper.dart';
-import 'package:ISTISHARA/ShowDialog.dart';
+import 'package:ISTISHARA/Database/Database.dart';
+import 'package:ISTISHARA/Database/Databasers.dart';
+import 'package:ISTISHARA/Helpers/Helper.dart';
+import 'package:ISTISHARA/Helpers/ShowDialog.dart';
 import 'package:ISTISHARA/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_format/date_format.dart';
@@ -13,8 +13,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:flutter/material.dart';
-import 'nav-drawer.dart';
-import 'package:ISTISHARA/Time.dart';
+import '../Drawer/nav-drawer.dart';
+import 'package:ISTISHARA/Calendar/Time.dart';
 import 'package:intl/intl.dart';
 
 class MainCalendar extends StatelessWidget {

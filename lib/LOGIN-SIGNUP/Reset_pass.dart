@@ -3,9 +3,9 @@ import 'package:ISTISHARA/LOGIN-SIGNUP/login_background.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'LOGIN-SIGNUP/RoundedTextField.dart';
-import 'LOGIN-SIGNUP/TextFieldContainer.dart';
-import 'LOGIN-SIGNUP/rounded_button.dart';
+import 'RoundedTextField.dart';
+import 'TextFieldContainer.dart';
+import 'rounded_button.dart';
 
 // ignore: camel_case_types
 class Reset_Pass extends StatefulWidget {

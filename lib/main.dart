@@ -1,21 +1,17 @@
-import 'package:ISTISHARA/Chat/Conversations.dart';
 import 'package:ISTISHARA/LOGIN-SIGNUP/Log_in.dart';
 import 'package:ISTISHARA/LOGIN-SIGNUP/Welcome.dart';
-import 'package:ISTISHARA/NotificationsPage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ISTISHARA/Drawer/NotificationsPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'Credentials.dart';
-import 'DashBoard.dart';
-import 'Databasers.dart';
+import 'LOGIN-SIGNUP/Credentials.dart';
+import 'Drawer/DashBoard.dart';
 import 'dart:async';
 import 'package:loading_animations/loading_animations.dart';
 import 'dart:math';
-import './Start.dart';
+import 'package:ISTISHARA/LOGIN-SIGNUP/Start.dart';
 import 'package:connectivity/connectivity.dart';
 
-import 'Reset.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,8 +1,8 @@
-import 'package:ISTISHARA/Database.dart';
+import 'package:ISTISHARA/Database/Database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:flutter/material.dart';
-import 'nav-drawer.dart';
+import '../Drawer/nav-drawer.dart';
 
 class MainCalendar extends StatelessWidget {
   var id;

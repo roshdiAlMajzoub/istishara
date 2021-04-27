@@ -1,20 +1,17 @@
-import 'package:ISTISHARA/DashBoard.dart';
+import 'package:ISTISHARA/Drawer/DashBoard.dart';
 import 'package:ISTISHARA/LOGIN-SIGNUP/TextFieldContainer.dart';
 import 'package:ISTISHARA/LOGIN-SIGNUP/constants.dart';
 import 'package:ISTISHARA/LOGIN-SIGNUP/rounded_button.dart';
 import 'package:ISTISHARA/LOGIN-SIGNUP/rounded_password_field.dart';
-import 'package:ISTISHARA/Reset_pass.dart';
-import 'package:ISTISHARA/Start.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ISTISHARA/LOGIN-SIGNUP/Reset_pass.dart';
+import 'package:ISTISHARA/LOGIN-SIGNUP/Start.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'RoundedTextField.dart';
 import 'login_background.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:ISTISHARA/Databasers.dart';
-import 'package:ISTISHARA/Reset.dart';
-import 'package:ISTISHARA/ShowDialog.dart';
+import 'package:ISTISHARA/Database/Databasers.dart';
+import 'package:ISTISHARA/Helpers/ShowDialog.dart';
 
 // ignore: camel_case_types
 class Login_Body extends StatefulWidget {

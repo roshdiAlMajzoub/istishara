@@ -1,17 +1,16 @@
 import 'dart:async';
 
 import 'package:ISTISHARA/LOGIN-SIGNUP/constants.dart';
-import 'package:ISTISHARA/MyCalendar.dart';
-import 'package:ISTISHARA/NotificationsPage.dart';
-import 'package:ISTISHARA/VideoCall/home.dart';
+import 'package:ISTISHARA/Calendar/MyCalendar.dart';
+import 'package:ISTISHARA/Drawer/NotificationsPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'Chat/Conversations.dart';
+import '../Chat/Conversations.dart';
 import 'DashBoard.dart';
 import 'ProfileView.dart';
-import 'Database.dart';
-import 'package:ISTISHARA/Settings.dart' as settings;
+import '../Database/Database.dart';
+import 'package:ISTISHARA/Drawer/Settings.dart' as settings;
 
 class NavDrawer extends StatefulWidget {
   final String type;

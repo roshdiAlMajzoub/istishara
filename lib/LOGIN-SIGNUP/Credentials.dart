@@ -4,13 +4,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_password_strength/flutter_password_strength.dart';
 import 'package:flutter/foundation.dart';
-import './ExpertType.dart';
-import 'ExpertType.dart';
+import '../Expert/ExpertType.dart';
+import '../Expert/ExpertType.dart';
 import 'dart:ui';
-import 'Helper.dart';
-import 'LOGIN-SIGNUP/constants.dart';
-import 'ShowDialog.dart';
-import 'package:ISTISHARA/Databasers.dart';
+import '../Helpers/Helper.dart';
+import 'constants.dart';
+import '../Helpers/ShowDialog.dart';
+import 'package:ISTISHARA/Database/Databasers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' as cloud;
 
 class Credentials extends StatefulWidget {

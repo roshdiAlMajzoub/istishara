@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'Database.dart';
 import 'package:flutter/foundation.dart';
-import 'ShowDialog.dart';
+import '../Helpers/ShowDialog.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:cloud_firestore/cloud_firestore.dart' as cloud;
 

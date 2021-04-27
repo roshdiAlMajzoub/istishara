@@ -134,6 +134,7 @@ flutter:
       - asset/icons/excel.svg
       - asset/icons/txt-file.svg
       - asset/icons/pdf.svg
+      - asset/icons/video-camera.svg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

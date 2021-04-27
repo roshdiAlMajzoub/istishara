@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'Database.dart';
-import 'ExpertType.dart';
+import '../Database/Database.dart';
+import '../Expert/ExpertType.dart';
 
 class Helper {
   int clearInfo(List<TextEditingController> l) {

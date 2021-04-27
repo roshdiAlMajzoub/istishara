@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:ISTISHARA/Databasers.dart';
-import 'package:ISTISHARA/ShowDialog.dart';
+import 'package:ISTISHARA/Database/Databasers.dart';
+import 'package:ISTISHARA/Helpers/ShowDialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';

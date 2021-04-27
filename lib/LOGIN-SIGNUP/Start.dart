@@ -3,8 +3,8 @@ import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'LOGIN-SIGNUP/background.dart';
-import 'LOGIN-SIGNUP/rounded_button.dart';
+import 'background.dart';
+import 'rounded_button.dart';
 import 'Start.dart';
 
 class StartApp extends StatelessWidget {

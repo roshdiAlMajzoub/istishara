@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'background.dart';
 import 'rounded_button.dart';
-import '../Start.dart';
+import 'Start.dart';
 
 class WelcomeScreen extends StatelessWidget {
   @override

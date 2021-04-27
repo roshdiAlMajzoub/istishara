@@ -1,11 +1,11 @@
-import 'package:ISTISHARA/Chat/Conversations.dart';
 import 'package:ISTISHARA/Chat/Messages.dart';
 import 'package:ISTISHARA/Chat/SendTextField.dart';
-import 'package:ISTISHARA/Databasers.dart';
-import 'package:ISTISHARA/ShowDialog.dart';
-import 'package:ISTISHARA/VideoCall/home.dart';
+import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:ISTISHARA/VideoCall/call.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
@@ -86,7 +86,7 @@ class _ChatScreenState extends State<ChatScreen> {
     var updtExpertMoney = await FirebaseFirestore.instance
         .collection(widget.collection2)
         .doc(widget.id2);
-    
+
     var updtHelpSeekMoney = await FirebaseFirestore.instance
         .collection(widget.collection1)
         .doc(widget.secId1);
@@ -106,7 +106,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     helpSeekMoney = helpSeekMoney - widget.priceRange;
     expMoney = expMoney + widget.priceRange;
-    
+
     await updtExpertMoney.update({'money': expMoney});
     await updtHelpSeekMoney.update({'money': helpSeekMoney});
     FirebaseFirestore.instance
@@ -195,9 +195,45 @@ class _ChatScreenState extends State<ChatScreen> {
         });
   }
 
+  ClientRole _role = ClientRole.Broadcaster;
+  Future<void> onJoin() async {
+    var token;
+    var channelName;
+    await FirebaseFirestore.instance
+        .collection("video call")
+        .doc("OAJMg5m6PlKnTgKGcZpX")
+        .get()
+        .then((value) {
+      setState(() {
+              token =
+      value.data()['token'];
+      channelName =
+      value.data()['channel name'];
+            });
+    });
+    
+    await _handleCameraAndMic(Permission.camera);
+    await _handleCameraAndMic(Permission.microphone);
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CallPage(
+          channelName: channelName,
+          role: _role,
+          token:token
+        ),
+      ),
+    );
+  }
+
+  Future<void> _handleCameraAndMic(Permission permission) async {
+    final status = await permission.request();
+  }
+
   @override
   Widget build(BuildContext context) {
     int endTimeint;
+
     if (!widget.isConversation) {
       endTimeint = DateTime.now().millisecondsSinceEpoch +
           1000 *
@@ -249,38 +285,37 @@ class _ChatScreenState extends State<ChatScreen> {
                               fontWeight: FontWeight.w600,
                               color: Colors.white),
                         ),
-                        IconButton(
-                            icon: Icon(Icons.video_call_sharp),
-                            onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return HomePage();
-          }));
-                            })
                       ],
                     ),
                   ),
+                  IconButton(
+                      icon: SvgPicture.asset("asset/icons/video-camera.svg"),
+                      iconSize: 2,
+                      onPressed: widget.isConversation ? null: () {
+                        onJoin();
+                      }),
                   if (!widget.isConversation)
                     Container(
                         height: 45,
                         decoration: BoxDecoration(
-                            color: Colors.black,
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(15)),
                         padding: EdgeInsets.only(left: 5, right: 5),
                         child: Center(
                           child: CountdownTimer(
                               textStyle: TextStyle(
-                                  color: Colors.red,
+                                  color: Colors.deepPurple,
                                   fontWeight: FontWeight.w900),
                               endTime: endTimeint,
-                              onEnd: ()async {
+                              onEnd: () async {
                                 setState(() {
                                   widget.isConversation = true;
                                 });
                                 await pay();
-                                //Navigator.of(context).pop();
+                               FirebaseAuth.instance.currentUser.uid == widget.secId1?
                                 showRatingPayment(
-                                    context, widget.collection2, widget.id2);
-                              
+                                    context, widget.collection2, widget.id2): Navigator.of(context).pop()
+                                    ;
                               }),
                         )),
                 ],

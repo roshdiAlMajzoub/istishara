@@ -9,12 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_password_strength/flutter_password_strength.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
-import './ExpertType.dart';
-import 'ExpertType.dart';
+import '../Expert/ExpertType.dart';
+import '../Expert/ExpertType.dart';
 import 'dart:ui';
-import 'Helper.dart';
-import 'ShowDialog.dart';
-import './Databasers.dart';
+import '../Helpers/Helper.dart';
+import '../Helpers/ShowDialog.dart';
+import '../Database/Databasers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' as cloud;
 
 class Profile extends StatefulWidget {

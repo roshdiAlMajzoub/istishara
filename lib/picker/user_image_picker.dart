@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:ISTISHARA/Databasers.dart';
+import 'package:ISTISHARA/Database/Databasers.dart';
 
 class UserImagePicker extends StatefulWidget {
   Function(File pickedImage) pickImagefn;

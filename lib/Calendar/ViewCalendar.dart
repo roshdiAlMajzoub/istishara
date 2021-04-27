@@ -1,15 +1,15 @@
-import 'package:ISTISHARA/Databasers.dart';
-import 'package:ISTISHARA/Helper.dart';
-import 'package:ISTISHARA/ProfileView.dart';
-import 'package:ISTISHARA/Time.dart';
+import 'package:ISTISHARA/Database/Databasers.dart';
+import 'package:ISTISHARA/Helpers/Helper.dart';
+import 'package:ISTISHARA/Drawer/ProfileView.dart';
+import 'package:ISTISHARA/Calendar/Time.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'Database.dart';
-import 'ShowDialog.dart';
+import '../Database/Database.dart';
+import '../Helpers/ShowDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'Calendar.dart';
-import 'nav-drawer.dart';
+import '../Drawer/nav-drawer.dart';
 
 Helper h = Helper();
 

@@ -1,12 +1,12 @@
-import 'package:ISTISHARA/Databasers.dart';
+import 'package:ISTISHARA/Database/Databasers.dart';
 import 'package:ISTISHARA/LOGIN-SIGNUP/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_format/date_format.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'Database.dart';
+import '../Database/Database.dart';
 import 'nav-drawer.dart';
-import 'ShowDialog.dart';
+import '../Helpers/ShowDialog.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 
